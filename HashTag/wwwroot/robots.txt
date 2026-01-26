@@ -1,0 +1,10 @@
+# robots.txt for TrendTag
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://viralhashtag.vn/sitemap.xml

@@ -1,0 +1,261 @@
+@model HashtagSearchViewModel
+@{
+    ViewData["Title"] = $"Search: {Model.Query} - TrendTag";
+}
+
+<div class="container mt-4">
+    <!-- Header với Back Button -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <a asp-action="Index" class="btn btn-outline-secondary mb-3">
+                <i class="bi bi-arrow-left"></i> Back to Home
+            </a>
+            <h1 class="display-6">
+                <i class="bi bi-search"></i> Search Results for "<strong class="text-primary">@Model.Query</strong>"
+            </h1>
+            <p class="text-muted">
+                Found <strong>@Model.Results.TotalCount</strong> hashtag(s) in our database
+            </p>
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <form asp-action="Search" method="get" class="input-group">
+                <span class="input-group-text bg-white">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" name="q" class="form-control" placeholder="Search hashtags..." value="@Model.Query" />
+                <button class="btn btn-primary" type="submit">
+                    Search
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Live Search Results (when hashtag not in database) -->
+    @if (Model.LiveResult != null)
+    {
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="alert alert-info border-primary shadow-sm">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-cloud-download fs-3 text-primary me-3"></i>
+                        <div>
+                            <h5 class="alert-heading mb-0">Live Result from TikTok</h5>
+                            <small class="text-muted">This hashtag was not found in our database, but we found it on TikTok</small>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-7">
+                                    <h2 class="text-primary mb-3">
+                                        @Model.LiveResult.TagDisplay
+                                    </h2>
+
+                                    <dl class="row mb-0">
+                                        @if (Model.LiveResult.PostCount.HasValue)
+                                        {
+                                            <dt class="col-sm-4">Total Posts:</dt>
+                                            <dd class="col-sm-8">
+                                                @{
+                                                    var postCountFormatted = Model.LiveResult.PostCount.Value >= 1_000_000
+                                                        ? $"{Model.LiveResult.PostCount.Value / 1_000_000.0:F1}M"
+                                                        : Model.LiveResult.PostCount.Value >= 1000
+                                                            ? $"{Model.LiveResult.PostCount.Value / 1000.0:F1}K"
+                                                            : Model.LiveResult.PostCount.Value.ToString("N0");
+                                                }
+                                                <span class="badge bg-info fs-5">@postCountFormatted posts</span>
+                                            </dd>
+                                        }
+
+                                        <dt class="col-sm-4">Data Source:</dt>
+                                        <dd class="col-sm-8">
+                                            <span class="badge bg-secondary">@Model.LiveResult.Source</span>
+                                        </dd>
+
+                                        <dt class="col-sm-4">Searched At:</dt>
+                                        <dd class="col-sm-8">
+                                            <small class="text-muted">@Model.LiveResult.SearchedAt.ToString("g")</small>
+                                        </dd>
+                                    </dl>
+                                </div>
+
+                                <div class="col-md-5 text-center">
+                                    <div class="d-grid gap-2">
+                                        <form asp-action="AddToTracking" method="post">
+                                            <input type="hidden" name="tag" value="@Model.LiveResult.Tag" />
+                                            <input type="hidden" name="postCount" value="@Model.LiveResult.PostCount" />
+                                            <button type="submit" class="btn btn-success btn-lg w-100">
+                                                <i class="bi bi-plus-circle-fill"></i> Add to Tracking List
+                                            </button>
+                                        </form>
+                                        <p class="text-muted mb-0 small">
+                                            <i class="bi bi-info-circle"></i> Track this hashtag and get updates every 6 hours
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Database Results -->
+    @if (Model.Results.Items.Any())
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-database"></i> Results from Database
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Hashtag</th>
+                                        <th>Best Rank</th>
+                                        <th>Sources</th>
+                                        <th>Appearances</th>
+                                        <th>Post Count</th>
+                                        <th>Difficulty</th>
+                                        <th>Last Seen</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var hashtag in Model.Results.Items)
+                                    {
+                                        <tr style="cursor: pointer;" onclick="window.location='/hashtag/@hashtag.Tag'">
+                                            <td>
+                                                <strong class="text-primary fs-5">@hashtag.TagDisplay</strong>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-primary">#@hashtag.BestRank</span>
+                                            </td>
+                                            <td>
+                                                @foreach (var source in hashtag.Sources)
+                                                {
+                                                    <span class="badge bg-secondary me-1">@source</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark">@hashtag.TotalAppearances</span>
+                                            </td>
+                                            <td>
+                                                @if (hashtag.LatestPostCount.HasValue)
+                                                {
+                                                    var postCountFormatted = hashtag.LatestPostCount.Value >= 1_000_000
+                                                        ? $"{hashtag.LatestPostCount.Value / 1_000_000.0:F1}M"
+                                                        : hashtag.LatestPostCount.Value >= 1000
+                                                            ? $"{hashtag.LatestPostCount.Value / 1000.0:F1}K"
+                                                            : hashtag.LatestPostCount.Value.ToString("N0");
+                                                    <span class="badge bg-info">@postCountFormatted</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(hashtag.DifficultyLevel))
+                                                {
+                                                    var badgeClass = hashtag.DifficultyLevel switch
+                                                    {
+                                                        "Easy" => "bg-success",
+                                                        "Medium" => "bg-warning text-dark",
+                                                        "Hard" => "bg-danger",
+                                                        _ => "bg-secondary"
+                                                    };
+                                                    <span class="badge @badgeClass">@hashtag.DifficultyLevel</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">N/A</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">@hashtag.LastSeen.ToString("g")</small>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                @if (Model.Results.TotalPages > 1)
+                {
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            @if (Model.Results.HasPreviousPage)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-action="Search" asp-route-q="@Model.Query" asp-route-page="@(Model.CurrentPage - 1)">
+                                        <i class="bi bi-chevron-left"></i> Previous
+                                    </a>
+                                </li>
+                            }
+
+                            @for (int i = 1; i <= Model.Results.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                    <a class="page-link" asp-action="Search" asp-route-q="@Model.Query" asp-route-page="@i">@i</a>
+                                </li>
+                            }
+
+                            @if (Model.Results.HasNextPage)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-action="Search" asp-route-q="@Model.Query" asp-route-page="@(Model.CurrentPage + 1)">
+                                        Next <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                }
+            </div>
+        </div>
+    }
+    else if (Model.LiveResult == null)
+    {
+        <!-- No Results Found -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning text-center py-5">
+                    <i class="bi bi-exclamation-triangle fs-1 text-warning mb-3 d-block"></i>
+                    <h4>No Results Found</h4>
+                    <p class="mb-3">
+                        We couldn't find any hashtags matching "<strong>@Model.Query</strong>" in our database or on TikTok.
+                    </p>
+                    <a asp-action="Index" class="btn btn-primary">
+                        <i class="bi bi-house"></i> Go Back Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    tr[onclick]:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.01);
+        transition: all 0.2s ease;
+    }
+
+    .table-hover tbody tr {
+        transition: all 0.2s ease;
+    }
+</style>

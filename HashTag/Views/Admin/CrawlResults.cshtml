@@ -1,0 +1,157 @@
+@model CrawlSummary
+@{
+    ViewData["Title"] = "Crawl Results";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Admin</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Crawl">Manual Crawl</a></li>
+                    <li class="breadcrumb-item active">Results</li>
+                </ol>
+            </nav>
+            <h1><i class="bi bi-check-circle text-success"></i> Crawl Completed</h1>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <h6>Total Sources</h6>
+                    <h2>@Model.TotalSources</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h6>Successful</h6>
+                    <h2>@Model.SuccessfulSources</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body text-center">
+                    <h6>Failed</h6>
+                    <h2>@Model.FailedSources</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <h6>Total Hashtags</h6>
+                    <h2>@Model.TotalHashtagsCollected</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Duration -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <i class="bi bi-clock"></i>
+                <strong>Duration:</strong> @((Model.CompletedAt - Model.StartedAt).TotalSeconds.ToString("F1")) seconds
+                (Started: @Model.StartedAt.ToString("T"), Completed: @Model.CompletedAt.ToString("T"))
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Results -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-list-ul"></i> Detailed Results</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Source</th>
+                                    <th>Status</th>
+                                    <th>Hashtags Collected</th>
+                                    <th>Duration</th>
+                                    <th>Error Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var result in Model.Results.OrderByDescending(r => r.Success).ThenBy(r => r.SourceName))
+                                {
+                                    <tr class="@(result.Success ? "" : "table-danger")">
+                                        <td>
+                                            <strong>@result.SourceName</strong>
+                                        </td>
+                                        <td>
+                                            @if (result.Success)
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="bi bi-check-circle"></i> Success
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">
+                                                    <i class="bi bi-x-circle"></i> Failed
+                                                </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (result.Success)
+                                            {
+                                                <strong>@result.HashtagsCollected</strong>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">0</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (result.CompletedAt.HasValue)
+                                            {
+                                                var duration = result.CompletedAt.Value - result.StartedAt;
+                                                <span>@duration.TotalSeconds.ToString("F1")s</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(result.ErrorMessage))
+                                            {
+                                                <small class="text-danger">@result.ErrorMessage</small>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row">
+        <div class="col-md-12">
+            <a asp-action="Hashtags" class="btn btn-primary">
+                <i class="bi bi-hash"></i> View Hashtags
+            </a>
+            <a asp-action="Crawl" class="btn btn-secondary">
+                <i class="bi bi-arrow-clockwise"></i> Crawl Again
+            </a>
+            <a asp-action="CrawlLogs" class="btn btn-outline-secondary">
+                <i class="bi bi-journal-text"></i> View All Logs
+            </a>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-house"></i> Admin Dashboard
+            </a>
+        </div>
+    </div>
+</div>

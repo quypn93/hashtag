@@ -1,0 +1,407 @@
+@model HashtagDashboardViewModel
+@{
+    ViewData["Title"] = "Hashtag Trending TikTok Việt Nam";
+    Layout = "_LayoutPublic";
+}
+
+<!-- Hero Section -->
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="hero-title">
+            <i class="bi bi-hash-square"></i> Hashtag Trending TikTok
+        </h1>
+        <p class="hero-subtitle">
+            Khám phá hashtag viral, phân tích độ khó và dự đoán lượt xem cho video của bạn
+        </p>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <!-- Search Bar -->
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <form asp-controller="Hashtag" asp-action="Search" method="get" class="d-flex gap-3">
+                <input type="text" name="q" class="form-control search-box flex-grow-1"
+                       placeholder="Tìm kiếm hashtag... (VD: bongdavietnam, seagame)"
+                       aria-label="Tìm kiếm hashtag"
+                       required
+                       minlength="2" />
+                <button class="btn btn-primary btn-search" type="submit">
+                    <i class="bi bi-search"></i> Tìm Kiếm
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-5">
+        <div class="col-md-3 mb-3">
+            <div class="card card-hashtag bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body text-white text-center">
+                    <i class="bi bi-hash fs-1 mb-2"></i>
+                    <h6 class="card-title mb-2">Tổng Hashtag</h6>
+                    <h2 class="mb-0">@Model.Stats.TotalHashtags.ToString("N0")</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card card-hashtag bg-gradient" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="card-body text-white text-center">
+                    <i class="bi bi-database fs-1 mb-2"></i>
+                    <h6 class="card-title mb-2">Nguồn Dữ Liệu</h6>
+                    <h2 class="mb-0">@Model.Stats.TotalSources</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card card-hashtag bg-gradient" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="card-body text-white text-center">
+                    <i class="bi bi-calendar-check fs-1 mb-2"></i>
+                    <h6 class="card-title mb-2">Thu Thập Hôm Nay</h6>
+                    <h2 class="mb-0">@Model.Stats.TodayCollected.ToString("N0")</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card card-hashtag bg-gradient" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                <div class="card-body text-white text-center">
+                    <i class="bi bi-clock-history fs-1 mb-2"></i>
+                    <h6 class="card-title mb-2">Cập Nhật Lần Cuối</h6>
+                    <h6 class="mb-0">@(Model.Stats.LastCrawled?.ToString("dd/MM HH:mm") ?? "Chưa có")</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Panel -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card card-hashtag">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <a data-bs-toggle="collapse" href="#filterPanel" role="button" aria-expanded="false" class="text-decoration-none">
+                            <i class="bi bi-funnel-fill text-primary"></i> Bộ Lọc Nâng Cao
+                        </a>
+                    </h5>
+                </div>
+                <div class="collapse" id="filterPanel">
+                    <div class="card-body">
+                        <form asp-action="Index" method="get">
+                            <div class="row">
+                                <!-- Source Filter -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold"><i class="bi bi-database"></i> Nguồn Dữ Liệu</label>
+                                    @foreach (var source in Model.Filters.AvailableSources)
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="SelectedSourceIds" value="@source.Id" @(source.IsSelected ? "checked" : "") />
+                                            <label class="form-check-label">@source.Name</label>
+                                        </div>
+                                    }
+                                </div>
+
+                                <!-- Date Range -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold"><i class="bi bi-calendar"></i> Ngày Bắt Đầu</label>
+                                        <input type="date" name="StartDate" class="form-control" value="@Model.Filters.StartDate?.ToString("yyyy-MM-dd")" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold"><i class="bi bi-calendar"></i> Ngày Kết Thúc</label>
+                                        <input type="date" name="EndDate" class="form-control" value="@Model.Filters.EndDate?.ToString("yyyy-MM-dd")" />
+                                    </div>
+                                </div>
+
+                                <!-- Rank Range & Sort -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold"><i class="bi bi-sort-numeric-down"></i> Xếp Hạng Thấp Nhất</label>
+                                        <input type="number" name="MinRank" class="form-control" value="@Model.Filters.MinRank" placeholder="VD: 1" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold"><i class="bi bi-sort-numeric-up"></i> Xếp Hạng Cao Nhất</label>
+                                        <input type="number" name="MaxRank" class="form-control" value="@Model.Filters.MaxRank" placeholder="VD: 50" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold"><i class="bi bi-sort-down"></i> Sắp Xếp Theo</label>
+                                        <select name="SortBy" class="form-select">
+                                            <option value="BestRank" selected="@(Model.Filters.SortBy == "BestRank")">Xếp hạng tốt nhất</option>
+                                            <option value="TotalAppearances" selected="@(Model.Filters.SortBy == "TotalAppearances")">Xuất hiện nhiều nhất</option>
+                                            <option value="LastSeen" selected="@(Model.Filters.SortBy == "LastSeen")">Mới nhất</option>
+                                            <option value="TrendMomentum" selected="@(Model.Filters.SortBy == "TrendMomentum")">📈 Tăng trưởng mạnh nhất</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-filter-circle"></i> Áp Dụng Bộ Lọc
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary">
+                                        <i class="bi bi-x-circle"></i> Xóa Bộ Lọc
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hashtags Table -->
+    <div class="row">
+        <div class="col-md-12">
+            @if (Model.TrendingHashtags.Any())
+            {
+                <div class="card card-hashtag">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="bi bi-fire text-danger"></i> Hashtag Trending
+                            <span class="badge bg-primary ms-2">@Model.TrendingHashtags.Count hashtag</span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th><i class="bi bi-trophy"></i> Hạng</th>
+                                        <th><i class="bi bi-hash"></i> Hashtag</th>
+                                        <th><i class="bi bi-database"></i> Nguồn</th>
+                                        <th><i class="bi bi-bar-chart"></i> Xuất Hiện</th>
+                                        <th><i class="bi bi-file-post"></i> Bài Viết</th>
+                                        <th><i class="bi bi-eye"></i> Lượt Xem</th>
+                                        <th><i class="bi bi-speedometer"></i> Độ Khó</th>
+                                        <th><i class="bi bi-folder"></i> Danh Mục</th>
+                                        <th><i class="bi bi-clock"></i> Lần Cuối</th>
+                                        <th><i class="bi bi-gear"></i> Thao Tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var hashtag in Model.TrendingHashtags)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span class="badge bg-primary">#@hashtag.BestRank</span>
+                                            @if (hashtag.RankDiff.HasValue && hashtag.RankDiff.Value != 0)
+                                            {
+                                                var rankDiffClass = hashtag.RankDiff.Value > 0 ? "text-success" : "text-danger";
+                                                var rankDiffIcon = hashtag.RankDiff.Value > 0 ? "bi-arrow-up" : "bi-arrow-down";
+                                                <small class="@rankDiffClass ms-1">
+                                                    <i class="bi @rankDiffIcon"></i>@Math.Abs(hashtag.RankDiff.Value)
+                                                </small>
+                                            }
+                                        </td>
+                                        <td>
+                                            <strong class="text-primary">@hashtag.TagDisplay</strong>
+                                            @if (hashtag.IsViral)
+                                            {
+                                                <span class="badge bg-danger ms-2" title="Viral trending">
+                                                    <i class="bi bi-fire"></i> VIRAL
+                                                </span>
+                                            }
+                                            @if (hashtag.TrendMomentum.HasValue && Math.Abs(hashtag.TrendMomentum.Value) >= 5)
+                                            {
+                                                var momentumClass = hashtag.TrendMomentum.Value > 0 ? "bg-success" : "bg-warning";
+                                                var momentumIcon = hashtag.TrendMomentum.Value > 0 ? "bi-graph-up-arrow" : "bi-graph-down-arrow";
+                                                var momentumText = hashtag.TrendMomentum.Value > 0 ? $"+{hashtag.TrendMomentum.Value:F1}%" : $"{hashtag.TrendMomentum.Value:F1}%";
+                                                <span class="badge @momentumClass ms-2" title="7-day trend momentum">
+                                                    <i class="bi @momentumIcon"></i> @momentumText
+                                                </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @foreach (var source in hashtag.Sources)
+                                            {
+                                                <span class="badge bg-secondary me-1">@source</span>
+                                            }
+                                        </td>
+                                        <td>@hashtag.TotalAppearances</td>
+                                        <td>
+                                            @if (hashtag.LatestPostCount.HasValue)
+                                            {
+                                                var postCountFormatted = hashtag.LatestPostCount.Value >= 1000
+                                                    ? $"{hashtag.LatestPostCount.Value / 1000.0:F1}K"
+                                                    : hashtag.LatestPostCount.Value.ToString("N0");
+                                                <span class="badge bg-info">@postCountFormatted</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">-</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (hashtag.LatestViewCount.HasValue)
+                                            {
+                                                var viewCountFormatted = hashtag.LatestViewCount.Value >= 1_000_000
+                                                    ? $"{hashtag.LatestViewCount.Value / 1_000_000.0:F1}M"
+                                                    : hashtag.LatestViewCount.Value >= 1000
+                                                        ? $"{hashtag.LatestViewCount.Value / 1000.0:F1}K"
+                                                        : hashtag.LatestViewCount.Value.ToString("N0");
+                                                <span class="badge bg-primary">@viewCountFormatted</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">-</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(hashtag.DifficultyLevel))
+                                            {
+                                                var badgeClass = hashtag.DifficultyLevel switch
+                                                {
+                                                    "Easy" => "bg-success",
+                                                    "Medium" => "bg-warning",
+                                                    "Hard" => "bg-danger",
+                                                    _ => "bg-secondary"
+                                                };
+                                                <span class="badge @badgeClass">@hashtag.DifficultyLevel</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">N/A</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(hashtag.CategoryName))
+                                            {
+                                                <span class="badge bg-info">@hashtag.CategoryName</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">N/A</span>
+                                            }
+                                        </td>
+                                        <td>@hashtag.LastSeen.ToString("g")</td>
+                                        <td>
+                                            <a asp-controller="Hashtag" asp-action="Details" asp-route-slug="@hashtag.Tag" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-eye"></i> Xem Chi Tiết
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    @if (Model.TotalPages > 1)
+                    {
+                        var startPage = Math.Max(1, Model.CurrentPage - 2);
+                        var endPage = Math.Min(Model.TotalPages, Model.CurrentPage + 2);
+
+                        <nav aria-label="Phân trang hashtag" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                @if (Model.HasPreviousPage)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="@BuildPageUrl(Model.CurrentPage - 1)">
+                                            <i class="bi bi-chevron-left"></i> Trước
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (startPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="@BuildPageUrl(1)">1</a>
+                                    </li>
+                                    @if (startPage > 2)
+                                    {
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    }
+                                }
+
+                                @for (int i = startPage; i <= endPage; i++)
+                                {
+                                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                        <a class="page-link" href="@BuildPageUrl(i)">@i</a>
+                                    </li>
+                                }
+
+                                @if (endPage < Model.TotalPages)
+                                {
+                                    @if (endPage < Model.TotalPages - 1)
+                                    {
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    }
+                                    <li class="page-item">
+                                        <a class="page-link" href="@BuildPageUrl(Model.TotalPages)">@Model.TotalPages</a>
+                                    </li>
+                                }
+
+                                @if (Model.HasNextPage)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="@BuildPageUrl(Model.CurrentPage + 1)">
+                                            Tiếp <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="text-center text-muted mt-2">
+                                <small>Trang @Model.CurrentPage / @Model.TotalPages (Tổng @Model.TotalCount hashtags)</small>
+                            </div>
+                        </nav>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info border-0 shadow-sm">
+                    <i class="bi bi-info-circle fs-4"></i>
+                    <h5 class="mt-2">Không tìm thấy hashtag nào</h5>
+                    <p class="mb-0">Thử điều chỉnh bộ lọc hoặc đợi đến lần thu thập dữ liệu tiếp theo.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-submit form when filters change (optional)
+        document.querySelectorAll('#filterPanel input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                // Optional: auto-submit on change
+                // this.form.submit();
+            });
+        });
+    </script>
+}
+
+@functions {
+    private string BuildPageUrl(int pageNumber)
+    {
+        var query = new List<string> { $"page={pageNumber}" };
+
+        if (Model.Filters.SelectedSourceIds != null && Model.Filters.SelectedSourceIds.Any())
+        {
+            foreach (var id in Model.Filters.SelectedSourceIds)
+            {
+                query.Add($"SelectedSourceIds={id}");
+            }
+        }
+
+        if (Model.Filters.CategoryId.HasValue)
+        {
+            query.Add($"CategoryId={Model.Filters.CategoryId.Value}");
+        }
+
+        if (!string.IsNullOrEmpty(Model.Filters.DifficultyLevel))
+        {
+            query.Add($"DifficultyLevel={Uri.EscapeDataString(Model.Filters.DifficultyLevel)}");
+        }
+
+        if (!string.IsNullOrEmpty(Model.Filters.SortBy))
+        {
+            query.Add($"SortBy={Uri.EscapeDataString(Model.Filters.SortBy)}");
+        }
+
+        return "/Hashtag/Index?" + string.Join("&", query);
+    }
+}

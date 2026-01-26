@@ -1,0 +1,36 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+/* body {
+  margin-bottom: 60px;
+} */
+
+/* Style for form buttons in dropdown to look like dropdown items */
+.dropdown-menu form button.dropdown-item {
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  padding: 0.25rem 1rem;
+}
+
+.dropdown-menu form button.dropdown-item:hover {
+  background-color: #f8f9fa;
+}

@@ -1,0 +1,296 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1><i class="bi bi-shield-lock"></i> Admin Dashboard</h1>
+            <p class="text-muted">Manage hashtag crawling and view system status</p>
+        </div>
+    </div>
+
+    <!-- Metadata Info Alert -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <h6 class="alert-heading"><i class="bi bi-info-circle"></i> Metrics Calculation Status</h6>
+                <p class="mb-2">
+                    <strong>Currently tracking metrics for:</strong> Hashtags from <span class="badge bg-primary">TikTok</span> with detail page data.
+                </p>
+                <small class="text-muted">
+                    <i class="bi bi-bar-chart"></i> <strong>Available metadata:</strong> PostCount, Category (from detail pages)<br>
+                    <i class="bi bi-exclamation-triangle"></i> <strong>Note:</strong> ViewCount is NOT available on TikTok pages. Difficulty is calculated based on PostCount (competition level).<br>
+                    <i class="bi bi-dash-circle"></i> <strong>Other sources</strong> (Google Trends, TokChart, Buffer, etc.) provide trending hashtags but lack metadata.
+                </small>
+                <hr>
+                <small>
+                    <a href="/VIEWCOUNT_NULL_ISSUE.md" class="alert-link" target="_blank">
+                        <i class="bi bi-book"></i> Learn about metadata limitations
+                    </a>
+                </small>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-lightning-charge"></i> Quick Actions</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group" role="group">
+                            <a asp-action="Crawl" class="btn btn-light">
+                                <i class="bi bi-play-circle"></i> Manual Crawl
+                            </a>
+                            <a asp-action="Hashtags" class="btn btn-light">
+                                <i class="bi bi-hash"></i> View Hashtags
+                            </a>
+                            <a asp-action="CrawlLogs" class="btn btn-light">
+                                <i class="bi bi-journal-text"></i> Crawl Logs
+                            </a>
+                            <a asp-action="SystemLogs" class="btn btn-light">
+                                <i class="bi bi-terminal"></i> System Logs
+                            </a>
+                            <a asp-controller="AdminBlog" asp-action="Index" class="btn btn-light">
+                                <i class="bi bi-file-earmark-text"></i> Quản Lý Blog
+                            </a>
+                        </div>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#clearDataModal">
+                            <i class="bi bi-trash3"></i> Clear All Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sources Status -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-globe"></i> Active Sources</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Source</th>
+                                    <th>URL</th>
+                                    <th>Metadata</th>
+                                    <th>Last Crawled</th>
+                                    <th>Status</th>
+                                    <th>Last Error</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var source in Model.Sources)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@source.Name</strong>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">@source.Url</small>
+                                        </td>
+                                        <td>
+                                            @if (source.Name == "TikTok")
+                                            {
+                                                <span class="badge bg-success" title="PostCount and Category available from detail pages">
+                                                    <i class="bi bi-check-circle"></i> PostCount
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning text-dark" title="Only Tag and Rank available">
+                                                    <i class="bi bi-dash-circle"></i> Rank Only
+                                                </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (source.LastCrawled.HasValue)
+                                            {
+                                                <span>@source.LastCrawled.Value.ToString("g")</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Never</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (source.IsActive)
+                                            {
+                                                <span class="badge bg-success">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">Inactive</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(source.LastError))
+                                            {
+                                                <span class="text-danger" title="@source.LastError">
+                                                    <i class="bi bi-exclamation-triangle"></i>
+                                                    @(source.LastError.Length > 30 ? source.LastError.Substring(0, 30) + "..." : source.LastError)
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-success"><i class="bi bi-check-circle"></i> OK</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <form asp-action="CrawlSource" method="post" style="display: inline;">
+                                                <input type="hidden" name="sourceName" value="@source.Name" />
+                                                <button type="submit" class="btn btn-sm btn-primary" @(!source.IsActive ? "disabled" : "")>
+                                                    <i class="bi bi-arrow-clockwise"></i> Crawl
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Crawl Logs -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Crawl Activity</h5>
+                    <a asp-action="CrawlLogs" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentCrawlLogs.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Source</th>
+                                        <th>Started</th>
+                                        <th>Duration</th>
+                                        <th>Hashtags</th>
+                                        <th>Status</th>
+                                        <th>Error</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var log in Model.RecentCrawlLogs.Take(10))
+                                    {
+                                        <tr>
+                                            <td><span class="badge bg-secondary">@log.Source.Name</span></td>
+                                            <td>@log.StartedAt.ToString("g")</td>
+                                            <td>
+                                                @if (log.CompletedAt.HasValue)
+                                                {
+                                                    var duration = log.CompletedAt.Value - log.StartedAt;
+                                                    <span>@duration.TotalSeconds.ToString("F1")s</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>@log.HashtagsCollected</td>
+                                            <td>
+                                                @if (log.Success)
+                                                {
+                                                    <span class="badge bg-success">Success</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">Failed</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(log.ErrorMessage))
+                                                {
+                                                    <small class="text-danger" title="@log.ErrorMessage">
+                                                        @(log.ErrorMessage.Length > 40 ? log.ErrorMessage.Substring(0, 40) + "..." : log.ErrorMessage)
+                                                    </small>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No crawl logs yet.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clear All Data Confirmation Modal -->
+    <div class="modal fade" id="clearDataModal" tabindex="-1" aria-labelledby="clearDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="clearDataModalLabel">
+                        <i class="bi bi-exclamation-triangle-fill"></i> Confirm Clear All Data
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger" role="alert">
+                        <h6 class="alert-heading"><i class="bi bi-exclamation-octagon"></i> WARNING: This action cannot be undone!</h6>
+                        <p class="mb-0">This will permanently delete:</p>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item">
+                            <i class="bi bi-hash text-danger"></i> All hashtags
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-clock-history text-danger"></i> All hashtag history
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-bar-chart text-danger"></i> All metrics
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-folder text-danger"></i> All categories
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-link-45deg text-danger"></i> All hashtag relations
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-journal-text text-danger"></i> All crawl logs
+                        </li>
+                    </ul>
+                    <p class="text-muted mb-0">
+                        <i class="bi bi-info-circle"></i> Note: Sources (TikTok, etc.) will be kept as they are seed data.
+                    </p>
+                    <p class="mt-3 mb-0 fw-bold">
+                        Are you absolutely sure you want to clear all data?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </button>
+                    <form asp-action="ClearAllData" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash3-fill"></i> Yes, Clear All Data
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

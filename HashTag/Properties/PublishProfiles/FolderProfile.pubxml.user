@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Task\TrendTag\HashTag\bin\Release\net8.0\publish\</_PublishTargetUrl>
+    <History>True|2026-01-08T14:17:15.4809543Z||;True|2026-01-08T20:48:43.4043166+07:00||;True|2026-01-08T09:25:19.5698670+07:00||;True|2026-01-08T09:09:48.9059743+07:00||;True|2026-01-07T16:56:04.3017322+07:00||;True|2026-01-07T15:29:13.4334389+07:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

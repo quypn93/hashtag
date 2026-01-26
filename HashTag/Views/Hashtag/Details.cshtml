@@ -1,0 +1,835 @@
+@using HashTag.Helpers
+@model HashtagDetailsViewModel
+@{
+    var categoryName = Model.Hashtag.Category != null
+        ? (!string.IsNullOrEmpty(Model.Hashtag.Category.DisplayNameVi) ? Model.Hashtag.Category.DisplayNameVi : Model.Hashtag.Category.Name)
+        : "TikTok";
+
+    var viewCount = Model.Hashtag.LatestViewCount.HasValue && Model.Hashtag.LatestViewCount > 0
+        ? (Model.Hashtag.LatestViewCount.Value >= 1_000_000_000
+            ? $"{Model.Hashtag.LatestViewCount.Value / 1_000_000_000.0:F1}B"
+            : Model.Hashtag.LatestViewCount.Value >= 1_000_000
+                ? $"{Model.Hashtag.LatestViewCount.Value / 1_000_000.0:F1}M"
+                : "nhiều")
+        : "nhiều";
+
+    ViewData["Title"] = $"{Model.Hashtag.TagDisplay} - Hashtag TikTok Trending | TrendTag";
+    ViewData["Description"] = $"Phân tích chi tiết hashtag {Model.Hashtag.TagDisplay} trên TikTok. {viewCount} lượt xem, xuất hiện {Model.Hashtag.TotalAppearances} lần trong trending. Tìm hiểu cách sử dụng hashtag {categoryName} hiệu quả để tăng view, tăng tương tác cho video TikTok.";
+    ViewData["Keywords"] = $"{Model.Hashtag.Tag.Trim()}, hashtag tiktok, {categoryName}, trending hashtag, viral hashtag, hashtag hot, tìm hashtag tiktok, phân tích hashtag, tăng view tiktok, tăng tương tác tiktok";
+    Layout = "_LayoutPublic";
+}
+
+<style>
+    /* Modern Card Styling */
+    .metric-card {
+        border-radius: 1rem;
+        border: none;
+        box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    .metric-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+    }
+
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .metric-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .gradient-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 3rem 0 2rem;
+        margin: -2rem 0 2rem 0;
+        border-radius: 0 0 2rem 2rem;
+    }
+
+    .info-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .related-item {
+        transition: all 0.2s ease;
+        border-left: 3px solid transparent;
+    }
+
+    .related-item:hover {
+        background-color: #f8f9fa;
+        border-left-color: #667eea;
+        transform: translateX(5px);
+    }
+
+    .history-table thead {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+    }
+
+    .history-table tbody tr {
+        transition: background-color 0.2s ease;
+    }
+
+    .history-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+
+<!-- Gradient Header -->
+<div class="gradient-header">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb breadcrumb-transparent mb-0">
+                @* <li class="breadcrumb-item"><a href="@Url.Action("Index", "Hashtag")" class="text-white">Trang chủ</a></li> *@
+                <li class="breadcrumb-item active text-white-50">@Model.Hashtag.TagDisplay</li>
+            </ol>
+        </nav>
+        <h1 class="display-3 text-white mb-2 fw-bold">@Model.Hashtag.TagDisplay</h1>
+        <div class="d-flex flex-wrap gap-2 mt-3 align-items-center">
+            @if (Model.Hashtag.Category != null)
+            {
+                <span class="info-badge bg-white text-dark">
+                    <i class="bi bi-folder"></i> @(!string.IsNullOrEmpty(Model.Hashtag.Category.DisplayNameVi) ? Model.Hashtag.Category.DisplayNameVi : Model.Hashtag.Category.Name)
+                </span>
+            }
+            @if (!string.IsNullOrEmpty(Model.Hashtag.DifficultyLevel))
+            {               
+                var badgeClass = Model.Hashtag.DifficultyLevel switch
+                {
+                    "Easy" => "bg-success",
+                    "Medium" => "bg-warning",
+                    "Hard" => "bg-danger",
+                    _ => "bg-secondary"
+                };
+                var difficultyVi = Model.Hashtag.DifficultyLevel switch
+                {
+                    "Easy" => "Thấp",
+                    "Medium" => "Trung Bình",
+                    "Hard" => "Cao",
+                    "Very Hard" => "Rất Cao",
+                    _ => Model.Hashtag.DifficultyLevel
+                };
+                <span class="text-white">Mức độ cạnh tranh: </span>
+                <span class="info-badge @badgeClass text-white">
+                    <i class="bi bi-speedometer"></i> @difficultyVi
+                </span>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    @* Key Metrics Cards *@
+    <div class="row g-4 mb-4">
+        @* Total Appearances *@
+        <div class="col-md-3 col-sm-6">
+            <div class="metric-card card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3 justify-content-center">
+                        <div class="metric-icon metric-icon-primary">
+                            <i class="bi bi-bar-chart-fill"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">@Model.Hashtag.TotalAppearances</div>
+                    <div class="metric-label">Tổng Số Lần Xuất Hiện</div>
+                </div>
+            </div>
+        </div>
+
+        @* View Count *@
+        @if (Model.Hashtag.LatestViewCount.HasValue && Model.Hashtag.LatestViewCount > 0)
+        {
+            var viewCountFormatted = Model.Hashtag.LatestViewCount.Value >= 1_000_000_000
+                ? $"{Model.Hashtag.LatestViewCount.Value / 1_000_000_000.0:F1}B"
+                : Model.Hashtag.LatestViewCount.Value >= 1_000_000
+                    ? $"{Model.Hashtag.LatestViewCount.Value / 1_000_000.0:F1}M"
+                    : Model.Hashtag.LatestViewCount.Value >= 1000
+                        ? $"{Model.Hashtag.LatestViewCount.Value / 1000.0:F1}K"
+                        : Model.Hashtag.LatestViewCount.Value.ToString("N0");
+
+            <div class="col-md-3 col-sm-6">
+                <div class="metric-card card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3 justify-content-center">
+                            <div class="metric-icon metric-icon-secondary">
+                                <i class="bi bi-eye-fill"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value text-danger">@viewCountFormatted</div>
+                        <div class="metric-label">Lượt Xem Gần Nhất</div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @* Post Count *@
+        @if (Model.Hashtag.LatestPostCount.HasValue && Model.Hashtag.LatestPostCount > 0)
+        {
+            var postCountFormatted = Model.Hashtag.LatestPostCount.Value >= 1_000_000
+                ? $"{Model.Hashtag.LatestPostCount.Value / 1_000_000.0:F1}M"
+                : Model.Hashtag.LatestPostCount.Value >= 1000
+                    ? $"{Model.Hashtag.LatestPostCount.Value / 1000.0:F1}K"
+                    : Model.Hashtag.LatestPostCount.Value.ToString("N0");
+
+            <div class="col-md-3 col-sm-6">
+                <div class="metric-card card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3 justify-content-center">
+                            <div class="metric-icon metric-icon-success">
+                                <i class="bi bi-file-post-fill"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value text-success">@postCountFormatted</div>
+                        <div class="metric-label">Số Bài Viết Gần Nhất</div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @* Total Views from Metrics *@
+        @if (Model.Metrics != null && Model.Metrics.ViewCount.HasValue && Model.Metrics.ViewCount > 0)
+        {
+            var totalViewsFormatted = Model.Metrics.ViewCount.Value >= 1_000_000_000
+                ? $"{Model.Metrics.ViewCount.Value / 1_000_000_000.0:F2}B"
+                : Model.Metrics.ViewCount.Value >= 1_000_000
+                    ? $"{Model.Metrics.ViewCount.Value / 1_000_000.0:F1}M"
+                    : Model.Metrics.ViewCount.Value >= 1000
+                        ? $"{Model.Metrics.ViewCount.Value / 1000.0:F1}K"
+                        : Model.Metrics.ViewCount.Value.ToString("N0");
+
+            <div class="col-md-3 col-sm-6">
+                <div class="metric-card card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3 justify-content-center">
+                            <div class="metric-icon metric-icon-warning">
+                                <i class="bi bi-eye"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value text-warning">@totalViewsFormatted</div>
+                        <div class="metric-label">Tổng Lượt Xem</div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @* Additional Info Cards *@
+    <div class="row g-4 mb-4">
+        @* Info Card *@
+        <div class="col-lg-8">
+            <div class="card metric-card">
+                <div class="card-header card-header-gradient-secondary">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-info-circle-fill"></i> Thông Tin Hashtag</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 bg-light rounded">
+                                <i class="bi bi-calendar-check text-primary fs-3 me-3"></i>
+                                <div>
+                                    <small class="text-muted d-block">Lần Đầu Xuất Hiện</small>
+                                    <strong>@Model.Hashtag.FirstSeen.ToVietnameseString()</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 bg-light rounded">
+                                <i class="bi bi-clock-history text-success fs-3 me-3"></i>
+                                <div>
+                                    <small class="text-muted d-block">Lần Cuối Xuất Hiện</small>
+                                    <strong>@Model.Hashtag.LastSeen.ToVietnameseString()</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Model.Metrics != null && Model.Metrics.EngagementRate > 0)
+                        {
+                            var avgViewsFormatted = Model.Metrics.EngagementRate >= 1_000_000
+                                ? $"{(Model.Metrics.EngagementRate / 1_000_000m):F1}M"
+                                : Model.Metrics.EngagementRate >= 1000
+                                    ? $"{(Model.Metrics.EngagementRate / 1000m):F1}K"
+                                    : $"{Model.Metrics.EngagementRate:N0}";
+
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center p-3 bg-light rounded">
+                                    <i class="bi bi-graph-up text-info fs-3 me-3"></i>
+                                    <div>
+                                        <small class="text-muted d-block">Trung Bình Lượt Xem/Bài</small>
+                                        <strong class="text-info">@avgViewsFormatted</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        @if (Model.Metrics != null && Model.Metrics.PredictedViewMin.HasValue && Model.Metrics.PredictedViewMax.HasValue)
+                        {
+                            var minFormatted = Model.Metrics.PredictedViewMin.Value >= 1_000_000
+                                ? $"{Model.Metrics.PredictedViewMin.Value / 1_000_000.0:F1}M"
+                                : Model.Metrics.PredictedViewMin.Value >= 1000
+                                    ? $"{Model.Metrics.PredictedViewMin.Value / 1000.0:F1}K"
+                                    : Model.Metrics.PredictedViewMin.Value.ToString("N0");
+
+                            var maxFormatted = Model.Metrics.PredictedViewMax.Value >= 1_000_000
+                                ? $"{Model.Metrics.PredictedViewMax.Value / 1_000_000.0:F1}M"
+                                : Model.Metrics.PredictedViewMax.Value >= 1000
+                                    ? $"{Model.Metrics.PredictedViewMax.Value / 1000.0:F1}K"
+                                    : Model.Metrics.PredictedViewMax.Value.ToString("N0");
+
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center p-3 bg-light rounded">
+                                    <i class="bi bi-graph-up-arrow text-warning fs-3 me-3"></i>
+                                    <div>
+                                        <small class="text-muted d-block">Dự Đoán Lượt Xem</small>
+                                        <strong class="text-warning">@minFormatted - @maxFormatted</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    @if (Model.Metrics != null && Model.Metrics.PredictedViewMin.HasValue)
+                    {
+                        <div class="alert alert-info alert-border-info mt-3 mb-0">
+                            <i class="bi bi-info-circle"></i> Ước tính lượt xem cho video mới của bạn khi sử dụng hashtag này
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @* Related Hashtags & Creators *@
+        <div class="col-lg-4">
+            @* Related Hashtags *@
+            <div class="card metric-card mb-4">
+                <div class="card-header card-header-gradient-primary">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-link-45deg"></i> Hashtag Liên Quan</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.RelatedHashtags.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var relatedHashtag in Model.RelatedHashtags.Take(5))
+                            {
+                                var viewCountFormatted = relatedHashtag.LatestViewCount.HasValue && relatedHashtag.LatestViewCount > 0
+                                    ? (relatedHashtag.LatestViewCount.Value >= 1_000_000_000
+                                        ? $"{relatedHashtag.LatestViewCount.Value / 1_000_000_000.0:F1}B"
+                                        : relatedHashtag.LatestViewCount.Value >= 1_000_000
+                                            ? $"{relatedHashtag.LatestViewCount.Value / 1_000_000.0:F1}M"
+                                            : relatedHashtag.LatestViewCount.Value >= 1000
+                                                ? $"{relatedHashtag.LatestViewCount.Value / 1000.0:F1}K"
+                                                : relatedHashtag.LatestViewCount.Value.ToString("N0"))
+                                    : null;
+
+                                <a href="@Url.Action("Details", new { slug = relatedHashtag.Tag.Trim() })" class="related-item list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <i class="bi bi-hash text-primary"></i>
+                                        <strong>@relatedHashtag.Tag.Trim()</strong>
+                                    </span>
+                                    @if (viewCountFormatted != null)
+                                    {
+                                        <span class="badge bg-primary rounded-pill" title="@relatedHashtag.LatestViewCount!.Value.ToString("N0") lượt xem">
+                                            @viewCountFormatted
+                                        </span>
+                                    }
+                                </a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0 text-center py-3">
+                            <i class="bi bi-info-circle"></i> Chưa có hashtag cùng chủ đề
+                        </p>
+                    }
+                </div>
+            </div>
+
+            @* Top Creators *@
+            @{
+                var latestHistoryWithCreators = Model.History
+                    .Where(h => !string.IsNullOrEmpty(h.FeaturedCreatorsJson))
+                    .OrderByDescending(h => h.CollectedDate)
+                    .FirstOrDefault();
+            }
+
+            @if (latestHistoryWithCreators != null)
+            {
+                <div class="card metric-card">
+                    <div class="card-header card-header-gradient-success">
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-people-fill"></i> Top Creators</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="creatorsContainer" data-creators='@latestHistoryWithCreators.FeaturedCreatorsJson'></div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    @* Usage Tips & Best Practices *@
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card metric-card">
+                <div class="card-header card-header-gradient-primary">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-lightbulb-fill"></i> Cách Sử Dụng Hashtag @Model.Hashtag.TagDisplay Hiệu Quả</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-primary mb-3"><i class="bi bi-check2-circle"></i> Tối Ưu Nội Dung</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>Đặt hashtag trong phần mô tả video hoặc bình luận đầu tiên</li>
+                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>Kết hợp 3-5 hashtag liên quan để tăng độ phủ sóng</li>
+                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>Tạo nội dung chất lượng cao phù hợp với chủ đề hashtag</li>
+                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>Đăng video vào khung giờ vàng (19h-22h) để tối đa hóa tương tác</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-primary mb-3"><i class="bi bi-x-circle"></i> Lưu Ý Khi Sử Dụng</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Tránh spam quá nhiều hashtag (không nên dùng hơn 8 hashtag)</li>
+                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Đảm bảo nội dung video phù hợp với ý nghĩa hashtag</li>
+                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Kiểm tra độ cạnh tranh trước khi sử dụng</li>
+                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Cập nhật hashtag trending thường xuyên để bắt kịp xu hướng</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    @if (Model.Hashtag.Category != null)
+                    {
+                        var tipCategoryName = !string.IsNullOrEmpty(Model.Hashtag.Category.DisplayNameVi)
+                            ? Model.Hashtag.Category.DisplayNameVi
+                            : Model.Hashtag.Category.Name;
+                        <div class="alert alert-info mt-3 mb-0 border-start border-4" style="border-left-color: #0dcaf0 !important;">
+                            <i class="bi bi-info-circle-fill"></i> <strong>Mẹo:</strong> Hashtag này thuộc chủ đề <strong>@tipCategoryName</strong>.
+                            Kết hợp với các hashtag cùng chủ đề ở phần "Hashtag Liên Quan" để tăng khả năng viral!
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Statistics Insights *@
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card metric-card">
+                <div class="card-header card-header-gradient-success">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-graph-up-arrow"></i> Phân Tích & Thống Kê Chi Tiết</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        @* Trend Analysis *@
+                        <div class="col-md-4">
+                            <div class="p-4 bg-light rounded text-center h-100">
+                                <i class="bi bi-fire text-danger fs-1 mb-3 d-block"></i>
+                                <h6 class="fw-bold mb-2">Mức Độ Hot</h6>
+                                @{
+                                    var trendLevel = Model.Hashtag.TotalAppearances >= 20 ? "Rất Hot"
+                                        : Model.Hashtag.TotalAppearances >= 10 ? "Hot"
+                                        : Model.Hashtag.TotalAppearances >= 5 ? "Khá Hot"
+                                        : "Mới Nổi";
+                                    var trendClass = Model.Hashtag.TotalAppearances >= 20 ? "text-danger"
+                                        : Model.Hashtag.TotalAppearances >= 10 ? "text-warning"
+                                        : "text-info";
+                                }
+                                <p class="fs-4 fw-bold @trendClass mb-2">@trendLevel</p>
+                                <small class="text-muted">Xuất hiện @Model.Hashtag.TotalAppearances lần trong trending</small>
+                            </div>
+                        </div>
+
+                        @* Competition Level *@
+                        <div class="col-md-4">
+                            <div class="p-4 bg-light rounded text-center h-100">
+                                <i class="bi bi-speedometer2 text-primary fs-1 mb-3 d-block"></i>
+                                <h6 class="fw-bold mb-2">Cạnh Tranh</h6>
+                                @{
+                                    var competitionText = Model.Hashtag.DifficultyLevel switch
+                                    {
+                                        "Easy" => "Thấp - Dễ lên top",
+                                        "Medium" => "Trung Bình",
+                                        "Hard" => "Cao - Khó lên top",
+                                        "Very Hard" => "Rất Cao",
+                                        _ => "Chưa xác định"
+                                    };
+                                    var competitionClass = Model.Hashtag.DifficultyLevel switch
+                                    {
+                                        "Easy" => "text-success",
+                                        "Medium" => "text-warning",
+                                        "Hard" or "Very Hard" => "text-danger",
+                                        _ => "text-secondary"
+                                    };
+                                }
+                                <p class="fs-5 fw-bold @competitionClass mb-2">@competitionText</p>
+                                @if (Model.Hashtag.LatestPostCount.HasValue && Model.Hashtag.LatestPostCount > 0)
+                                {
+                                    <small class="text-muted">@Model.Hashtag.LatestPostCount.Value.ToString("N0") bài viết đang sử dụng</small>
+                                }
+                            </div>
+                        </div>
+
+                        @* Performance Score *@
+                        <div class="col-md-4">
+                            <div class="p-4 bg-light rounded text-center h-100">
+                                <i class="bi bi-star-fill text-warning fs-1 mb-3 d-block"></i>
+                                <h6 class="fw-bold mb-2">Hiệu Suất</h6>
+                                @{
+                                    // Calculate performance based on views/post ratio
+                                    var performanceScore = Model.Metrics != null && Model.Metrics.EngagementRate > 0
+                                        ? (Model.Metrics.EngagementRate >= 100000 ? "Xuất Sắc"
+                                            : Model.Metrics.EngagementRate >= 50000 ? "Tốt"
+                                            : Model.Metrics.EngagementRate >= 10000 ? "Khá"
+                                            : "Trung Bình")
+                                        : "Đang thu thập dữ liệu";
+                                    var performanceClass = Model.Metrics != null && Model.Metrics.EngagementRate >= 50000
+                                        ? "text-success"
+                                        : "text-info";
+                                }
+                                <p class="fs-5 fw-bold @performanceClass mb-2">@performanceScore</p>
+                                @if (Model.Metrics != null && Model.Metrics.EngagementRate > 0)
+                                {
+                                    var avgViews = Model.Metrics.EngagementRate >= 1_000_000
+                                        ? $"{(Model.Metrics.EngagementRate / 1_000_000m):F1}M"
+                                        : Model.Metrics.EngagementRate >= 1000
+                                            ? $"{(Model.Metrics.EngagementRate / 1000m):F1}K"
+                                            : $"{Model.Metrics.EngagementRate:N0}";
+                                    <small class="text-muted">Trung bình @avgViews views/bài</small>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    @* Duration Analysis *@
+                    @{
+                        var daysSinceFirst = (Model.Hashtag.LastSeen - Model.Hashtag.FirstSeen).Days;
+                        var isStillHot = (DateTime.UtcNow - Model.Hashtag.LastSeen).TotalDays <= 7;
+                    }
+                    <div class="alert @(isStillHot ? "alert-success" : "alert-warning") mt-4 mb-0 border-start border-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <i class="bi bi-@(isStillHot ? "check-circle-fill" : "clock-history") me-2"></i>
+                                <strong>Tình Trạng:</strong>
+                                @if (isStillHot)
+                                {
+                                    <span>Hashtag này <strong class="text-success">vẫn đang hot</strong> (xuất hiện lần cuối @((DateTime.UtcNow - Model.Hashtag.LastSeen).TotalDays < 1 ? "hôm nay" : $"{(int)(DateTime.UtcNow - Model.Hashtag.LastSeen).TotalDays} ngày trước"))</span>
+                                }
+                                else
+                                {
+                                    <span>Hashtag này đã <strong>nguội đi</strong> (không xuất hiện trong trending @((int)(DateTime.UtcNow - Model.Hashtag.LastSeen).TotalDays) ngày)</span>
+                                }
+                            </div>
+                            <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                                <small class="text-muted">Thời gian hot: @daysSinceFirst ngày</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* FAQ Section *@
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card metric-card">
+                <div class="card-header card-header-gradient-warning">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-question-circle-fill"></i> Câu Hỏi Thường Gặp</h5>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item border-0 mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    <i class="bi bi-1-circle-fill text-primary me-2"></i> Làm thế nào để hashtag @Model.Hashtag.TagDisplay giúp video của tôi viral?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Sử dụng hashtag @Model.Hashtag.TagDisplay giúp video của bạn xuất hiện trong feed của những người đang quan tâm đến chủ đề này.
+                                    @if (Model.Metrics != null && Model.Metrics.PredictedViewMin.HasValue)
+                                    {
+                                        var minViews = Model.Metrics.PredictedViewMin.Value >= 1_000_000
+                                            ? $"{Model.Metrics.PredictedViewMin.Value / 1_000_000.0:F1}M"
+                                            : Model.Metrics.PredictedViewMin.Value >= 1000
+                                                ? $"{Model.Metrics.PredictedViewMin.Value / 1000.0:F1}K"
+                                                : Model.Metrics.PredictedViewMin.Value.ToString("N0");
+                                        var maxViews = Model.Metrics.PredictedViewMax.HasValue
+                                            ? (Model.Metrics.PredictedViewMax.Value >= 1_000_000
+                                                ? $"{Model.Metrics.PredictedViewMax.Value / 1_000_000.0:F1}M"
+                                                : Model.Metrics.PredictedViewMax.Value >= 1000
+                                                    ? $"{Model.Metrics.PredictedViewMax.Value / 1000.0:F1}K"
+                                                    : Model.Metrics.PredictedViewMax.Value.ToString("N0"))
+                                            : minViews;
+                                        <text>Theo dữ liệu của chúng tôi, video sử dụng hashtag này có thể đạt từ <strong>@minViews đến @maxViews lượt xem</strong>.</text>
+                                    }
+                                    Kết hợp với nội dung chất lượng và thời điểm đăng phù hợp sẽ tăng cơ hội lên trending.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item border-0 mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    <i class="bi bi-2-circle-fill text-primary me-2"></i> Nên kết hợp hashtag @Model.Hashtag.TagDisplay với hashtag nào?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    @if (Model.RelatedHashtags.Any())
+                                    {
+                                        <text>Bạn nên kết hợp với các hashtag liên quan như: </text>
+                                        @string.Join(", ", Model.RelatedHashtags.Take(5).Select(h => h.Tag.Trim()))
+                                        <text>. Việc kết hợp 3-5 hashtag cùng chủ đề sẽ giúp tăng độ phủ sóng và tiếp cận đúng đối tượng mục tiêu.</text>
+                                    }
+                                    else
+                                    {
+                                        <text>Bạn nên tìm các hashtag cùng chủ đề </text>
+                                        @if (Model.Hashtag.Category != null)
+                                        {
+                                            var faqCategoryName = !string.IsNullOrEmpty(Model.Hashtag.Category.DisplayNameVi)
+                                                ? Model.Hashtag.Category.DisplayNameVi
+                                                : Model.Hashtag.Category.Name;
+                                            <text><strong>@faqCategoryName</strong> </text>
+                                        }
+                                        <text>để kết hợp. Việc sử dụng 3-5 hashtag liên quan sẽ giúp tăng độ phủ sóng của video.</text>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item border-0 mb-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    <i class="bi bi-3-circle-fill text-primary me-2"></i> Khi nào là thời điểm tốt nhất để đăng video với hashtag này?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Thời điểm tốt nhất để đăng video trên TikTok là <strong>19h-22h</strong> (giờ vàng) và <strong>12h-14h</strong> (giờ trưa).
+                                    @{
+                                        var isWeekendTrend = Model.Hashtag.Tag.ToLower().Contains("weekend") ||
+                                                           Model.Hashtag.Tag.ToLower().Contains("cuoituan") ||
+                                                           Model.Hashtag.Tag.ToLower().Contains("thứbảy") ||
+                                                           Model.Hashtag.Tag.ToLower().Contains("chủnhật");
+                                    }
+                                    @if (isWeekendTrend)
+                                    {
+                                        <text>Đặc biệt, với hashtag này bạn nên đăng vào <strong>cuối tuần</strong> để tối đa hóa tương tác.</text>
+                                    }
+                                    else if (Model.Hashtag.Category != null && (Model.Hashtag.Category.Name.Contains("Music") || Model.Hashtag.Category.Name.Contains("Entertainment")))
+                                    {
+                                        <text>Với chủ đề giải trí, buổi tối và cuối tuần thường có tương tác cao nhất.</text>
+                                    }
+                                    Hãy theo dõi phản hồi của khán giả để tìm ra thời điểm phù hợp nhất với đối tượng của bạn.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item border-0">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                    <i class="bi bi-4-circle-fill text-primary me-2"></i> Hashtag @Model.Hashtag.TagDisplay có phù hợp cho người mới bắt đầu không?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    @{
+                                        var isGoodForBeginners = Model.Hashtag.DifficultyLevel == "Easy" || Model.Hashtag.DifficultyLevel == "Medium";
+                                    }
+                                    @if (isGoodForBeginners)
+                                    {
+                                        <text><strong class="text-success">Có!</strong> Hashtag này có mức độ cạnh tranh <strong>@(Model.Hashtag.DifficultyLevel == "Easy" ? "thấp" : "trung bình")</strong>,
+                                        rất phù hợp cho người mới bắt đầu. Bạn có cơ hội cao để video của mình được nhiều người xem.</text>
+                                    }
+                                    else if (Model.Hashtag.DifficultyLevel == "Hard" || Model.Hashtag.DifficultyLevel == "Very Hard")
+                                    {
+                                        <text><strong class="text-warning">Khuyến nghị cẩn trọng.</strong> Hashtag này có mức độ cạnh tranh <strong>cao</strong>,
+                                        phù hợp hơn cho các creator đã có kinh nghiệm và lượng follower nhất định.
+                                        Người mới nên kết hợp với các hashtag cạnh tranh thấp hơn để tăng cơ hội tiếp cận.</text>
+                                    }
+                                    else
+                                    {
+                                        <text>Hashtag này phù hợp cho mọi đối tượng. Hãy thử nghiệm và theo dõi hiệu quả để đánh giá xem có phù hợp với nội dung của bạn không.</text>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* History Timeline *@
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card metric-card">
+                <div class="card-header card-header-gradient-secondary">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history"></i> Lịch Sử Xếp Hạng (30 Ngày Gần Nhất)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.History.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table history-table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th><i class="bi bi-calendar"></i> Ngày</th>
+                                        <th><i class="bi bi-database"></i> Nguồn</th>
+                                        <th><i class="bi bi-trophy"></i> Xếp Hạng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var history in Model.History.OrderByDescending(h => h.CollectedDate).Take(50))
+                                    {
+                                        <tr>
+                                            <td>@history.CollectedDate.ToVietnameseString()</td>
+                                            <td><span class="badge bg-secondary">@history.Source.Name</span></td>
+                                            <td><span class="badge badge-gradient-primary">#@history.Rank</span></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0 text-center py-4">
+                            <i class="bi bi-info-circle"></i> Chưa có dữ liệu lịch sử
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Keywords *@
+    @if (Model.Hashtag.Keywords.Any())
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card metric-card">
+                    <div class="card-header card-header-gradient-warning">
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-key"></i> Từ Khóa Liên Quan</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var keyword in Model.Hashtag.Keywords.Where(k => k.IsActive))
+                            {
+                                <span class="badge bg-light text-dark border px-3 py-2 fs-6">
+                                    <i class="bi bi-tag"></i> @keyword.Keyword
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @* Back Button - Smart navigation based on referrer *@
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <a href="#" id="backButton" class="btn btn-gradient-primary btn-lg px-5">
+                <i class="bi bi-arrow-left"></i> <span id="backButtonText">Quay về Trang Chủ</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Smart back button logic
+        (function() {
+            const backButton = document.getElementById('backButton');
+            const backButtonText = document.getElementById('backButtonText');
+            const referrer = document.referrer;
+
+            // Check if user came from within the site
+            if (referrer && referrer.includes(window.location.hostname)) {
+                // Check if came from search page
+                if (referrer.includes('/Home/Search') || referrer.includes('/search')) {
+                    backButton.href = '@Url.Action("Search", "Home")' + window.location.search;
+                    backButtonText.textContent = 'Quay về Kết Quả Tìm Kiếm';
+                }
+                // Check if came from home page
+                else if (referrer.includes('/Home/Index') || referrer === window.location.origin + '/' || referrer.endsWith(window.location.hostname + '/')) {
+                    backButton.href = '@Url.Action("Index", "Home")';
+                    backButtonText.textContent = 'Quay về Trang Chủ';
+                }
+                // Came from somewhere else on site - use browser back
+                else {
+                    backButton.href = 'javascript:history.back()';
+                    backButtonText.textContent = 'Quay Lại';
+                }
+            } else {
+                // Came from external site or direct URL - go to home
+                backButton.href = '@Url.Action("Index", "Home")';
+                backButtonText.textContent = 'Quay về Trang Chủ';
+            }
+        })();
+    </script>
+</div>
+
+@section Scripts {
+    <script>
+        const creatorsContainer = document.getElementById('creatorsContainer');
+        if (creatorsContainer) {
+            const creatorsJson = creatorsContainer.dataset.creators;
+            if (creatorsJson) {
+                try {
+                    const creators = JSON.parse(creatorsJson);
+                    if (creators && creators.length > 0) {
+                        const html = creators.slice(0, 3).map((creator, index) => `
+                            <div class="creator-card creator-card-border d-flex align-items-center mb-3 p-3 border-start border-4 rounded bg-light">
+                                <div class="creator-avatar me-3">
+                                    <img src="${escapeHtml(creator.avatar_url)}"
+                                         alt="${escapeHtml(creator.nick_name)}"
+                                         class="rounded-circle avatar-sm"
+                                         onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2755%27 height=%2755%27%3E%3Crect fill=%27%23ddd%27 width=%2755%27 height=%2755%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 dominant-baseline=%27middle%27 text-anchor=%27middle%27 fill=%27%23999%27 font-size=%2724%27%3E${(index + 1)}%3C/text%3E%3C/svg%3E'">
+                                </div>
+                                <div class="creator-info flex-grow-1">
+                                    <div class="fw-bold fs-6">${escapeHtml(creator.nick_name)}</div>
+                                    <small class="text-muted">
+                                        <i class="bi bi-trophy-fill text-warning"></i> Top ${index + 1} Creator
+                                    </small>
+                                </div>
+                            </div>
+                        `).join('');
+                        creatorsContainer.innerHTML = html;
+                    } else {
+                        creatorsContainer.innerHTML = '<p class="text-muted mb-0 text-center py-3"><i class="bi bi-info-circle"></i> Chưa có thông tin creators</p>';
+                    }
+                } catch (e) {
+                    console.error('Error parsing creators JSON:', e);
+                    creatorsContainer.innerHTML = '<p class="text-muted mb-0 text-center py-3"><i class="bi bi-exclamation-triangle"></i> Lỗi khi tải thông tin creators</p>';
+                }
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+}

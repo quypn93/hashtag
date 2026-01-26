@@ -1,0 +1,129 @@
+@model List<CrawlLog>
+@{
+    ViewData["Title"] = "Crawl Logs";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Admin</a></li>
+                    <li class="breadcrumb-item active">Crawl Logs</li>
+                </ol>
+            </nav>
+            <h1><i class="bi bi-journal-text"></i> Crawl Logs</h1>
+            <p class="text-muted">Complete history of all crawl operations</p>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Source</th>
+                                        <th>Started</th>
+                                        <th>Completed</th>
+                                        <th>Duration</th>
+                                        <th>Hashtags</th>
+                                        <th>Status</th>
+                                        <th>Error Message</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var log in Model)
+                                    {
+                                        <tr class="@(log.Success ? "" : "table-danger")">
+                                            <td>@log.Id</td>
+                                            <td>
+                                                <span class="badge bg-secondary">@log.Source.Name</span>
+                                            </td>
+                                            <td>@log.StartedAt.ToString("g")</td>
+                                            <td>
+                                                @if (log.CompletedAt.HasValue)
+                                                {
+                                                    @log.CompletedAt.Value.ToString("g")
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (log.CompletedAt.HasValue)
+                                                {
+                                                    var duration = log.CompletedAt.Value - log.StartedAt;
+                                                    <span>@duration.TotalSeconds.ToString("F1")s</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (log.Success)
+                                                {
+                                                    <strong>@log.HashtagsCollected</strong>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">0</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (log.Success)
+                                                {
+                                                    <span class="badge bg-success">
+                                                        <i class="bi bi-check-circle"></i> Success
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">
+                                                        <i class="bi bi-x-circle"></i> Failed
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(log.ErrorMessage))
+                                                {
+                                                    <small class="text-danger" title="@log.ErrorMessage">
+                                                        @(log.ErrorMessage.Length > 50 ? log.ErrorMessage.Substring(0, 50) + "..." : log.ErrorMessage)
+                                                    </small>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> No crawl logs found. Start a manual crawl to see logs here.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+            <a asp-action="Crawl" class="btn btn-primary">
+                <i class="bi bi-play-circle"></i> Start New Crawl
+            </a>
+        </div>
+    </div>
+</div>

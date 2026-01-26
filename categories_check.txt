@@ -1,0 +1,10 @@
+Id Name DisplayNameVi Slug
+-- ---- ------------- ----
+1 TikTok Tips M?o TikTok tiktok-tips
+2 Hashtag Strategy Chi?n Lu?c Hashtag hashtag-strategy
+3 Trending Analysis Phân Tích Trending trending-analysis
+4 Creator Guide Hu?ng D?n Creator creator-guide
+5 Case Studies Nghiên C?u Ði?n Hình case-studies
+6 News & Updates Tin T?c & C?p Nh?t news-updates
+
+(6 rows affected)

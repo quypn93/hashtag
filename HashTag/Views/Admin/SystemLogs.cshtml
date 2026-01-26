@@ -1,0 +1,176 @@
+@model List<HashTag.Models.SystemLog>
+@{
+    ViewData["Title"] = "System Logs";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Admin</a></li>
+                    <li class="breadcrumb-item active">System Logs</li>
+                </ol>
+            </nav>
+            <h1><i class="bi bi-terminal"></i> System Logs</h1>
+            <p class="text-muted">Background service lifecycle events - useful for diagnosing IIS app pool issues</p>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="bi bi-exclamation-triangle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-list-ul"></i> Recent Events (@Model.Count entries)</span>
+                    <form asp-action="ClearSystemLogs" method="post" class="d-inline"
+                          onsubmit="return confirm('Are you sure you want to clear all system logs?');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i> Clear All
+                        </button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 160px;">Timestamp (UTC)</th>
+                                        <th style="width: 100px;">Event</th>
+                                        <th>Service</th>
+                                        <th>Message</th>
+                                        <th>Additional Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var log in Model)
+                                    {
+                                        var rowClass = log.EventType switch
+                                        {
+                                            "Started" => "table-success",
+                                            "Stopped" or "StopAsync" or "Stopping" => "table-warning",
+                                            "Error" => "table-danger",
+                                            "Disabled" => "table-secondary",
+                                            _ => ""
+                                        };
+                                        var badgeClass = log.EventType switch
+                                        {
+                                            "Started" => "bg-success",
+                                            "Stopped" or "StopAsync" or "Stopping" => "bg-warning text-dark",
+                                            "Error" => "bg-danger",
+                                            "Scheduled" => "bg-info",
+                                            "Executing" => "bg-primary",
+                                            "Disabled" => "bg-secondary",
+                                            _ => "bg-light text-dark"
+                                        };
+                                        <tr class="@rowClass">
+                                            <td>
+                                                <small>@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge @badgeClass">@log.EventType</span>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">@log.ServiceName</small>
+                                            </td>
+                                            <td>@log.Message</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(log.AdditionalData))
+                                                {
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                            data-bs-toggle="modal" data-bs-target="#dataModal@(log.Id)">
+                                                        <i class="bi bi-code-slash"></i> View
+                                                    </button>
+
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="dataModal@(log.Id)" tabindex="-1">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Additional Data - @log.EventType</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <pre class="bg-light p-3 rounded" style="white-space: pre-wrap; word-wrap: break-word;"><code>@log.AdditionalData</code></pre>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> No system logs found. Logs will appear when background services start/stop.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-question-circle"></i> Event Types Legend
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-3">
+                        <span><span class="badge bg-success">Started</span> Service started</span>
+                        <span><span class="badge bg-info">Scheduled</span> Next run scheduled</span>
+                        <span><span class="badge bg-primary">Executing</span> Crawl in progress</span>
+                        <span><span class="badge bg-warning text-dark">Stopping</span> Service stopping</span>
+                        <span><span class="badge bg-danger">Error</span> Error occurred</span>
+                        <span><span class="badge bg-secondary">Disabled</span> Service disabled</span>
+                    </div>
+                    <hr />
+                    <p class="mb-0 text-muted">
+                        <i class="bi bi-lightbulb"></i> <strong>Tip:</strong> If you see "Started" but no "Scheduled" or the service stops unexpectedly,
+                        check IIS Application Pool settings:
+                    </p>
+                    <ul class="text-muted mb-0">
+                        <li>Idle Timeout: Set to 0 (disable)</li>
+                        <li>Regular Time Interval (Recycling): Set to 0 or high value</li>
+                        <li>Start Mode: AlwaysRunning</li>
+                        <li>Preload Enabled: True</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+            <a asp-action="CrawlLogs" class="btn btn-outline-primary">
+                <i class="bi bi-journal-text"></i> Crawl Logs
+            </a>
+        </div>
+    </div>
+</div>

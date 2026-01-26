@@ -1,0 +1,287 @@
+@model AdminBlogListViewModel
+@{
+    ViewData["Title"] = "Quản Lý Blog";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1><i class="bi bi-file-earmark-text"></i> Quản Lý Blog</h1>
+            <p class="text-muted">Tạo, sửa, xóa và xuất bản bài viết blog</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Tạo Bài Mới
+            </a>
+            <div class="btn-group">
+                <a asp-action="Generate" class="btn btn-success">
+                    <i class="bi bi-magic"></i> Auto Generate
+                </a>
+                <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <form asp-controller="Admin" asp-action="GenerateBlogPosts" method="post" class="d-inline">
+                            <input type="hidden" name="type" value="all" />
+                            <button type="submit" class="dropdown-item">
+                                <i class="bi bi-stars"></i> Generate All
+                            </button>
+                        </form>
+                    </li>
+                    <li>
+                        <form asp-controller="Admin" asp-action="GenerateBlogPosts" method="post" class="d-inline">
+                            <input type="hidden" name="type" value="monthly" />
+                            <button type="submit" class="dropdown-item">
+                                <i class="bi bi-calendar-month"></i> Monthly Report
+                            </button>
+                        </form>
+                    </li>
+                    <li>
+                        <form asp-controller="Admin" asp-action="GenerateBlogPosts" method="post" class="d-inline">
+                            <input type="hidden" name="type" value="weekly" />
+                            <button type="submit" class="dropdown-item">
+                                <i class="bi bi-calendar-week"></i> Weekly Report
+                            </button>
+                        </form>
+                    </li>
+                    <li>
+                        <form asp-controller="Admin" asp-action="GenerateBlogPosts" method="post" class="d-inline">
+                            <input type="hidden" name="type" value="category" />
+                            <button type="submit" class="dropdown-item">
+                                <i class="bi bi-tags"></i> Category Posts
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null || TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @(TempData["Success"] ?? TempData["SuccessMessage"])
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null || TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle"></i> @(TempData["Error"] ?? TempData["ErrorMessage"])
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Trạng thái</label>
+                    <select name="status" class="form-select">
+                        <option value="">Tất cả</option>
+                        <option value="Draft" selected="@(Model.StatusFilter == "Draft")">Bản nháp</option>
+                        <option value="Published" selected="@(Model.StatusFilter == "Published")">Đã đăng</option>
+                        <option value="Archived" selected="@(Model.StatusFilter == "Archived")">Lưu trữ</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Danh mục</label>
+                    <select name="categoryId" class="form-select">
+                        <option value="">Tất cả</option>
+                        @foreach (var cat in Model.Categories)
+                        {
+                            <option value="@cat.Id" selected="@(Model.CategoryFilter == cat.Id)">@cat.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Tìm kiếm</label>
+                    <input type="text" name="q" class="form-control" placeholder="Tiêu đề hoặc slug..." value="@Model.SearchQuery">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-search"></i> Lọc
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Posts Table -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-list-ul"></i> Danh sách bài viết</span>
+            <span class="badge bg-secondary">@Model.TotalPosts bài</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 40%">Tiêu đề</th>
+                            <th>Danh mục</th>
+                            <th>Trạng thái</th>
+                            <th>Views</th>
+                            <th>Ngày tạo</th>
+                            <th style="width: 150px">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Posts.Any())
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                                    <p class="mb-0 mt-2">Chưa có bài viết nào</p>
+                                </td>
+                            </tr>
+                        }
+                        @foreach (var post in Model.Posts)
+                        {
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>@post.Title</strong>
+                                        <br>
+                                        <small class="text-muted">/@post.Slug</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (post.Category != null)
+                                    {
+                                        <span class="badge bg-info">@post.Category.Name</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @switch (post.Status)
+                                    {
+                                        case "Published":
+                                            <span class="badge bg-success"><i class="bi bi-check-circle"></i> Đã đăng</span>
+                                            break;
+                                        case "Draft":
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-pencil"></i> Bản nháp</span>
+                                            break;
+                                        case "Archived":
+                                            <span class="badge bg-secondary"><i class="bi bi-archive"></i> Lưu trữ</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>@post.ViewCount.ToString("N0")</td>
+                                <td>
+                                    <small>@post.CreatedAt.ToString("dd/MM/yyyy")</small>
+                                    @if (post.PublishedAt.HasValue)
+                                    {
+                                        <br>
+                                        <small class="text-success">Đăng: @post.PublishedAt.Value.ToString("dd/MM/yyyy")</small>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Edit" asp-route-id="@post.Id" class="btn btn-outline-primary" title="Sửa">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="/blog/@post.Slug" target="_blank" class="btn btn-outline-secondary" title="Xem">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <form asp-action="TogglePublish" asp-route-id="@post.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            @if (post.Status == "Published")
+                                            {
+                                                <button type="submit" class="btn btn-outline-warning" title="Gỡ xuống">
+                                                    <i class="bi bi-eye-slash"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-outline-success" title="Xuất bản">
+                                                    <i class="bi bi-send"></i>
+                                                </button>
+                                            }
+                                        </form>
+                                        <button type="button" class="btn btn-outline-danger" title="Xóa"
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                data-post-id="@post.Id" data-post-title="@post.Title">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <div class="card-footer">
+                <nav>
+                    <ul class="pagination pagination-sm mb-0 justify-content-center">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-action="Index"
+                                   asp-route-page="@i"
+                                   asp-route-status="@Model.StatusFilter"
+                                   asp-route-categoryId="@Model.CategoryFilter"
+                                   asp-route-q="@Model.SearchQuery">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        }
+    </div>
+
+    <!-- Back to Admin -->
+    <div class="mt-4">
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Quay lại Admin
+        </a>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-exclamation-triangle text-danger"></i> Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc muốn xóa bài viết "<strong id="deletePostTitle"></strong>"?</p>
+                <p class="text-danger mb-0"><small>Hành động này không thể hoàn tác!</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <form id="deleteForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Xóa
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('deleteModal').addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var postId = button.getAttribute('data-post-id');
+            var postTitle = button.getAttribute('data-post-title');
+
+            document.getElementById('deletePostTitle').textContent = postTitle;
+            document.getElementById('deleteForm').action = '/admin/blog/delete/' + postId;
+        });
+    </script>
+}

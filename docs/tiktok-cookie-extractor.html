@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Cookie Extractor - TrendTag</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #fe2c55;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-weight: bold;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        .code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .alert {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .alert-danger {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .alert-success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .instruction {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍪 TikTok Cookie Extractor</h1>
+        <p class="subtitle">Công cụ lấy cookie TikTok cho TrendTag Crawler (Playwright Format)</p>
+
+        <div class="alert alert-danger">
+            <strong>⚠️ LƯU Ý:</strong> Script này chỉ hoạt động khi chạy trên trang TikTok Creative Center. Vui lòng:
+            <ol>
+                <li>Mở tab mới</li>
+                <li>Truy cập: <a href="https://ads.tiktok.com/business/creativecenter/hashtag" target="_blank">TikTok Creative Center</a></li>
+                <li>Đăng nhập TikTok</li>
+                <li>Quay lại tab này và nhấn nút bên dưới</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h3>📋 Hướng Dẫn Sử Dụng</h3>
+            <ol>
+                <li><strong>Đăng nhập TikTok Creative Center</strong> (link ở trên)</li>
+                <li><strong>Mở Developer Console:</strong>
+                    <ul>
+                        <li>Windows/Linux: Nhấn <code>F12</code> hoặc <code>Ctrl + Shift + I</code></li>
+                        <li>Mac: Nhấn <code>Cmd + Option + I</code></li>
+                    </ul>
+                </li>
+                <li><strong>Chuyển sang tab "Console"</strong></li>
+                <li><strong>Copy script bên dưới</strong> và paste vào Console</li>
+                <li><strong>Nhấn Enter</strong></li>
+                <li><strong>Cookie sẽ tự động copy</strong> vào clipboard!</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h3>💻 Script (Click để copy)</h3>
+            <div class="code" id="scriptCode" onclick="copyScript()">// TikTok Cookie Extractor for TrendTag Crawler (Playwright Format)
+(function() {
+    console.clear();
+    console.log('%c🍪 TikTok Cookie Extractor for Playwright', 'font-size: 20px; font-weight: bold; color: #fe2c55;');
+    console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #fe2c55;');
+
+    // Get all cookies
+    const cookies = document.cookie;
+
+    if (!cookies) {
+        console.log('%c❌ Không tìm thấy cookie nào!', 'color: #dc3545; font-weight: bold;');
+        console.log('%cVui lòng đăng nhập TikTok Creative Center trước.', 'color: #6c757d;');
+        return;
+    }
+
+    // Parse cookies into Playwright format
+    const cookieArray = cookies.split(';').map(c => {
+        const [name, ...valueParts] = c.trim().split('=');
+        return {
+            name: name.trim(),
+            value: valueParts.join('=').trim(),
+            domain: '.tiktok.com',
+            path: '/',
+            expires: Math.floor(Date.now() / 1000) + (365 * 24 * 60 * 60), // 1 year from now
+            httpOnly: false,
+            secure: true,
+            sameSite: 'None'
+        };
+    });
+
+    // Important TikTok cookies
+    const importantCookies = [
+        'sessionid', 'sessionid_ss', 'sid_guard', 'sid_tt',
+        'uid_tt', 'uid_tt_ss', 'store-idc', 'store-country-code',
+        'tt_csrf_token', 'tt_chain_token', 'msToken',
+        's_v_web_id', 'passport_csrf_token', 'tt_ticket_guard_client_data'
+    ];
+
+    console.log('%c📊 Tổng số cookies:', 'font-weight: bold; color: #495057;');
+    console.log(`   Tất cả: ${cookieArray.length}`);
+    console.log(`   Quan trọng: ${cookieArray.filter(c => importantCookies.includes(c.name)).length}`);
+    console.log('');
+
+    // Format for appsettings.json (escaped JSON string)
+    const jsonString = JSON.stringify(cookieArray);
+    const escapedJsonString = jsonString
+        .replace(/\\/g, '\\\\')  // Escape backslashes first
+        .replace(/"/g, '\\"');   // Escape quotes
+
+    console.log('%c✅ Cookie JSON (for appsettings.json):', 'font-weight: bold; color: #28a745; font-size: 14px;');
+    console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #28a745;');
+    console.log('%cPaste this into appsettings.json → "TikTokCookies":', 'color: #6c757d; font-style: italic;');
+    console.log('');
+    console.log(`"TikTokCookies": "${escapedJsonString}"`);
+    console.log('');
+    console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #28a745;');
+
+    // Copy to clipboard
+    const finalString = `"TikTokCookies": "${escapedJsonString}"`;
+    navigator.clipboard.writeText(finalString).then(() => {
+        console.log('%c✨ ĐÃ COPY VÀO CLIPBOARD!', 'font-size: 16px; font-weight: bold; color: #28a745; background: #d4edda; padding: 10px;');
+        console.log('%cBây giờ paste vào appsettings.json (thay thế dòng "TikTokCookies" cũ)', 'color: #6c757d; font-style: italic;');
+    }).catch(() => {
+        console.log('%c⚠️ Không thể tự động copy. Vui lòng copy thủ công từ console.', 'color: #ffc107; font-weight: bold;');
+    });
+
+    console.log('');
+    console.log('%c🔍 Chi tiết cookies quan trọng:', 'font-weight: bold; color: #007bff;');
+    importantCookies.forEach(name => {
+        const cookie = cookieArray.find(c => c.name === name);
+        if (cookie) {
+            console.log(`   ✓ ${name}: ${cookie.value.substring(0, 30)}...`);
+        } else {
+            console.log(`   ✗ ${name}: KHÔNG TÌM THẤY`);
+        }
+    });
+
+    console.log('');
+    console.log('%c⏰ Cookie Expiry:', 'font-weight: bold; color: #dc3545;');
+    console.log('   ⚠️ Cookie TikTok thường hết hạn sau 7-30 ngày');
+    console.log('   ⚠️ Nếu crawler lỗi 401/403, cần lấy cookie mới');
+    console.log('');
+    console.log('%c📋 Preview (first 3 cookies):', 'font-weight: bold; color: #495057;');
+    console.log(JSON.stringify(cookieArray.slice(0, 3), null, 2));
+    console.log('');
+    console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #fe2c55;');
+})();</div>
+            <button onclick="copyScript()" style="margin-top: 15px;">📋 Copy Script</button>
+        </div>
+
+        <div class="instruction">
+            <h4>🎯 Sau Khi Chạy Script:</h4>
+            <ol>
+                <li>Cookie JSON sẽ tự động copy vào clipboard</li>
+                <li>Mở file: <code>d:\Task\TrendTag\HashTag\appsettings.json</code></li>
+                <li>Tìm dòng <code>"TikTokCookies"</code></li>
+                <li>Thay thế toàn bộ dòng đó bằng nội dung đã copy</li>
+                <li>Save file</li>
+                <li>Restart ứng dụng TrendTag</li>
+            </ol>
+        </div>
+
+        <div class="alert">
+            <strong>🔐 Bảo Mật:</strong>
+            <ul>
+                <li>KHÔNG chia sẻ cookie với người khác</li>
+                <li>KHÔNG commit appsettings.json lên Git</li>
+                <li>Cookie hết hạn sau 7-30 ngày, cần update định kỳ</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function copyScript() {
+            const scriptText = document.getElementById('scriptCode').textContent;
+            navigator.clipboard.writeText(scriptText).then(() => {
+                alert('✅ Đã copy script vào clipboard!\n\nBây giờ:\n1. Mở TikTok Creative Center\n2. Nhấn F12 (Console)\n3. Paste script và Enter');
+            }).catch(() => {
+                alert('❌ Không thể copy tự động.\n\nVui lòng copy thủ công script từ khung màu đen.');
+            });
+        }
+    </script>
+</body>
+</html>

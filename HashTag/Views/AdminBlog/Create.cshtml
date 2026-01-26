@@ -1,0 +1,202 @@
+@model BlogPostEditViewModel
+@{
+    ViewData["Title"] = "Tạo Bài Viết Mới";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1><i class="bi bi-plus-circle"></i> Tạo Bài Viết Mới</h1>
+            <p class="text-muted">Điền thông tin để tạo bài viết blog mới</p>
+        </div>
+    </div>
+
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-card-text"></i> Nội dung</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label">Tiêu đề <span class="text-danger">*</span></label>
+                            <input asp-for="Title" class="form-control" id="titleInput" placeholder="Nhập tiêu đề bài viết...">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Slug" class="form-label">Slug (URL) <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">/blog/</span>
+                                <input asp-for="Slug" class="form-control" id="slugInput" placeholder="slug-bai-viet">
+                                <button type="button" class="btn btn-outline-secondary" id="generateSlugBtn">
+                                    <i class="bi bi-magic"></i> Tự động
+                                </button>
+                            </div>
+                            <span asp-validation-for="Slug" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Excerpt" class="form-label">Mô tả ngắn</label>
+                            <textarea asp-for="Excerpt" class="form-control" rows="2" placeholder="Mô tả ngắn hiển thị trong danh sách..."></textarea>
+                            <span asp-validation-for="Excerpt" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Content" class="form-label">Nội dung <span class="text-danger">*</span></label>
+                            <textarea asp-for="Content" class="form-control" id="contentEditor" rows="15" placeholder="Nhập nội dung HTML..."></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                            <small class="text-muted">Hỗ trợ HTML. Có thể dùng các tag như &lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;a&gt;...</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEO Settings -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-search"></i> SEO</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="MetaTitle" class="form-label">Meta Title</label>
+                            <input asp-for="MetaTitle" class="form-control" placeholder="Tiêu đề hiển thị trên Google (để trống sẽ dùng tiêu đề bài)">
+                            <small class="text-muted">Tối đa 60 ký tự</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MetaDescription" class="form-label">Meta Description</label>
+                            <textarea asp-for="MetaDescription" class="form-control" rows="2" placeholder="Mô tả hiển thị trên Google..."></textarea>
+                            <small class="text-muted">Tối đa 160 ký tự</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MetaKeywords" class="form-label">Meta Keywords</label>
+                            <input asp-for="MetaKeywords" class="form-control" placeholder="keyword1, keyword2, keyword3...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Publish Settings -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-gear"></i> Cài đặt</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Status" class="form-label">Trạng thái</label>
+                            <select asp-for="Status" class="form-select">
+                                <option value="Draft">Bản nháp</option>
+                                <option value="Published">Xuất bản</option>
+                                <option value="Archived">Lưu trữ</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CategoryId" class="form-label">Danh mục</label>
+                            <select asp-for="CategoryId" class="form-select">
+                                <option value="">-- Chọn danh mục --</option>
+                                @foreach (var cat in Model.Categories)
+                                {
+                                    <option value="@cat.Id">@cat.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Author" class="form-label">Tác giả</label>
+                            <input asp-for="Author" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PublishedAt" class="form-label">Ngày đăng</label>
+                            <input asp-for="PublishedAt" type="datetime-local" class="form-control">
+                            <small class="text-muted">Để trống sẽ dùng thời điểm xuất bản</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Image -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-image"></i> Ảnh đại diện</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="FeaturedImage" class="form-label">URL ảnh</label>
+                            <input asp-for="FeaturedImage" class="form-control" id="featuredImageInput" placeholder="https://...">
+                        </div>
+                        <div id="imagePreview" class="mt-2" style="display: none;">
+                            <img id="previewImg" src="" alt="Preview" class="img-fluid rounded">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-lg"></i> Lưu Bài Viết
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-lg"></i> Hủy
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-generate slug from title
+        document.getElementById('generateSlugBtn').addEventListener('click', function() {
+            var title = document.getElementById('titleInput').value;
+            if (title) {
+                fetch('/admin/blog/api/generate-slug?title=' + encodeURIComponent(title))
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('slugInput').value = data.slug;
+                    });
+            }
+        });
+
+        // Auto-generate slug on title blur (if slug is empty)
+        document.getElementById('titleInput').addEventListener('blur', function() {
+            var slugInput = document.getElementById('slugInput');
+            if (!slugInput.value && this.value) {
+                fetch('/admin/blog/api/generate-slug?title=' + encodeURIComponent(this.value))
+                    .then(response => response.json())
+                    .then(data => {
+                        slugInput.value = data.slug;
+                    });
+            }
+        });
+
+        // Image preview
+        document.getElementById('featuredImageInput').addEventListener('change', function() {
+            var url = this.value;
+            var preview = document.getElementById('imagePreview');
+            var img = document.getElementById('previewImg');
+
+            if (url) {
+                img.src = url;
+                preview.style.display = 'block';
+                img.onerror = function() {
+                    preview.style.display = 'none';
+                };
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+    </script>
+}

@@ -1,0 +1,1163 @@
+@model HomeIndexViewModel
+@{
+    ViewData["Title"] = "Tìm Hashtag TikTok Trending - Công Cụ Tìm Kiếm Hashtag Viral";
+    ViewData["Description"] = "Công cụ tìm kiếm hashtag TikTok trending miễn phí. Tìm hashtag viral, hashtag hot, hashtag xu hướng để tăng view, tăng tương tác cho video TikTok của bạn.";
+    ViewData["Keywords"] = "tìm hashtag tiktok, hashtag trending, hashtag viral, hashtag tiktok hot, tìm kiếm hashtag, công cụ hashtag, hashtag xu hướng, tăng view tiktok, tăng tương tác tiktok";
+    Layout = "_LayoutPublic";
+}
+
+<div class="home-hero text-center py-5">
+    <div class="container">
+        <h1 class="display-3 fw-bold mb-3">
+            <i class="bi bi-hash-square text-primary"></i> Tìm Hashtag TikTok Trending Viral
+        </h1>
+        <p class="lead text-muted mb-5">
+            Công cụ phân tích và tìm kiếm hashtag trending miễn phí - Cập nhật real-time mỗi 6 giờ từ TikTok Việt Nam
+        </p>
+
+        <div class="search-container search-container-max mx-auto p-0 p-sm-2">
+            <form asp-controller="Hashtag" asp-action="Search" method="get" class="position-relative">
+                <div class="input-group search-input-height shadow-lg rounded-pill overflow-hidden">
+                    <span class="input-group-text bg-white border-0 ps-4 d-flex align-items-center">
+                        <i class="bi bi-search text-primary fs-4"></i>
+                    </span>
+                    <input
+                        type="text"
+                        class="form-control search-input-font border-0 ps-2 fs-5"
+                        id="searchInput"
+                        name="q"
+                        placeholder="Tìm kiếm hashtag... (VD: dulich, amnhac, thethao)"
+                        autocomplete="off"
+                        required
+                    />
+                    <button class="btn btn-primary search-btn-radius px-5 border-0 fs-5 fw-semibold" type="submit">
+                        <i class="bi bi-search me-2"></i>Tìm Kiếm
+                    </button>
+                </div>
+
+                <!-- Auto-suggest dropdown -->
+                <div id="suggestionsDropdown" class="suggestions-dropdown list-group position-absolute w-100 mt-2 shadow-lg rounded-3"></div>
+            </form>
+
+            <div class="mt-4 text-muted">
+                <i class="bi bi-lightbulb text-warning"></i>
+                <small>Thử tìm kiếm: "bongda", "amnhac", "dulich" hoặc "amthuc"</small>
+            </div>
+        </div>
+
+        <div class="row mt-5 g-4">
+            <div class="col-md-4">
+                <a href="/Analytics/Growth" class="text-decoration-none">
+                    <div class="card card-hashtag border-0 h-100 feature-card-hover feature-card-primary">
+                        <div class="card-body text-center text-white p-4">
+                            <div class="feature-icon bg-white bg-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                <i class="bi bi-graph-up-arrow fs-3"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Trending Real-time</h5>
+                            <p class="card-text opacity-90">
+                                Cập nhật hashtag trending mới nhất mỗi 6 giờ từ nhiều nguồn uy tín
+                            </p>
+                            <small class="d-block mt-2 opacity-75"><i class="bi bi-arrow-right-circle me-1"></i>Theo dõi tăng trưởng</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/" class="text-decoration-none">
+                    <div class="card card-hashtag border-0 h-100 feature-card-hover feature-card-secondary">
+                        <div class="card-body text-center text-white p-4">
+                            <div class="feature-icon bg-white bg-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                <i class="bi bi-database fs-3"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Đa Nguồn Dữ Liệu</h5>
+                            <p class="card-text opacity-90">
+                                Thu thập từ TikTok và nhiều nền tảng khác
+                            </p>
+                            <small class="d-block mt-2 opacity-75"><i class="bi bi-arrow-right-circle me-1"></i>Xem hashtag trending</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/Hashtag/Generator" class="text-decoration-none">
+                    <div class="card card-hashtag border-0 h-100 feature-card-hover feature-card-info">
+                        <div class="card-body text-center text-white p-4">
+                            <div class="feature-icon bg-white bg-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                <i class="bi bi-stars fs-3"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Gợi Ý Thông Minh</h5>
+                            <p class="card-text opacity-90">
+                                Nhận đề xuất hashtag thông minh ngay khi bạn gõ từ khóa
+                            </p>
+                            <small class="d-block mt-2 opacity-75"><i class="bi bi-arrow-right-circle me-1"></i>Tạo hashtag AI</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Value Propositions -->
+        <div class="row mt-5 text-center">
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="value-card p-4 h-100">
+                    <i class="bi bi-clock-history fs-1 text-primary mb-3"></i>
+                    <h5 class="fw-bold">Cập Nhật Mỗi 6 Giờ</h5>
+                    <p class="text-muted small">Dữ liệu trending realtime từ TikTok và nhiều nguồn uy tín khác</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="value-card p-4 h-100">
+                    <i class="bi bi-shield-check fs-1 text-success mb-3"></i>
+                    <h5 class="fw-bold">100% Miễn Phí</h5>
+                    <p class="text-muted small">Không cần đăng ký tài khoản, không giới hạn số lần tra cứu hashtag</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="value-card p-4 h-100">
+                    <i class="bi bi-graph-up-arrow fs-1 text-warning mb-3"></i>
+                    <h5 class="fw-bold">Phân Tích Chuyên Sâu</h5>
+                    <p class="text-muted small">Độ khó cạnh tranh, lượt xem, số bài đăng chi tiết cho mỗi hashtag trending</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="value-card p-4 h-100">
+                    <i class="bi bi-grid-3x3-gap fs-1 text-info mb-3"></i>
+                    <h5 class="fw-bold">16+ Chủ Đề</h5>
+                    <p class="text-muted small">Từ Giáo Dục, Tin Tức đến Du Lịch, Thể Thao - tìm hashtag theo ngành dễ dàng</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="row mt-5 mb-4">
+            <div class="col-lg-10 mx-auto">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold mb-3">
+                        <i class="bi bi-lightbulb text-warning me-2"></i>
+                        Cách Sử Dụng TrendTag Hiệu Quả
+                    </h2>
+                    <p class="text-muted">3 bước đơn giản để tìm hashtag trending phù hợp với nội dung của bạn</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="how-it-works-card text-center p-4 h-100 border rounded-4 shadow-sm">
+                            <div class="step-number step-number-primary mx-auto mb-3">
+                                <span class="text-white fw-bold fs-4">1</span>
+                            </div>
+                            <h5 class="fw-bold mb-3">Chọn Chủ Đề</h5>
+                            <p class="text-muted small">
+                                Lọc hashtag theo chủ đề phù hợp với nội dung của bạn: Giáo Dục, Du Lịch, Thời Trang, Công Nghệ, v.v. Có 16+ chủ đề để lựa chọn.
+                            </p>
+                            <div class="mt-3">
+                                <i class="bi bi-grid-3x3-gap text-primary icon-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="how-it-works-card text-center p-4 h-100 border rounded-4 shadow-sm">
+                            <div class="step-number step-number-secondary mx-auto mb-3">
+                                <span class="text-white fw-bold fs-4">2</span>
+                            </div>
+                            <h5 class="fw-bold mb-3">Phân Tích Hashtag</h5>
+                            <p class="text-muted small">
+                                Xem số lượt xem, số bài đăng, và mức độ cạnh tranh của mỗi hashtag. Chọn hashtag có mức độ cạnh tranh <strong>Thấp</strong> hoặc <strong>Trung Bình</strong> để dễ viral hơn.
+                            </p>
+                            <div class="mt-3">
+                                <i class="bi bi-bar-chart-line text-success icon-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="how-it-works-card text-center p-4 h-100 border rounded-4 shadow-sm">
+                            <div class="step-number step-number-info mx-auto mb-3">
+                                <span class="text-white fw-bold fs-4">3</span>
+                            </div>
+                            <h5 class="fw-bold mb-3">Sao Chép & Đăng Video</h5>
+                            <p class="text-muted small">
+                                Click vào hashtag để xem chi tiết và sao chép. Sử dụng 3-5 hashtag trending kết hợp với 2-3 hashtag ngách để tối ưu reach và engagement.
+                            </p>
+                            <div class="mt-3">
+                                <i class="bi bi-rocket-takeoff text-warning icon-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info border-0 shadow-sm mt-4 rounded-4" role="alert">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-info-circle-fill me-3 mt-1 icon-lg"></i>
+                        <div>
+                            <h6 class="fw-bold mb-2">💡 Mẹo Pro:</h6>
+                            <p class="mb-0 small">
+                                Kết hợp hashtag <strong>trending có mức độ cạnh tranh Thấp</strong> với hashtag ngách (niche) của bạn để video dễ lên FYP hơn.
+                                Ví dụ: #dulich (trending, cạnh tranh cao) + #dulichdalat2025 (ngách, cạnh tranh thấp) = Tăng cơ hội viral!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top 10 Trending Hashtags -->
+        <div class="mt-5">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-header card-header-gradient-primary text-white py-3">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <h4 class="mb-0 fw-bold text-black">
+                                <i class="bi bi-fire me-2"></i>Top 10 Hashtag Trending
+                            </h4>
+                            @if (Model.SelectedCategoryId.HasValue)
+                            {
+                                var selectedCategory = Model.Categories.FirstOrDefault(c => c.Id == Model.SelectedCategoryId.Value);
+                                if (selectedCategory != null)
+                                {
+                                    <span id="categoryLabel" class="badge bg-white bg-opacity-25 px-3 py-2">
+                                        <i class="bi bi-tag-fill me-1"></i>
+                                        @(!string.IsNullOrEmpty(selectedCategory.DisplayNameVi) ? selectedCategory.DisplayNameVi : selectedCategory.Name)
+                                    </span>
+                                }
+                            }
+                        </div>
+                        <select id="categorySelect" class="form-select form-select-sm border-white text-dark min-w-200" onchange="filterByCategory(this)">
+                            <option value="">Tất Cả Chủ Đề</option>
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option value="@category.Id"
+                                        data-slug="@category.Slug"
+                                        data-name="@(!string.IsNullOrEmpty(category.DisplayNameVi) ? category.DisplayNameVi : category.Name)"
+                                        selected="@(Model.SelectedCategoryId == category.Id)">
+                                    @(!string.IsNullOrEmpty(category.DisplayNameVi) ? category.DisplayNameVi : category.Name)
+                                </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.TopHashtags.Any())
+                    {
+                        <div class="table-responsive">
+                            <table id="hashtagTable" class="table table-hover mb-0 align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4 w-60px">#</th>
+                                        <th>Hashtag</th>
+                                        <th class="text-center">Chủ Đề</th>
+                                        <th class="text-center">Lượt Xem</th>
+                                        <th class="text-center">Số Bài Đăng</th>
+                                        <th class="text-center">Mức Độ Cạnh Tranh</th>
+                                        <th class="text-center">Hạng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.TopHashtags.Count; i++)
+                                    {
+                                        var hashtag = Model.TopHashtags[i];
+                                        var viewCountFormatted = hashtag.LatestViewCount.HasValue && hashtag.LatestViewCount > 0
+                                            ? (hashtag.LatestViewCount.Value >= 1_000_000_000
+                                                ? $"{hashtag.LatestViewCount.Value / 1_000_000_000.0:F1}B"
+                                                : hashtag.LatestViewCount.Value >= 1_000_000
+                                                    ? $"{hashtag.LatestViewCount.Value / 1_000_000.0:F1}M"
+                                                    : hashtag.LatestViewCount.Value >= 1000
+                                                        ? $"{hashtag.LatestViewCount.Value / 1000.0:F1}K"
+                                                        : hashtag.LatestViewCount.Value.ToString("N0"))
+                                            : "-";
+
+                                        var postCountFormatted = hashtag.LatestPostCount.HasValue && hashtag.LatestPostCount > 0
+                                            ? (hashtag.LatestPostCount.Value >= 1_000_000_000
+                                                ? $"{hashtag.LatestPostCount.Value / 1_000_000_000.0:F1}B"
+                                                : hashtag.LatestPostCount.Value >= 1_000_000
+                                                    ? $"{hashtag.LatestPostCount.Value / 1_000_000.0:F1}M"
+                                                    : hashtag.LatestPostCount.Value >= 1000
+                                                        ? $"{hashtag.LatestPostCount.Value / 1000.0:F1}K"
+                                                        : hashtag.LatestPostCount.Value.ToString("N0"))
+                                            : "-";
+
+                                        var difficultyBadge = hashtag.DifficultyLevel switch
+                                        {
+                                            "Easy" => "badge bg-success",
+                                            "Medium" => "badge bg-warning",
+                                            "Hard" => "badge bg-danger",
+                                            "Very Hard" => "badge bg-dark",
+                                            _ => "badge bg-secondary"
+                                        };
+
+                                        var difficultyVi = hashtag.DifficultyLevel switch
+                                        {
+                                            "Easy" => "Thấp",
+                                            "Medium" => "Trung Bình",
+                                            "Hard" => "Cao",
+                                            "Very Hard" => "Rất Cao",
+                                            _ => hashtag.DifficultyLevel
+                                        };
+
+                                        var rankBadge = i < 3 ? "badge bg-warning text-dark" : "badge bg-secondary";
+
+                                        <tr class="clickable-row" onclick="window.location.href='/hashtag/@hashtag.Tag'">
+                                            <td class="ps-4 fw-bold text-muted">@(i + 1)</td>
+                                            <td>
+                                                <a href="/hashtag/@hashtag.Tag" class="text-decoration-none">
+                                                    <strong class="text-primary fs-5">@hashtag.TagDisplay</strong>
+                                                    <div class="text-muted small">
+                                                        <i class="bi bi-bar-chart"></i> @hashtag.TotalAppearances lần xuất hiện
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                @if (!string.IsNullOrEmpty(hashtag.CategoryName))
+                                                {
+                                                    <span class="badge bg-info">@hashtag.CategoryName</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <strong class="text-danger">@viewCountFormatted</strong>
+                                            </td>
+                                            <td class="text-center">
+                                                <strong class="text-success">@postCountFormatted</strong>
+                                            </td>
+                                            <td class="text-center">
+                                                @if (!string.IsNullOrEmpty(hashtag.DifficultyLevel))
+                                                {
+                                                    <span class="@difficultyBadge">@difficultyVi</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="@rankBadge">#@hashtag.BestRank</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                            <p>Chưa có hashtag trending nào</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section bg-gradient-vertical-light mt-5 py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <div class="text-center mb-5">
+                            <h2 class="fw-bold mb-3">
+                                <i class="bi bi-question-circle text-primary me-2"></i>
+                                Câu Hỏi Thường Gặp (FAQ)
+                            </h2>
+                            <p class="text-muted">Tất cả những gì bạn cần biết về hashtag TikTok trending và cách sử dụng TrendTag</p>
+                        </div>
+
+                        <div class="accordion accordion-flush" id="faqAccordion">
+                            <!-- FAQ 1 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                        Hashtag TikTok trending là gì?
+                                    </button>
+                                </h3>
+                                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Hashtag TikTok trending</strong> là những hashtag đang được sử dụng nhiều nhất trên TikTok tại một thời điểm cụ thể.
+                                        Sử dụng hashtag trending giúp video của bạn tiếp cận nhiều người xem hơn, tăng tương tác và có cơ hội cao hơn để xuất hiện trên trang For You (FYP).
+                                        TrendTag cập nhật danh sách hashtag trending mỗi 6 giờ để đảm bảo bạn luôn có dữ liệu mới nhất.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 2 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                        Cách chọn hashtag TikTok hiệu quả nhất?
+                                    </button>
+                                </h3>
+                                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Để chọn hashtag hiệu quả, hãy kết hợp <strong>3-5 hashtag trending có mức độ cạnh tranh Thấp hoặc Trung Bình</strong> với <strong>2-3 hashtag ngách (niche)</strong> liên quan đến nội dung của bạn.
+                                        Ví dụ: Nếu bạn làm video về du lịch Đà Lạt, hãy kết hợp #dulich (trending, cạnh tranh cao) với #dulichdalat2025 (ngách, cạnh tranh thấp).
+                                        Chiến lược này giúp tăng cơ hội viral trong cả nhóm đối tượng rộng lẫn đối tượng mục tiêu cụ thể.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 3 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                        TrendTag cập nhật dữ liệu hashtag bao lâu một lần?
+                                    </button>
+                                </h3>
+                                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        TrendTag tự động cập nhật dữ liệu hashtag <strong>mỗi 6 giờ</strong> từ nhiều nguồn uy tín như TikTok Creative Center và các nguồn khác.
+                                        Điều này đảm bảo bạn luôn có danh sách hashtag trending mới nhất và chính xác nhất để tối ưu video của mình.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 4 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                        Mức độ cạnh tranh của hashtag là gì?
+                                    </button>
+                                </h3>
+                                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Mức độ cạnh tranh cho biết độ khó để video của bạn nổi bật khi sử dụng hashtag đó. TrendTag phân loại thành 4 mức:
+                                        <ul class="mt-2 mb-0">
+                                            <li>Thấp: Dễ viral, ít người dùng → Phù hợp cho creator mới</li>
+                                            <li>Trung Bình: Cơ hội tốt nếu nội dung chất lượng</li>
+                                            <li>Cao: Khó viral, nhiều người dùng → Cần nội dung xuất sắc</li>
+                                            <li>Rất Cao: Cực kỳ cạnh tranh → Chỉ phù hợp creator lớn</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 5 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                        Có nên sử dụng hashtag viral có lượt xem cao?
+                                    </button>
+                                </h3>
+                                <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Không hoàn toàn. Hashtag viral có lượt xem cao thường có mức độ cạnh tranh Rất Cao, khiến video của bạn dễ bị "chìm" trong hàng triệu video khác.
+                                        Thay vào đó, hãy chọn hashtag có lượt xem vừa phải (100K-5M) và mức độ cạnh tranh Thấp-Trung Bình để tăng cơ hội lên FYP.
+                                        TrendTag hiển thị cả số lượt xem lẫn mức độ cạnh tranh để bạn đưa ra quyết định thông minh.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 6 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                        TrendTag có miễn phí không?
+                                    </button>
+                                </h3>
+                                <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        100% miễn phí! TrendTag không yêu cầu đăng ký tài khoản, không giới hạn số lần tra cứu hashtag, và không có phí ẩn.
+                                        Tất cả tính năng phân tích hashtag, xem trending, theo dõi mức độ cạnh tranh đều hoàn toàn miễn phí cho cộng đồng creator TikTok Việt Nam.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 7 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                                        Làm sao để tìm hashtag theo chủ đề cụ thể?
+                                    </button>
+                                </h3>
+                                <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        TrendTag cung cấp 16+ chủ đề hashtag để bạn dễ dàng lọc và tìm kiếm. Chỉ cần chọn chủ đề từ dropdown ở đầu trang (ví dụ: Giáo Dục, Du Lịch, Thời Trang, Công Nghệ, v.v.)
+                                        và hệ thống sẽ tự động hiển thị top 10 hashtag trending trong chủ đề đó. Bạn cũng có thể sử dụng thanh tìm kiếm để tìm hashtag cụ thể.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 8 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+                                        Nên dùng bao nhiêu hashtag trong một video TikTok?
+                                    </button>
+                                </h3>
+                                <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        TikTok khuyến nghị sử dụng 5-8 hashtag cho mỗi video. Công thức hiệu quả nhất là:
+                                        <ul class="mt-2 mb-0">
+                                            <li>3-5 hashtag trending (mức độ cạnh tranh Thấp-Trung Bình) để tăng reach</li>
+                                            <li>2-3 hashtag ngách (liên quan trực tiếp đến nội dung) để target đúng đối tượng</li>
+                                        </ul>
+                                        Tránh dùng quá nhiều hashtag (>10) vì có thể làm giảm hiệu quả và trông spam.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 9 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">
+                                        Hashtag trending có thay đổi theo thời gian không?
+                                    </button>
+                                </h3>
+                                <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Có, thường xuyên! Hashtag trending trên TikTok thay đổi liên tục theo sự kiện, mùa vụ, xu hướng văn hóa và hành vi người dùng.
+                                        Một hashtag có thể trending hôm nay nhưng không còn hiệu quả sau vài ngày hoặc vài tuần.
+                                        Đó là lý do TrendTag cập nhật dữ liệu mỗi 6 giờ để đảm bảo bạn luôn sử dụng hashtag trending mới nhất.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 10 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq10">
+                                        TrendTag lấy dữ liệu từ đâu?
+                                    </button>
+                                </h3>
+                                <div id="faq10" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        TrendTag thu thập dữ liệu từ nhiều nguồn uy tín:
+                                        <ul class="mt-2 mb-0">
+                                            <li><a href="https://www.tiktok.com/business/vi/creative-center/" target="_blank" rel="nofollow noopener">TikTok Creative Center</a>: Dữ liệu trending chính thức từ TikTok</li>
+                                            <li>TikTok API: Số lượt xem và số bài đăng realtime</li>
+                                            <li>Social Analytics: Dữ liệu phân tích engagement và tăng trưởng</li>
+                                        </ul>
+                                        Tất cả dữ liệu được xử lý và phân tích bằng thuật toán AI để cho ra kết quả chính xác nhất.
+                                        <br><br>
+                                        Tìm hiểu thêm về <a href="https://www.tiktok.com/business/vi/blog/guide-to-tiktok-hashtags" target="_blank" rel="nofollow noopener">chiến lược hashtag TikTok</a> từ TikTok for Business.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 11 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq11">
+                                        Hashtag trending có giúp tăng follower không?
+                                    </button>
+                                </h3>
+                                <div id="faq11" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Có, nhưng gián tiếp.</strong> Hashtag trending giúp video của bạn tiếp cận nhiều người xem hơn (tăng reach và impressions).
+                                        Khi video có nhiều lượt xem và tương tác cao, thuật toán TikTok sẽ đẩy video lên For You Page (FYP) rộng hơn, từ đó tăng cơ hội được follow.
+                                        Tuy nhiên, yếu tố quan trọng nhất vẫn là <strong>chất lượng nội dung</strong> - hashtag chỉ là công cụ hỗ trợ.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 12 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq12">
+                                        Có nên dùng hashtag bằng tiếng Việt hay tiếng Anh?
+                                    </button>
+                                </h3>
+                                <div id="faq12" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Tùy thuộc vào <strong>đối tượng mục tiêu</strong> của bạn:
+                                        <ul class="mt-2 mb-0">
+                                            <li><strong>Hashtag tiếng Việt:</strong> Phù hợp nếu bạn target khán giả Việt Nam (ví dụ: #dulich, #giaoduс, #amthuc)</li>
+                                            <li><strong>Hashtag tiếng Anh:</strong> Phù hợp nếu muốn tiếp cận đối tượng quốc tế (ví dụ: #travel, #education, #food)</li>
+                                        </ul>
+                                        Chiến lược tốt nhất là <strong>kết hợp cả hai</strong>: 3-4 hashtag tiếng Việt + 2-3 hashtag tiếng Anh để maximize reach cả trong lẫn ngoài nước.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 13 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq13">
+                                        Làm sao biết hashtag nào phù hợp với nội dung của mình?
+                                    </button>
+                                </h3>
+                                <div id="faq13" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        TrendTag giúp bạn dễ dàng tìm hashtag phù hợp qua 3 bước:
+                                        <ol class="mt-2 mb-0">
+                                            <li><strong>Chọn chủ đề:</strong> Lọc hashtag theo 16+ chủ đề (Giáo Dục, Du Lịch, Thời Trang, v.v.)</li>
+                                            <li><strong>Xem mức độ cạnh tranh:</strong> Chọn hashtag có mức độ Thấp-Trung Bình</li>
+                                            <li><strong>Kiểm tra số lượt xem:</strong> Chọn hashtag có 100K-5M lượt xem cho tỷ lệ viral tốt nhất</li>
+                                        </ol>
+                                        Bạn cũng có thể sử dụng thanh tìm kiếm để tìm hashtag cụ thể và xem phân tích chi tiết.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 14 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq14">
+                                        Có nên dùng cùng một bộ hashtag cho mọi video?
+                                    </button>
+                                </h3>
+                                <div id="faq14" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Không nên!</strong> Mỗi video nên có bộ hashtag riêng biệt phù hợp với nội dung cụ thể.
+                                        Sử dụng cùng một bộ hashtag cho mọi video có thể:
+                                        <ul class="mt-2 mb-0">
+                                            <li>Làm giảm hiệu quả tiếp cận (thuật toán TikTok phát hiện pattern lặp lại)</li>
+                                            <li>Không tối ưu cho từng loại nội dung khác nhau</li>
+                                            <li>Bỏ lỡ cơ hội từ hashtag trending mới</li>
+                                        </ul>
+                                        Hãy dành 2-3 phút để chọn hashtag phù hợp cho mỗi video bằng TrendTag!
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FAQ 15 -->
+                            <div class="accordion-item border rounded-3 mb-3 shadow-sm">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq15">
+                                        TrendTag có hỗ trợ các nền tảng khác ngoài TikTok không?
+                                    </button>
+                                </h3>
+                                <div id="faq15" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Hiện tại, TrendTag <strong>tập trung 100% vào TikTok</strong> để mang lại dữ liệu chính xác và chuyên sâu nhất cho creator TikTok Việt Nam.
+                                        Tuy nhiên, nhiều hashtag trending trên TikTok cũng hoạt động tốt trên Instagram Reels và YouTube Shorts.
+                                        Trong tương lai, chúng tôi có kế hoạch mở rộng sang các nền tảng video ngắn khác dựa trên nhu cầu của cộng đồng.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CTA after FAQ -->
+                        <div class="alert alert-primary border-0 shadow-sm mt-4 rounded-4" role="alert">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-lightbulb-fill me-3 mt-1" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <h6 class="fw-bold mb-2">Vẫn còn thắc mắc?</h6>
+                                    <p class="mb-0 small">
+                                        Khám phá ngay top 10 hashtag trending hôm nay và bắt đầu tăng view cho video của bạn!
+                                        <a href="#hashtagTable" class="text-decoration-none fw-bold ms-1">Xem Top 10 Hashtag Trending →</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Blog Posts Section -->
+        @if (Model.RecentBlogPosts != null && Model.RecentBlogPosts.Any())
+        {
+            <div class="blog-posts-section bg-gradient-vertical-light py-5">
+                <div class="container">
+                    <div class="row mb-4">
+                        <div class="col-12 text-center">
+                            <h2 class="fw-bold mb-3">
+                                <i class="bi bi-journal-text text-primary me-2"></i>
+                                Bài Viết Mới Nhất
+                            </h2>
+                            <p class="text-muted">Khám phá các tips, chiến lược và phân tích chuyên sâu về hashtag TikTok</p>
+                        </div>
+                    </div>
+                    <div class="row g-4">
+                        @foreach (var post in Model.RecentBlogPosts)
+                        {
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden hover-lift">
+                                    @if (!string.IsNullOrEmpty(post.FeaturedImage))
+                                    {
+                                        <img src="@post.FeaturedImage" class="card-img-top blog-img-cover" alt="@post.Title">
+                                    }
+                                    else
+                                    {
+                                        <div class="card-img-top blog-placeholder"></div>
+                                    }
+                                    <div class="card-body d-flex flex-column">
+                                        <div class="mb-2">
+                                            @if (post.Category != null)
+                                            {
+                                                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">
+                                                    @post.Category.DisplayNameVi
+                                                </span>
+                                            }
+                                        </div>
+                                        <h5 class="card-title fw-bold mb-3">
+                                            <a href="/blog/@post.Slug" class="text-decoration-none text-dark stretched-link">
+                                                @post.Title
+                                            </a>
+                                        </h5>
+                                        @if (!string.IsNullOrEmpty(post.Excerpt))
+                                        {
+                                            <p class="card-text text-muted small mb-3 flex-grow-1">
+                                                @post.Excerpt
+                                            </p>
+                                        }
+                                        <div class="d-flex justify-content-between align-items-center text-muted small mt-auto">
+                                            <span>
+                                                <i class="bi bi-person-circle me-1"></i>
+                                                @post.Author
+                                            </span>
+                                            <span>
+                                                <i class="bi bi-clock me-1"></i>
+                                                @post.ReadingTimeMinutes phút đọc
+                                            </span>
+                                        </div>
+                                        @if (post.PublishedAt.HasValue)
+                                        {
+                                            <div class="text-muted small mt-2">
+                                                <i class="bi bi-calendar3 me-1"></i>
+                                                @post.PublishedAt.Value.ToString("dd/MM/yyyy")
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-12 text-center">
+                            <a href="/blog" class="btn btn-gradient-primary btn-lg px-5 py-3 shadow-sm">
+                                <i class="bi bi-arrow-right-circle me-2"></i>
+                                Xem Tất Cả Bài Viết
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- SEO Content Section -->
+        <div class="seo-content bg-gradient-vertical-dark mt-5 py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <h2 class="mb-4">TrendTag - Công Cụ Tìm Hashtag Trending TikTok Hàng Đầu Việt Nam</h2>
+
+                        <h3 class="h5 fw-bold mt-4 mb-3">Hashtag TikTok Trending Là Gì?</h3>
+                        <p>
+                            <strong>Hashtag trending TikTok</strong> là những hashtag đang được sử dụng phổ biến nhất trên nền tảng TikTok tại một thời điểm cụ thể.
+                            Những hashtag này giúp video của bạn tiếp cận nhiều người xem hơn, tăng tương tác và có cơ hội xuất hiện trên trang For You (FYP).
+                            TrendTag cập nhật <strong>hashtag TikTok Việt Nam</strong> mỗi 6 giờ để bạn luôn bắt kịp xu hướng mới nhất.
+                        </p>
+
+                        <h3 class="h5 fw-bold mt-4 mb-3">Tại Sao Nên Sử Dụng TrendTag?</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Dữ liệu realtime:</strong> Cập nhật mỗi 6 giờ từ TikTok</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Phân tích chuyên sâu:</strong> Xem độ khó cạnh tranh, lượt xem, số bài đăng</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Theo dõi xu hướng:</strong> Biết hashtag nào đang lên, hashtag nào đang xuống</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Phân loại theo ngành:</strong> 16+ chủ đề từ Giáo Dục đến Giải Trí</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Hoàn toàn miễn phí:</strong> Không giới hạn tra cứu, không cần đăng ký</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Dễ sử dụng:</strong> Giao diện đơn giản, tìm kiếm nhanh chóng</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3 class="h5 fw-bold mt-4 mb-3">Cách Chọn Hashtag TikTok Hiệu Quả</h3>
+                        <p>Để tối ưu video TikTok và <strong>tăng view hiệu quả</strong>, bạn nên kết hợp:</p>
+                        <ol>
+                            <li class="mb-2"><strong>2-3 hashtag trending:</strong> Hashtag đang hot có lượt xem cao (độ cạnh tranh cao)</li>
+                            <li class="mb-2"><strong>3-4 hashtag ngách:</strong> Hashtag liên quan đến nội dung cụ thể của video</li>
+                            <li class="mb-2"><strong>1-2 hashtag brand:</strong> Hashtag riêng của bạn hoặc thương hiệu</li>
+                        </ol>
+                        <p class="text-muted small">
+                            <i class="bi bi-lightbulb-fill text-warning me-1"></i>
+                            <strong>Mẹo:</strong> Chọn hashtag có độ cạnh tranh "Thấp" hoặc "Trung Bình" nếu kênh của bạn còn nhỏ để dễ lên top hơn.
+                        </p>
+
+                        <h3 class="h5 fw-bold mt-4 mb-3">Các Chủ Đề Hashtag Phổ Biến Nhất</h3>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled category-links">
+                                    <li class="mb-2"><i class="bi bi-arrow-right-circle text-primary me-2"></i><a href="/chu-de/giao-duc" class="text-decoration-none">Hashtag Giáo Dục Trending</a></li>
+                                    <li class="mb-2"><i class="bi bi-arrow-right-circle text-primary me-2"></i><a href="/chu-de/tin-tuc-giai-tri" class="text-decoration-none">Hashtag Tin Tức & Giải Trí</a></li>
+                                    <li class="mb-2"><i class="bi bi-arrow-right-circle text-primary me-2"></i><a href="/chu-de/thoi-trang-phu-kien" class="text-decoration-none">Hashtag Thời Trang & Phụ Kiện</a></li>
+                                    <li class="mb-2"><i class="bi bi-arrow-right-circle text-primary me-2"></i><a href="/chu-de/lam-dep-cham-soc-ca-nhan" class="text-decoration-none">Hashtag Làm Đẹp</a></li>
+                                    <li class="mb-2"><i class="bi bi-arrow-right-circle text-primary me-2"></i><a href="/chu-de/thuc-pham-do-uong" class="text-decoration-none">Hashtag Thực Phẩm & Đồ Uống</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled category-links">
+                                    <li class="mb-2"><i class="bi bi-arrow-right-circle text-primary me-2"></i><a href="/chu-de/du-lich" class="text-decoration-none">Hashtag Du Lịch Trending</a></li>
+                                    <li class="mb-2"><i class="bi bi-arrow-right-circle text-primary me-2"></i><a href="/chu-de/the-thao-ngoai-troi" class="text-decoration-none">Hashtag Thể Thao & Ngoài Trời</a></li>
+                                    <li class="mb-2"><i class="bi bi-arrow-right-circle text-primary me-2"></i><a href="/chu-de/cong-nghe-dien-tu" class="text-decoration-none">Hashtag Công Nghệ & Điện Tử</a></li>
+                                    <li class="mb-2"><i class="bi bi-arrow-right-circle text-primary me-2"></i><a href="/chu-de/phuong-tien-giao-thong" class="text-decoration-none">Hashtag Phương Tiện & Giao Thông</a></li>
+                                    <li class="mb-2"><i class="bi bi-arrow-right-circle text-primary me-2"></i><a href="/chu-de/tro-choi" class="text-decoration-none">Hashtag Gaming & Trò Chơi</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info mt-4" role="alert">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            <strong>Bắt đầu ngay:</strong> Sử dụng ô tìm kiếm phía trên để tìm hashtag phù hợp với nội dung của bạn,
+                            hoặc chọn chủ đề từ dropdown để xem Top 10 hashtag trending trong ngành.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Category filter function - AJAX load with URL update
+        async function filterByCategory(select) {
+            const selectedOption = select.options[select.selectedIndex];
+            const categoryId = selectedOption.value;
+            const slug = selectedOption.getAttribute('data-slug');
+            const categoryName = selectedOption.getAttribute('data-name');
+
+            // Update URL without reload using History API
+            let newUrl = '/';
+            if (slug && slug !== '') {
+                newUrl = '/chu-de/' + slug;
+            }
+            window.history.pushState({ categoryId: categoryId }, '', newUrl);
+
+            // Update category label
+            updateCategoryLabel(categoryName);
+
+            // Load top 10 hashtags via AJAX
+            await loadTopHashtags(categoryId);
+        }
+
+        // Update category label badge
+        function updateCategoryLabel(categoryName) {
+            const titleContainer = document.querySelector('.card-header .d-flex.align-items-center.gap-3');
+            let labelElement = document.getElementById('categoryLabel');
+
+            if (categoryName && categoryName !== '') {
+                if (!labelElement) {
+                    // Create new label if doesn't exist
+                    labelElement = document.createElement('span');
+                    labelElement.id = 'categoryLabel';
+                    labelElement.className = 'badge bg-white bg-opacity-25 px-3 py-2';
+                    titleContainer.appendChild(labelElement);
+                }
+                labelElement.innerHTML = '<i class="bi bi-tag-fill me-1"></i>' + htmlEscape(categoryName);
+            } else {
+                // Remove label if "Tất Cả Chủ Đề"
+                if (labelElement) {
+                    labelElement.remove();
+                }
+            }
+        }
+
+        // Load top 10 hashtags via AJAX
+        async function loadTopHashtags(categoryId) {
+            try {
+                const url = categoryId ? `/Home/GetTopHashtags?categoryId=${categoryId}` : '/Home/GetTopHashtags';
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    console.error('Failed to load hashtags');
+                    return;
+                }
+
+                const hashtags = await response.json();
+                renderHashtagTable(hashtags);
+            } catch (error) {
+                console.error('Error loading hashtags:', error);
+            }
+        }
+
+        // Render hashtag table
+        function renderHashtagTable(hashtags) {
+            const tbody = document.querySelector('#hashtagTable tbody');
+
+            if (!hashtags || hashtags.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                            <p>Chưa có hashtag trending nào</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = hashtags.map((hashtag, index) => {
+                const viewCountFormatted = formatNumber(hashtag.latestViewCount);
+                const postCountFormatted = formatNumber(hashtag.latestPostCount);
+                const difficultyBadge = getDifficultyBadge(hashtag.difficultyLevel);
+                const difficultyVi = getDifficultyVi(hashtag.difficultyLevel);
+                const rankBadge = index < 3 ? 'badge bg-warning text-dark' : 'badge bg-secondary';
+
+                return `
+                    <tr style="cursor: pointer;" onclick="window.location.href='/hashtag/${encodeURIComponent(hashtag.tag)}'">
+                        <td class="ps-4 fw-bold text-muted">${index + 1}</td>
+                        <td>
+                            <a href="/hashtag/${encodeURIComponent(hashtag.tag)}" class="text-decoration-none">
+                                <strong class="text-primary fs-5">${htmlEscape(hashtag.tagDisplay)}</strong>
+                                <div class="text-muted small">
+                                    <i class="bi bi-bar-chart"></i> ${hashtag.totalAppearances} lần xuất hiện
+                                </div>
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            ${hashtag.categoryName ? `<span class="badge bg-info">${htmlEscape(hashtag.categoryName)}</span>` : '<span class="text-muted">-</span>'}
+                        </td>
+                        <td class="text-center">
+                            <strong class="text-danger">${viewCountFormatted}</strong>
+                        </td>
+                        <td class="text-center">
+                            <strong class="text-success">${postCountFormatted}</strong>
+                        </td>
+                        <td class="text-center">
+                            ${hashtag.difficultyLevel ? `<span class="${difficultyBadge}">${difficultyVi}</span>` : '<span class="text-muted">-</span>'}
+                        </td>
+                        <td class="text-center">
+                            <span class="${rankBadge}">#${hashtag.bestRank}</span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Helper functions
+        function formatNumber(num) {
+            if (!num || num <= 0) return '-';
+            if (num >= 1000000000) return (num / 1000000000).toFixed(1) + 'B';
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toLocaleString();
+        }
+
+        function getDifficultyBadge(level) {
+            const badges = {
+                'Easy': 'badge bg-success',
+                'Medium': 'badge bg-warning',
+                'Hard': 'badge bg-danger',
+                'Very Hard': 'badge bg-dark'
+            };
+            return badges[level] || 'badge bg-secondary';
+        }
+
+        function getDifficultyVi(level) {
+            const translations = {
+                'Easy': 'Thấp',
+                'Medium': 'Trung Bình',
+                'Hard': 'Cao',
+                'Very Hard': 'Rất Cao'
+            };
+            return translations[level] || level;
+        }
+
+        function htmlEscape(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.categoryId !== undefined) {
+                const select = document.getElementById('categorySelect');
+                select.value = event.state.categoryId || '';
+                loadTopHashtags(event.state.categoryId || null);
+            }
+        });
+
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsDropdown = document.getElementById('suggestionsDropdown');
+        let debounceTimer;
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            const query = this.value.trim();
+
+            if (query.length < 2) {
+                suggestionsDropdown.style.display = 'none';
+                return;
+            }
+
+            debounceTimer = setTimeout(() => {
+                fetchSuggestions(query);
+            }, 300);
+        });
+
+        searchInput.addEventListener('focus', function() {
+            if (this.value.trim().length >= 2) {
+                fetchSuggestions(this.value.trim());
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !suggestionsDropdown.contains(e.target)) {
+                suggestionsDropdown.style.display = 'none';
+            }
+        });
+
+        async function fetchSuggestions(query) {
+            try {
+                const response = await fetch(`/api/hashtags/suggest?q=${encodeURIComponent(query)}`);
+                if (!response.ok) {
+                    suggestionsDropdown.style.display = 'none';
+                    return;
+                }
+
+                const suggestions = await response.json();
+
+                if (!suggestions || suggestions.length === 0) {
+                    suggestionsDropdown.style.display = 'none';
+                    return;
+                }
+
+                suggestionsDropdown.innerHTML = suggestions.map(item => `
+                    <a href="/hashtag/${encodeURIComponent(item.tag)}" class="list-group-item list-group-item-action border-0 border-start border-3 border-white hover-border-primary">
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <div>
+                                <strong class="text-primary">${escapeHtml(item.tagDisplay)}</strong>
+                                <small class="text-muted ms-2 d-block mt-1">
+                                    <i class="bi bi-trophy"></i> Hạng ${item.bestRank} ·
+                                    <i class="bi bi-bar-chart"></i> ${item.totalAppearances} lần xuất hiện
+                                </small>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">${item.sources.length} nguồn</span>
+                        </div>
+                    </a>
+                `).join('');
+
+                suggestionsDropdown.style.display = 'block';
+            } catch (error) {
+                console.error('Error fetching suggestions:', error);
+                suggestionsDropdown.style.display = 'none';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+}
+
+<style>
+    .home-hero {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+    }
+
+    .search-container input:focus {
+        box-shadow: none !important;
+    }
+
+    .search-container .input-group:focus-within {
+        box-shadow: 0 10px 30px rgba(13, 110, 253, 0.3) !important;
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+
+    #suggestionsDropdown {
+        max-height: 400px;
+        overflow-y: auto;
+        border: none;
+    }
+
+    #suggestionsDropdown .list-group-item {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    #suggestionsDropdown .list-group-item:hover {
+        background-color: #f8f9fa;
+        border-left-color: #0d6efd !important;
+        transform: translateX(5px);
+    }
+
+    .hover-border-primary:hover {
+        border-left-color: #0d6efd !important;
+    }
+
+    .feature-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover .feature-icon {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Mobile responsive search button */
+    /* Feature card hover effect */
+    .feature-card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    @@media (max-width: 576px) {
+        .search-container {
+            max-width: 100% !important;
+            padding: 0 15px;
+        }
+
+        /* Reduce search input group height on mobile */
+        .input-group {
+            height: 55px !important;
+        }
+
+        /* Make search button smaller, hide text on mobile */
+        .input-group .btn-primary {
+            padding-left: 1.25rem !important;
+            padding-right: 1.25rem !important;
+            font-size: 0;
+        }
+
+        .input-group .btn-primary .bi-search {
+            font-size: 1.25rem;
+            margin-right: 0 !important;
+        }
+
+        .input-group .form-control {
+            font-size: 0.95rem !important;
+        }
+
+        .input-group .input-group-text {
+            padding-left: 1rem !important;
+        }
+
+        /* Hide "Đa Nguồn Dữ Liệu" card on mobile */
+        .row.mt-5.g-4 .col-md-4:nth-child(2) {
+            display: none !important;
+        }
+
+        /* Make remaining feature cards more compact on mobile */
+        .feature-card-hover .card-body {
+            padding: 1.5rem 1rem !important;
+        }
+
+        .feature-card-hover .feature-icon {
+            width: 50px !important;
+            height: 50px !important;
+            margin-bottom: 0.75rem !important;
+        }
+
+        .feature-card-hover .feature-icon i {
+            font-size: 1.5rem !important;
+        }
+
+        .feature-card-hover h5 {
+            font-size: 1rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+
+        .feature-card-hover p {
+            font-size: 0.85rem !important;
+        }
+
+        .feature-card-hover small {
+            font-size: 0.75rem !important;
+        }
+    }
+</style>

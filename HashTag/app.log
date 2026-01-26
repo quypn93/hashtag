@@ -1,0 +1,16 @@
+D:\Task\TrendTag\HashTag\Services\HashtagGeneratorService.cs(315,47): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [D:\Task\TrendTag\HashTag\HashTag.csproj]
+D:\Task\TrendTag\HashTag\Services\TikTokLiveSearchService.cs(12,35): warning CS0649: Field 'TikTokLiveSearchService._playwright' is never assigned to, and will always have its default value null [D:\Task\TrendTag\HashTag\HashTag.csproj]
+info: HashTag.Services.HashtagCrawlerHostedService[0]
+      HashtagCrawlerHostedService is starting.
+info: HashTag.Services.HashtagMetricsHostedService[0]
+      Hashtag Metrics Service started
+info: HashTag.Services.HashtagMetricsHostedService[0]
+      Next metrics calculation scheduled for 01/04/2026 02:00:00 (in 12h 55m)
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5000
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\Task\TrendTag\HashTag

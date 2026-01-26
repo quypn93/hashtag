@@ -1,0 +1,287 @@
+@model HashTag.ViewModels.BlogDetailsViewModel
+@{
+    ViewData["Title"] = Model.Post.Title;
+    Layout = "_LayoutPublic";
+}
+
+<!-- Blog Post Details -->
+<div class="container py-5">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Trang Chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/blog">Blog</a></li>
+                    @if (Model.Post.Category != null)
+                    {
+                        <li class="breadcrumb-item"><a href="/blog/category/@Model.Post.Category.Slug">@Model.Post.Category.DisplayNameVi</a></li>
+                    }
+                    <li class="breadcrumb-item active" aria-current="page">@Model.Post.Title</li>
+                </ol>
+            </nav>
+
+            <!-- Article -->
+            <article class="blog-post">
+                <!-- Category Badge -->
+                @if (Model.Post.Category != null)
+                {
+                    <div class="mb-3">
+                        <a href="/blog/category/@Model.Post.Category.Slug" class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill text-decoration-none">
+                            @Model.Post.Category.DisplayNameVi
+                        </a>
+                    </div>
+                }
+
+                <!-- Title -->
+                <h1 class="display-5 fw-bold mb-4">@Model.Post.Title</h1>
+
+                <!-- Meta Info -->
+                <div class="post-meta d-flex flex-wrap gap-4 mb-4 text-muted">
+                    <span>
+                        <i class="bi bi-person-circle me-2"></i>
+                        @Model.Post.Author
+                    </span>
+                    @if (Model.Post.PublishedAt.HasValue)
+                    {
+                        <span>
+                            <i class="bi bi-calendar3 me-2"></i>
+                            @Model.Post.PublishedAt.Value.ToString("dd/MM/yyyy")
+                        </span>
+                    }
+                    <span>
+                        <i class="bi bi-clock me-2"></i>
+                        @Model.Post.ReadingTimeMinutes phút đọc
+                    </span>
+                    <span>
+                        <i class="bi bi-eye me-2"></i>
+                        @Model.Post.ViewCount.ToString("N0") lượt xem
+                    </span>
+                </div>
+
+                <!-- Featured Image -->
+                <div class="featured-image mb-4">
+                    @if (!string.IsNullOrEmpty(Model.Post.FeaturedImage))
+                    {
+                        <img src="@Model.Post.FeaturedImage" alt="@Model.Post.Title" class="img-fluid rounded-4 shadow-sm w-100" style="max-height: 500px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="blog-placeholder rounded-4 shadow-sm w-100" style="height: 300px;"></div>
+                    }
+                </div>
+
+                <!-- Tags -->
+                @if (Model.Post.BlogPostTags != null && Model.Post.BlogPostTags.Any())
+                {
+                    <div class="post-tags mb-4">
+                        <i class="bi bi-tags me-2 text-muted"></i>
+                        @foreach (var postTag in Model.Post.BlogPostTags)
+                        {
+                            <a href="/blog/tag/@postTag.BlogTag.Slug" class="badge bg-light text-dark px-3 py-2 rounded-pill text-decoration-none me-2 mb-2">
+                                #@postTag.BlogTag.Name
+                            </a>
+                        }
+                    </div>
+                }
+
+                <hr class="my-4">
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    @Html.Raw(Model.Post.Content)
+                </div>
+
+                <hr class="my-5">
+
+                <!-- Share Buttons -->
+                <div class="share-buttons mb-5">
+                    <h6 class="fw-bold mb-3">Chia sẻ bài viết:</h6>
+                    <div class="d-flex gap-2">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=@ViewData["CanonicalUrl"]" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill">
+                            <i class="bi bi-facebook me-1"></i> Facebook
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url=@ViewData["CanonicalUrl"]&text=@Model.Post.Title" target="_blank" class="btn btn-outline-info btn-sm rounded-pill">
+                            <i class="bi bi-twitter me-1"></i> Twitter
+                        </a>
+                        <a href="https://www.linkedin.com/shareArticle?mini=true&url=@ViewData["CanonicalUrl"]&title=@Model.Post.Title" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill">
+                            <i class="bi bi-linkedin me-1"></i> LinkedIn
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Related Posts -->
+                @if (Model.RelatedPosts != null && Model.RelatedPosts.Any())
+                {
+                    <div class="related-posts mt-5">
+                        <h3 class="fw-bold mb-4">
+                            <i class="bi bi-bookmarks text-primary me-2"></i>
+                            Bài Viết Liên Quan
+                        </h3>
+                        <div class="row g-4">
+                            @foreach (var relatedPost in Model.RelatedPosts)
+                            {
+                                <div class="col-md-6">
+                                    <div class="card h-100 shadow-sm border-0 rounded-3 hover-lift">
+                                        @if (!string.IsNullOrEmpty(relatedPost.FeaturedImage))
+                                        {
+                                            <img src="@relatedPost.FeaturedImage" class="card-img-top" alt="@relatedPost.Title" style="height: 150px; object-fit: cover;">
+                                        }
+                                        else
+                                        {
+                                            <div class="card-img-top blog-placeholder-md"></div>
+                                        }
+                                        <div class="card-body">
+                                            @if (relatedPost.Category != null)
+                                            {
+                                                <span class="badge bg-primary bg-opacity-10 text-primary px-2 py-1 rounded-pill small mb-2">
+                                                    @relatedPost.Category.DisplayNameVi
+                                                </span>
+                                            }
+                                            <h6 class="card-title fw-bold">
+                                                <a href="/blog/@relatedPost.Slug" class="text-decoration-none text-dark stretched-link">
+                                                    @relatedPost.Title
+                                                </a>
+                                            </h6>
+                                            <div class="text-muted small mt-2">
+                                                <i class="bi bi-clock me-1"></i>
+                                                @relatedPost.ReadingTimeMinutes phút đọc
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </article>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Recent Posts Widget -->
+            @if (Model.RecentPosts != null && Model.RecentPosts.Any())
+            {
+                <div class="card shadow-sm border-0 rounded-4 mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-4">
+                            <i class="bi bi-clock-history text-primary me-2"></i>
+                            Bài Viết Mới Nhất
+                        </h5>
+                        <div class="list-group list-group-flush">
+                            @foreach (var recentPost in Model.RecentPosts)
+                            {
+                                <a href="/blog/@recentPost.Slug" class="list-group-item list-group-item-action border-0 px-0">
+                                    <div class="d-flex align-items-start">
+                                        @if (!string.IsNullOrEmpty(recentPost.FeaturedImage))
+                                        {
+                                            <img src="@recentPost.FeaturedImage" alt="@recentPost.Title" class="rounded me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                                        }
+                                        else
+                                        {
+                                            <div class="blog-placeholder-sm me-3"></div>
+                                        }
+                                        <div>
+                                            <h6 class="mb-1 fw-bold small">@recentPost.Title</h6>
+                                            <small class="text-muted">
+                                                @if (recentPost.PublishedAt.HasValue)
+                                                {
+                                                    <span>@recentPost.PublishedAt.Value.ToString("dd/MM/yyyy")</span>
+                                                }
+                                            </small>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Back to Blog Button -->
+            <div class="card shadow-sm border-0 rounded-4 mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body text-center text-white">
+                    <h5 class="card-title fw-bold mb-3">Khám Phá Thêm</h5>
+                    <p class="small mb-3">Xem tất cả bài viết về hashtag TikTok trending</p>
+                    <a href="/blog" class="btn btn-light btn-sm rounded-pill px-4">
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Quay Về Blog
+                    </a>
+                </div>
+            </div>
+
+            <!-- CTA - Back to Home -->
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body text-center">
+                    <i class="bi bi-hash text-primary" style="font-size: 3rem;"></i>
+                    <h5 class="card-title fw-bold mt-3 mb-3">Tìm Hashtag Trending</h5>
+                    <p class="small text-muted mb-3">Khám phá top hashtag TikTok đang trending ngay bây giờ</p>
+                    <a href="/" class="btn btn-primary btn-sm rounded-pill px-4">
+                        <i class="bi bi-house-fill me-2"></i>
+                        Về Trang Chủ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .post-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+
+    .post-content h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .post-content h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: #444;
+    }
+
+    .post-content p {
+        margin-bottom: 1.25rem;
+    }
+
+    .post-content ul, .post-content ol {
+        margin-bottom: 1.25rem;
+        padding-left: 2rem;
+    }
+
+    .post-content li {
+        margin-bottom: 0.5rem;
+    }
+
+    .post-content strong {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .post-content a {
+        color: #667eea;
+        text-decoration: underline;
+    }
+
+    .post-content a:hover {
+        color: #764ba2;
+    }
+
+    .breadcrumb-item a {
+        text-decoration: none;
+        color: #667eea;
+    }
+
+    .breadcrumb-item a:hover {
+        color: #764ba2;
+    }
+</style>

@@ -1,0 +1,595 @@
+@using HashTag.ViewModels
+@{
+    var seo = ViewData["SeoMetadata"] as SeoMetadata ?? new SeoMetadata();
+
+    // Fallback to ViewData if SeoMetadata is not set
+    var pageTitle = seo.Title ?? ViewData["Title"]?.ToString() ?? "Trang Chủ";
+    var description = seo.Description ?? ViewData["Description"]?.ToString() ?? "Công cụ phân tích hashtag TikTok trending";
+    var keywords = seo.Keywords ?? ViewData["Keywords"]?.ToString() ?? "hashtag tiktok, trending, viral";
+
+    var fullTitle = pageTitle.Contains("TrendTag") ? pageTitle : $"{pageTitle} | TrendTag - Phân Tích Hashtag TikTok Việt Nam";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO Meta Tags -->
+    <title>@fullTitle</title>
+    <meta name="description" content="@description" />
+    <meta name="keywords" content="@keywords" />
+    <meta name="author" content="TrendTag" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+    @if (!string.IsNullOrEmpty(seo.CanonicalUrl))
+    {
+        <link rel="canonical" href="@seo.CanonicalUrl" />
+    }
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="@(seo.OgType ?? "website")" />
+    <meta property="og:title" content="@(seo.OgTitle ?? pageTitle)" />
+    <meta property="og:description" content="@(seo.OgDescription ?? description)" />
+    <meta property="og:site_name" content="TrendTag - Phân Tích Hashtag TikTok" />
+    <meta property="og:locale" content="vi_VN" />
+
+    @if (!string.IsNullOrEmpty(seo.CanonicalUrl))
+    {
+        <meta property="og:url" content="@seo.CanonicalUrl" />
+    }
+
+    @if (!string.IsNullOrEmpty(seo.OgImage))
+    {
+        <meta property="og:image" content="@seo.OgImage" />
+        <meta property="og:image:width" content="@seo.OgImageWidth" />
+        <meta property="og:image:height" content="@seo.OgImageHeight" />
+        <meta property="og:image:alt" content="@(seo.OgTitle ?? pageTitle)" />
+    }
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="@seo.TwitterCard" />
+    <meta name="twitter:title" content="@(seo.OgTitle ?? pageTitle)" />
+    <meta name="twitter:description" content="@(seo.OgDescription ?? seo.Description)" />
+
+    @if (!string.IsNullOrEmpty(seo.OgImage))
+    {
+        <meta name="twitter:image" content="@seo.OgImage" />
+    }
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+    <link rel="apple-touch-icon" href="~/apple-touch-icon.svg" />
+
+    <!-- Mobile Optimization -->
+    <meta name="theme-color" content="#667eea" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="google-site-verification" content="V_fy-6j82cMwVJaTPYuqAUP15ZGraRlMeA6Nc6Ajzmg" />
+
+    <!-- Structured Data -->
+    @if (!string.IsNullOrEmpty(seo.StructuredDataJson))
+    {
+        <script type="application/ld+json">
+        @Html.Raw(seo.StructuredDataJson)
+        </script>
+    }
+
+    <!-- Global Organization Schema (appears on all pages) -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "TrendTag",
+        "url": "https://viralhashtag.vn",
+        "logo": "https://viralhashtag.vn/images/logo.svg",
+        "description": "Công cụ phân tích hashtag TikTok hàng đầu Việt Nam. Tìm hashtag trending, dự đoán lượt xem và tăng trưởng kênh TikTok hiệu quả.",
+        "sameAs": [],
+        "contactPoint": {
+            "@@type": "ContactPoint",
+            "email": "viralhashtagvn@gmail.com",
+            "contactType": "Customer Support",
+            "areaServed": "VN",
+            "availableLanguage": "Vietnamese"
+        }
+    }
+    </script>
+
+    <!-- Additional Meta Tags -->
+    @foreach (var meta in seo.AdditionalMetaTags)
+    {
+        <meta name="@meta.Key" content="@meta.Value" />
+    }
+
+    <!-- Preconnect to external domains for faster loading -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+    <!-- Critical CSS (inline for faster first paint) -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Non-critical CSS with preload -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"></noscript>
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/gradients.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HashTag.styles.css" asp-append-version="true" />
+
+    <style>
+        :root {
+            --primary-color: #fe2c55;
+            --secondary-color: #25f4ee;
+            --dark-color: #161823;
+            --light-bg: #f8f9fa;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            background-color: var(--light-bg);
+        }
+
+        .navbar-public {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #ff5e7a 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand-public {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white !important;
+            letter-spacing: -0.5px;
+            text-decoration: none !important;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand-public:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @@keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-tagline {
+            font-size: 0.65rem;
+            opacity: 0.8;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Mobile brand adjustments */
+        @@media (max-width: 991px) {
+            .brand-name {
+                font-size: 1.35rem;
+            }
+
+            .navbar-public {
+                padding: 0.75rem 0;
+            }
+
+            .logo-icon img {
+                width: 35px !important;
+                height: 35px !important;
+            }
+        }
+
+        .nav-link-public {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link-public:hover {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .btn-admin-login {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white !important;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-admin-login:hover {
+            background-color: white;
+            color: var(--primary-color) !important;
+            border-color: white;
+        }
+
+        /* Search button in navbar */
+        .btn-search-nav {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-search-nav:hover {
+            background-color: white;
+            color: var(--primary-color);
+            border-color: white;
+        }
+
+        /* Dropdown menu styling */
+        .dropdown-menu {
+            margin-top: 0.5rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            padding-left: 1.5rem;
+        }
+
+        /* Mobile navbar toggler - make it visible on dark background */
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            padding: 0.5rem;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.3);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.95%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            width: 1.5em;
+            height: 1.5em;
+        }
+
+        /* Mobile menu improvements */
+        @@media (max-width: 991px) {
+            .navbar-collapse {
+                background: white;
+                margin-top: 1rem;
+                padding: 1rem;
+                border-radius: 15px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-link-public {
+                color: var(--dark-color) !important;
+                padding: 0.75rem 1rem !important;
+                border-radius: 8px;
+                margin-bottom: 0.25rem;
+                line-height: 2.5rem;
+            }
+
+            .nav-link-public:hover,
+            .nav-link-public:active {
+                background-color: rgba(254, 44, 85, 0.1);
+                color: var(--primary-color) !important;
+            }
+
+            .nav-link-public i {
+                color: var(--primary-color);
+                width: 24px;
+                display: inline-block;
+            }
+
+            .btn-search-nav {
+                background-color: var(--primary-color);
+                color: white !important;
+                border: none;
+                width: 100%;
+                padding: 0.75rem 1rem;
+                margin-top: 0.5rem;
+            }
+
+            .btn-search-nav:hover {
+                background-color: #ff5e7a;
+            }
+
+            .dropdown-menu {
+                border: none;
+                box-shadow: none;
+                background-color: #f8f9fa;
+                margin-left: 1rem;
+            }
+
+            .dropdown-item {
+                color: var(--dark-color);
+                padding: 0.5rem 1rem;
+            }
+
+            .dropdown-item:hover {
+                background-color: rgba(254, 44, 85, 0.1);
+                color: var(--primary-color);
+            }
+        }
+
+        /* Blog Card Hover Effect */
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .card-hashtag {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-hashtag:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .badge-trending {
+            background: linear-gradient(135deg, var(--primary-color), #ff6b9d);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .footer-public {
+            background-color: var(--dark-color);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-public a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-public a:hover {
+            color: white;
+        }
+
+        .search-box {
+            border-radius: 25px;
+            border: 2px solid #e1e8ed;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(254, 44, 85, 0.25);
+        }
+
+        .btn-search {
+            border-radius: 25px;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--primary-color), #ff6b9d);
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(254, 44, 85, 0.4);
+        }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7XD195E2G4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-7XD195E2G4');
+    </script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-public">
+            <div class="container">
+                <!-- Logo/Brand -->
+                <a class="navbar-brand-public d-flex align-items-center" href="/">
+                    <div class="logo-icon me-2">
+                        <img src="~/favicon.svg" alt="TrendTag Logo" style="width: 40px; height: 40px;" />
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">TrendTag</span>
+                        <small class="brand-tagline d-none d-lg-block">Hashtag Trending</small>
+                    </div>
+                </a>
+
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPublic">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation -->
+                <div class="collapse navbar-collapse" id="navbarPublic">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link-public" href="/">
+                                <i class="bi bi-house-fill me-1"></i>
+                                Trang Chủ
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link-public" href="/hashtag/tao-hashtag-ai">
+                                <i class="bi bi-lightbulb-fill me-1"></i>
+                                Tạo Hashtag AI
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link-public" href="/phan-tich/theo-doi-tang-truong">
+                                <i class="bi bi-graph-up-arrow me-1"></i>
+                                Theo Dõi Tăng Trưởng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link-public" href="/blog">
+                                <i class="bi bi-journal-text me-1"></i>
+                                Blog
+                            </a>
+                        </li>
+                        @* <li class="nav-item dropdown">
+                            <a class="nav-link-public dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-folder-fill me-1"></i>
+                                Danh Mục
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item py-2" href="/chu-de/giao-duc"><i class="bi bi-mortarboard text-primary me-2"></i> Giáo Dục</a></li>
+                                <li><a class="dropdown-item py-2" href="/chu-de/thoi-trang-phu-kien"><i class="bi bi-bag text-danger me-2"></i> Thời Trang</a></li>
+                                <li><a class="dropdown-item py-2" href="/chu-de/the-thao-ngoai-troi"><i class="bi bi-trophy text-warning me-2"></i> Thể Thao</a></li>
+                                <li><a class="dropdown-item py-2" href="/chu-de/tin-tuc-giai-tri"><i class="bi bi-stars text-info me-2"></i> Tin Tức & Giải Trí</a></li>
+                                <li><a class="dropdown-item py-2" href="/chu-de/lam-dep-cham-soc-ca-nhan"><i class="bi bi-heart text-pink me-2"></i> Làm Đẹp</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item py-2 fw-bold" href="/"><i class="bi bi-grid-3x3 text-secondary me-2"></i> Xem Tất Cả</a></li>
+                            </ul>
+                        </li> *@
+                        @* <li class="nav-item ms-lg-2">
+                            <a class="btn btn-search-nav btn-sm rounded-pill px-3" href="/#search">
+                                <i class="bi bi-search me-1"></i>
+                                Tìm Hashtag
+                            </a>
+                        </li> *@
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @* TempData Messages *@
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="container mt-3">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="container mt-3">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        }
+        @if (TempData["InfoMessage"] != null)
+        {
+            <div class="container mt-3">
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <i class="bi bi-info-circle"></i> @TempData["InfoMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        }
+
+        @RenderBody()
+    </main>
+
+    <footer class="footer-public">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-white mb-3">
+                        <i class="bi bi-hash-square"></i> TrendTag
+                    </h5>
+                    <p>Công cụ phân tích hashtag TikTok hàng đầu Việt Nam. Giúp bạn tìm hashtag viral, dự đoán lượt xem và tăng trưởng kênh.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6 class="text-white mb-3">Tính Năng</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check-circle"></i> Phân tích độ khó hashtag</li>
+                        <li><i class="bi bi-check-circle"></i> Dự đoán lượt xem</li>
+                        <li><i class="bi bi-check-circle"></i> Theo dõi trending real-time</li>
+                        <li><i class="bi bi-check-circle"></i> Gợi ý hashtag liên quan</li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6 class="text-white mb-3">Liên Hệ</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/chinh-sach-bao-mat">Chính sách bảo mật</a></li>
+                        <li><a href="/dieu-khoan-su-dung">Điều khoản sử dụng</a></li>
+                        <li><a href="mailto:viralhashtagvn@gmail.com">viralhashtagvn@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr style="border-color: rgba(255, 255, 255, 0.1);" />
+            <div class="text-center">
+                <small>&copy; 2025 TrendTag. Phát triển cho cộng đồng TikTok Việt Nam.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

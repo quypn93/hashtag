@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(dotnet ef database:*)",
+      "Bash(dotnet ef migrations:*)",
+      "Bash(dotnet build:*)",
+      "Bash(sqlcmd:*)",
+      "Bash(dotnet add:*)",
+      "Bash(pwsh -Command \"dotnet tool install --global Microsoft.Playwright.CLI 2>&1 | Out-Null; playwright install chromium\")",
+      "Bash(playwright.ps1 install chromium)",
+      "Bash(where:*)",
+      "Bash(pip install:*)",
+      "Bash(python -m playwright:*)",
+      "Bash(python test_basic_search.py:*)",
+      "Bash(python:*)",
+      "Bash(Select-String -Pattern \"error|warning\")",
+      "Bash(Select-Object -First 20)",
+      "Bash(Select-String -Pattern \"error|warning|succeeded|failed\")",
+      "Bash(dotnet clean:*)",
+      "Bash(pwsh -Command:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(dotnet user-secrets:*)",
+      "Bash(test:*)",
+      "Bash(dotnet script:*)",
+      "Bash(taskkill /F /IM HashTag.exe)",
+      "Bash(dotnet run:*)",
+      "Bash(Select-String -Pattern \"error|warning|succeeded\")",
+      "Bash(dir:*)",
+      "Bash(dotnet publish:*)",
+      "Bash(findstr:*)",
+      "Bash(del \"C:\\\\Users\\\\dell\\\\AppData\\\\Roaming\\\\Microsoft\\\\UserSecrets\\\\a13f1a5e-9889-4392-9e31-76bdd6de0b58\\\\secrets.json\")"
+    ]
+  }
+}

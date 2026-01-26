@@ -1,0 +1,168 @@
+@model BlogGenerateViewModel
+@{
+    ViewData["Title"] = "Auto Generate Blog";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1><i class="bi bi-magic"></i> Auto Generate Blog</h1>
+            <p class="text-muted">Tự động tạo bài viết từ dữ liệu hashtag trending</p>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Monthly Report -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-calendar-month"></i> Top Hashtag Theo Tháng</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Tạo bài viết tổng hợp top 20 hashtag hot nhất trong tháng.</p>
+                    <form asp-action="Generate" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Type" value="monthly" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Tháng</label>
+                            <select name="Month" class="form-select">
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    var selected = i == DateTime.Now.AddMonths(-1).Month;
+                                    <option value="@i" selected="@selected">Tháng @i</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Năm</label>
+                            <select name="Year" class="form-select">
+                                @for (int y = DateTime.Now.Year; y >= DateTime.Now.Year - 2; y--)
+                                {
+                                    <option value="@y">@y</option>
+                                }
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-lightning"></i> Generate
+                        </button>
+                    </form>
+                </div>
+                <div class="card-footer text-muted">
+                    <small><i class="bi bi-info-circle"></i> Bao gồm: Bảng top hashtag, phân tích xu hướng, tips sử dụng</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Report -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-calendar-week"></i> Báo Cáo Trending Tuần</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Tạo bài viết tổng hợp hashtag nổi bật trong tuần vừa qua.</p>
+                    <form asp-action="Generate" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Type" value="weekly" />
+
+                        <div class="mb-3">
+                            <div class="alert alert-info mb-0">
+                                <small>
+                                    <i class="bi bi-clock"></i> Báo cáo tuần: <strong>@DateTime.Now.AddDays(-7).ToString("dd/MM") - @DateTime.Now.ToString("dd/MM/yyyy")</strong>
+                                </small>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-lightning"></i> Generate
+                        </button>
+                    </form>
+                </div>
+                <div class="card-footer text-muted">
+                    <small><i class="bi bi-info-circle"></i> Bao gồm: Top tăng trưởng, hashtag mới nổi, dự đoán xu hướng</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Report -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-tag"></i> Top Hashtag Theo Chủ Đề</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Tạo bài viết top hashtag theo từng chủ đề/ngành hàng.</p>
+                    <form asp-action="Generate" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Type" value="category" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Chọn chủ đề hashtag</label>
+                            <select name="CategoryId" class="form-select" required>
+                                <option value="">-- Chọn chủ đề --</option>
+                                @foreach (var cat in Model.HashtagCategories)
+                                {
+                                    var displayName = !string.IsNullOrEmpty(cat.DisplayNameVi) ? cat.DisplayNameVi : cat.Name;
+                                    <option value="@cat.Id">@displayName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-info w-100">
+                            <i class="bi bi-lightning"></i> Generate
+                        </button>
+                    </form>
+                </div>
+                <div class="card-footer text-muted">
+                    <small><i class="bi bi-info-circle"></i> Bao gồm: Top 15 hashtag ngành, cách kết hợp, content ideas</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Card -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h6><i class="bi bi-lightbulb"></i> Lưu ý:</h6>
+                    <ul class="mb-0 text-muted">
+                        <li>Bài viết được tạo sẽ ở trạng thái <strong>Draft</strong>, bạn có thể review và chỉnh sửa trước khi xuất bản.</li>
+                        <li>Nội dung được generate tự động dựa trên dữ liệu hashtag thực tế từ TikTok.</li>
+                        <li>Hệ thống sẽ tự động generate bài viết hàng tuần (Thứ 2) và hàng tháng (ngày 1).</li>
+                        <li>Nếu bài viết cùng slug đã tồn tại, slug sẽ được thêm số để tránh trùng.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Admin -->
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Quay lại danh sách
+        </a>
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-house"></i> Admin Dashboard
+        </a>
+    </div>
+</div>

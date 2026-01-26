@@ -1,0 +1,338 @@
+/* Common Gradient Backgrounds - TrendTag */
+
+/* Primary Gradients */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-secondary {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+/* Vertical Gradients */
+.bg-gradient-vertical-light {
+    background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.bg-gradient-vertical-dark {
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+/* Feature Cards */
+.feature-card-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card-secondary {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card-info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Feature Icon Circles */
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    transition: transform 0.3s ease;
+}
+
+.feature-icon-sm {
+    width: 60px;
+    height: 60px;
+}
+
+.feature-icon-lg {
+    width: 80px;
+    height: 80px;
+}
+
+/* Step Number Circles */
+.step-number {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-number-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.step-number-secondary {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.step-number-info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+/* Metric Icons */
+.metric-icon {
+    color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+}
+
+.metric-icon-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.metric-icon-secondary {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.metric-icon-success {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.metric-icon-warning {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+/* Card Headers */
+.card-header-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.card-header-gradient-secondary {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+}
+
+.card-header-gradient-success {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: white;
+    border: none;
+}
+
+.card-header-gradient-warning {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    color: white;
+    border: none;
+}
+
+/* Buttons */
+.btn-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+}
+
+.btn-gradient-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Border Colors */
+.border-info-bright {
+    border-color: #0dcaf0 !important;
+}
+
+.border-success-bright {
+    border-color: #43e97b !important;
+}
+
+/* Misc Sizes */
+.w-60px {
+    width: 60px;
+}
+
+.h-60px {
+    height: 60px;
+}
+
+.h-70px {
+    height: 70px;
+}
+
+.h-200px {
+    height: 200px;
+}
+
+/* Search Container */
+.search-container-max {
+    max-width: 900px;
+}
+
+.search-input-height {
+    height: 70px;
+}
+
+.search-input-font {
+    font-size: 1.1rem !important;
+}
+
+.search-btn-radius {
+    border-radius: 0 50px 50px 0;
+}
+
+/* Suggestions Dropdown */
+.suggestions-dropdown {
+    display: none;
+    z-index: 1000;
+}
+
+/* Icon Sizes */
+.icon-lg {
+    font-size: 1.5rem;
+}
+
+.icon-xl {
+    font-size: 2rem;
+}
+
+.icon-xxl {
+    font-size: 4rem;
+}
+
+/* Opacity */
+.opacity-70 {
+    opacity: 0.7;
+}
+
+/* Blog Image */
+.blog-img-cover {
+    height: 200px;
+    object-fit: cover;
+}
+
+.blog-placeholder {
+    height: 200px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.blog-placeholder::before {
+    content: "#";
+    font-size: 4rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.3);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.blog-placeholder::after {
+    content: "ViralHashtag";
+    position: absolute;
+    bottom: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 1px;
+}
+
+.blog-placeholder-sm {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.375rem;
+}
+
+.blog-placeholder-sm::before {
+    content: "#";
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.blog-placeholder-md {
+    height: 150px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blog-placeholder-md::before {
+    content: "#";
+    font-size: 3rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Creator Card Border */
+.creator-card-border {
+    border-color: #43e97b !important;
+}
+
+/* Avatar */
+.avatar-sm {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border: 3px solid #43e97b;
+}
+
+/* Clickable Row */
+.clickable-row {
+    cursor: pointer;
+}
+
+.clickable-row:hover {
+    background-color: #f8f9fa;
+}
+
+/* Breadcrumb */
+.breadcrumb-transparent {
+    background: transparent;
+}
+
+/* Badge Gradient */
+.badge-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Alert Border Left */
+.alert-border-info {
+    border-left: 4px solid #0dcaf0;
+}
+
+/* Min Width */
+.min-w-200 {
+    min-width: 200px;
+}
+
+/* Responsive Mobile */
+@media (max-width: 576px) {
+    .feature-icon {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .step-number {
+        width: 50px !important;
+        height: 50px !important;
+    }
+}

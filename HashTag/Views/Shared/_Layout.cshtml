@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TrendTag</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+    <link rel="apple-touch-icon" href="~/apple-touch-icon.svg" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HashTag.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/favicon.svg" alt="TrendTag Logo" style="height: 32px; width: 32px; margin-right: 8px;" />
+                    <span class="fw-bold" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">TrendTag</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Analytics" asp-action="Growth">
+                                <i class="bi bi-graph-up-arrow"></i> Theo Dõi Tăng Trưởng
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-shield-lock"></i> Admin
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                <li><a class="dropdown-item" asp-controller="Admin" asp-action="Index">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a></li>
+                                <li><a class="dropdown-item" asp-controller="Admin" asp-action="Crawl">
+                                    <i class="bi bi-play-circle"></i> Manual Crawl
+                                </a></li>
+                                <li>
+                                    <form method="post" asp-controller="Admin" asp-action="CalculateMetrics" id="metricsForm" style="margin: 0;">
+                                        <button type="submit" class="dropdown-item" onclick="return confirm('Calculate metrics for all hashtags? This may take a few minutes.');">
+                                            <i class="bi bi-calculator"></i> Calculate Metrics
+                                        </button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form method="post" asp-controller="Admin" asp-action="SyncLatestCounts" style="margin: 0;">
+                                        <button type="submit" class="dropdown-item" onclick="return confirm('Sync PostCount/ViewCount from history to hashtags table?');">
+                                            <i class="bi bi-arrow-repeat"></i> Sync Latest Counts
+                                        </button>
+                                    </form>
+                                </li>
+                                <li><a class="dropdown-item" asp-controller="Admin" asp-action="Hashtags">
+                                    <i class="bi bi-hash"></i> Trending Hashtags
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-controller="Admin" asp-action="CrawlLogs">
+                                    <i class="bi bi-journal-text"></i> Crawl Logs
+                                </a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (Context.Session.GetString("IsAdmin") == "true")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-success" asp-controller="Auth" asp-action="Logout">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">
+                                    <i class="bi bi-box-arrow-in-right"></i> Login
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @* TempData Messages *@
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            @if (TempData["InfoMessage"] != null)
+            {
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <i class="bi bi-info-circle"></i> @TempData["InfoMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - HashTag - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

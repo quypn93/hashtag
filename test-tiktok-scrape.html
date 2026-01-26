@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test TikTok Creative Center Scraping</title>
+</head>
+<body>
+    <h1>TikTok Creative Center - Manual Test</h1>
+    <p>Open this in browser console while on https://ads.tiktok.com/business/creativecenter/hashtag/pc/en</p>
+
+    <h2>Step 1: Check what data is available</h2>
+    <pre>
+// Run this in browser console on TikTok Creative Center page
+const items = document.querySelectorAll('[class*="hashtagItem"], [class*="card"], [class*="item"]');
+console.log('Found items:', items.length);
+
+// Check first item structure
+if (items.length > 0) {
+    const firstItem = items[0];
+    console.log('First item HTML:', firstItem.outerHTML);
+    console.log('First item text:', firstItem.innerText);
+
+    // Look for numbers
+    const text = firstItem.innerText;
+    const numbers = text.match(/([0-9,.]+[KMB]?)/gi);
+    console.log('Numbers found:', numbers);
+}
+    </pre>
+
+    <h2>Step 2: Try to find hashtag elements</h2>
+    <pre>
+// Different selector attempts
+const selectors = [
+    '[class*="hashtag"]',
+    '[class*="HashTag"]',
+    '[class*="card"]',
+    '[class*="item"]',
+    'a[href*="/hashtag/"]',
+    '[data-e2e*="hashtag"]'
+];
+
+selectors.forEach(sel => {
+    const found = document.querySelectorAll(sel);
+    console.log(`Selector "${sel}":`, found.length, 'elements');
+    if (found.length > 0) {
+        console.log('Sample:', found[0].innerText.substring(0, 200));
+    }
+});
+    </pre>
+
+    <h2>Step 3: Check for view/post count elements</h2>
+    <pre>
+// Search for view/post indicators
+const bodyText = document.body.innerText;
+const hasViews = bodyText.match(/views?/gi);
+const hasPosts = bodyText.match(/posts?/gi);
+const hasVideos = bodyText.match(/videos?/gi);
+
+console.log('Contains "views":', hasViews?.length || 0);
+console.log('Contains "posts":', hasPosts?.length || 0);
+console.log('Contains "videos":', hasVideos?.length || 0);
+
+// Look for large numbers (potential view counts)
+const allNumbers = bodyText.match(/\b[0-9]{1,3}(?:,[0-9]{3})*\b|\b[0-9]+\.?[0-9]*[KMB]\b/gi);
+console.log('Large numbers found:', allNumbers?.slice(0, 20));
+    </pre>
+
+    <h2>Step 4: Alternative - Check API calls</h2>
+    <pre>
+// Open Network tab in DevTools
+// Filter by "Fetch/XHR"
+// Reload the page
+// Look for API calls with hashtag data
+// Check response for ViewCount/PostCount fields
+
+// Common API patterns:
+// /api/hashtags
+// /creative_center/hashtags
+// /trending/hashtags
+    </pre>
+
+    <h2>Expected TikTok Creative Center Structure (as of 2024)</h2>
+    <p><strong>Important:</strong> TikTok Creative Center may have changed their UI. The page might:</p>
+    <ul>
+        <li>✅ Show hashtags with ranks</li>
+        <li>❌ No longer show view counts on the main trending page</li>
+        <li>🔍 View counts might only be available on individual hashtag detail pages</li>
+        <li>🔒 Require clicking into each hashtag to see statistics</li>
+    </ul>
+
+    <h2>Alternative Approach: Hashtag Detail Pages</h2>
+    <p>If view counts aren't on the trending page, we need to:</p>
+    <ol>
+        <li>Crawl trending hashtags (get tags only)</li>
+        <li>For each hashtag, visit detail page: <code>https://ads.tiktok.com/business/creativecenter/hashtag/{tagname}/pc/en</code></li>
+        <li>Extract ViewCount, PostCount, Creator count from detail page</li>
+    </ol>
+
+    <pre>
+// Test accessing detail page
+const hashtag = 'fyp'; // Example
+const detailUrl = `https://ads.tiktok.com/business/creativecenter/hashtag/${hashtag}/pc/en`;
+console.log('Visit:', detailUrl);
+
+// On detail page, check for stats:
+const stats = document.querySelectorAll('[class*="stat"], [class*="count"], [class*="number"]');
+stats.forEach(el => {
+    console.log('Stat element:', el.innerText);
+});
+    </pre>
+</body>
+</html>

@@ -1,0 +1,23 @@
+@model HashtagDashboardViewModel
+@{
+    ViewData["Title"] = "Admin - Trending Hashtags";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Admin</a></li>
+                    <li class="breadcrumb-item active">Trending Hashtags</li>
+                </ol>
+            </nav>
+            <h1>
+                <i class="bi bi-hash"></i> Trending Hashtags (Admin View)
+            </h1>
+        </div>
+    </div>
+
+    <!-- This reuses the same content as Views/Hashtag/Index.cshtml -->
+    @await Html.PartialAsync("../Hashtag/Index", Model)
+</div>

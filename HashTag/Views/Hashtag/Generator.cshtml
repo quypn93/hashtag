@@ -1,0 +1,677 @@
+@{
+    ViewData["Title"] = "Tạo Hashtag Thông Minh";
+    Layout = "_LayoutPublic";
+}
+
+<style>
+    /* Generator Page Styling */
+    .generator-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .description-input {
+        min-height: 120px;
+        font-size: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 1rem;
+        resize: vertical;
+        transition: all 0.3s ease;
+    }
+
+    .description-input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .char-counter {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+
+    .char-counter.warning {
+        color: #f5576c;
+        font-weight: bold;
+    }
+
+    .btn-generate {
+        padding: 1rem 3rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        border-radius: 50px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-generate:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-generate:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    /* Results Section */
+    .results-container {
+        display: none;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hashtag-category {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .hashtag-category:hover {
+        border-color: #667eea;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-trending { border-left: 4px solid #f5576c; }
+    .category-niche { border-left: 4px solid #667eea; }
+    .category-ultra { border-left: 4px solid #764ba2; }
+
+    .category-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .hashtag-item {
+        background: #f8f9fa;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+    }
+
+    .hashtag-item:hover {
+        background: #e9ecef;
+        transform: translateX(5px);
+    }
+
+    .hashtag-item.selected {
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        border-color: #667eea;
+    }
+
+    .hashtag-tag {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #667eea;
+    }
+
+    .hashtag-meta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 0.5rem;
+    }
+
+    .viral-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .copy-all-btn {
+        position: sticky;
+        top: 20px;
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 50px;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .copy-all-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+    }
+
+    .reasoning-box {
+        background: linear-gradient(135deg, #f093fb15 0%, #f5576c15 100%);
+        border-left: 4px solid #f5576c;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        border-width: 0.3rem;
+    }
+
+    /* Rate limit indicator */
+    .rate-limit-box {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        border-radius: 1rem;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Mobile responsive */
+    @@media (max-width: 768px) {
+        .btn-generate {
+            padding: 0.875rem 2rem;
+            font-size: 1rem;
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+        }
+
+        .hashtag-tag {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<!-- Header Section -->
+<div class="text-center mb-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3rem 0; margin-top: -2rem;">
+    <div class="container">
+        <h1 class="text-white mb-3">
+            <i class="bi bi-lightbulb"></i> Tạo Hashtag Thông Minh với AI
+        </h1>
+        <p class="text-white-50 mb-0 fs-5">Công nghệ AI giúp bạn tìm hashtag viral cho video TikTok</p>
+    </div>
+</div>
+
+<div class="container generator-container">
+    <!-- Rate Limit Info -->
+    <div id="rateLimitBox" class="rate-limit-box">
+        <div class="d-flex align-items-center justify-content-between">
+            <div>
+                <i class="bi bi-info-circle text-warning fs-4"></i>
+                <strong class="ms-2">Miễn phí:</strong>
+                <span id="remainingCount">5</span> lượt tạo hashtag mỗi ngày
+            </div>
+            <a href="#" class="btn btn-sm btn-warning">
+                <i class="bi bi-star"></i> Nâng cấp Pro
+            </a>
+        </div>
+    </div>
+
+    <!-- Input Section -->
+    <div class="card shadow-sm mb-5" style="border-radius: 1.5rem; border: 2px solid #667eea;">
+        <div class="card-body p-4">
+            <h4 class="mb-3 fw-bold">
+                <i class="bi bi-pencil-square text-primary"></i> Mô tả video của bạn
+            </h4>
+            <p class="text-muted mb-3">
+                Hãy mô tả nội dung video của bạn càng chi tiết càng tốt để AI đề xuất hashtag chính xác nhất.
+            </p>
+
+            <div class="mb-3">
+                <textarea
+                    id="videoDescription"
+                    class="form-control description-input"
+                    placeholder="VD: Video hướng dẫn làm bánh mì Việt Nam tại nhà, thơm ngon giòn rụm, phù hợp cho người mới bắt đầu..."
+                    maxlength="1000"></textarea>
+                <div class="d-flex justify-content-between mt-2">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle"></i> Tối thiểu 10 ký tự
+                    </small>
+                    <small class="char-counter" id="charCounter">0 / 1000</small>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button id="generateBtn" class="btn btn-primary btn-generate" onclick="generateHashtags()">
+                    <i class="bi bi-stars"></i> Tạo Hashtag Ngay
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-3 text-muted">AI đang phân tích và tạo hashtag cho bạn...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div id="errorMessage" class="alert alert-danger" style="display: none; border-radius: 1rem;">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span id="errorText"></span>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsContainer" class="results-container">
+        <!-- Reasoning Section -->
+        <div class="reasoning-box">
+            <h5 class="fw-bold mb-2">
+                <i class="bi bi-lightbulb-fill text-warning"></i> Chiến Lược Hashtag
+            </h5>
+            <p id="reasoningText" class="mb-0"></p>
+        </div>
+
+        <div class="row">
+            <!-- Hashtags Column -->
+            <div class="col-lg-8">
+                <!-- Trending Hashtags -->
+                <div id="trendingSection" class="hashtag-category category-trending">
+                    <div class="category-title">
+                        <i class="bi bi-fire text-danger"></i> Trending Hashtags
+                        <small class="text-muted">(1-2 hashtag)</small>
+                    </div>
+                    <p class="text-muted small mb-3">Hashtag đang viral, tiếp cận rộng nhưng cạnh tranh cao</p>
+                    <div id="trendingList"></div>
+                </div>
+
+                <!-- Niche Hashtags -->
+                <div id="nicheSection" class="hashtag-category category-niche">
+                    <div class="category-title">
+                        <i class="bi bi-bullseye text-primary"></i> Niche Hashtags
+                        <small class="text-muted">(2-3 hashtag)</small>
+                    </div>
+                    <p class="text-muted small mb-3">Hashtag chuyên ngành, cân bằng giữa tiếp cận và cạnh tranh</p>
+                    <div id="nicheList"></div>
+                </div>
+
+                <!-- Ultra-Niche Hashtags -->
+                <div id="ultraSection" class="hashtag-category category-ultra">
+                    <div class="category-title">
+                        <i class="bi bi-gem text-purple"></i> Ultra-Niche Hashtags
+                        <small class="text-muted">(1-2 hashtag)</small>
+                    </div>
+                    <p class="text-muted small mb-3">Hashtag siêu chuyên biệt, dễ nổi bật trong cộng đồng nhỏ</p>
+                    <div id="ultraList"></div>
+                </div>
+            </div>
+
+            <!-- Action Column -->
+            <div class="col-lg-4">
+                <div class="position-sticky" style="top: 20px;">
+                    <div class="card shadow" style="border-radius: 1rem;">
+                        <div class="card-body text-center p-4">
+                            <h5 class="fw-bold mb-3">Sao chép hashtag</h5>
+                            <p class="text-muted small mb-3">
+                                <span id="selectedCount">0</span> hashtag đã chọn
+                            </p>
+                            <button class="btn btn-primary copy-all-btn w-100 mb-3" onclick="copySelectedHashtags(event)">
+                                <i class="bi bi-clipboard"></i> Copy Tất Cả
+                            </button>
+                            <button class="btn btn-outline-secondary w-100" onclick="resetGenerator()">
+                                <i class="bi bi-arrow-clockwise"></i> Tạo Lại
+                            </button>
+
+                            <hr class="my-3">
+
+                            <div class="text-start">
+                                <small class="text-muted d-block mb-2">
+                                    <i class="bi bi-check-circle text-success"></i> Click hashtag để chọn/bỏ chọn
+                                </small>
+                                <small class="text-muted d-block">
+                                    <i class="bi bi-info-circle text-info"></i> Đề xuất: 5-7 hashtag/video
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <div class="card" style="background: #f8f9fa; border: none; border-radius: 1rem;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-question-circle text-info"></i> Cách sử dụng hiệu quả
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    Mô tả chi tiết nội dung video (50-200 từ)
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    Đề cập đến chủ đề, đối tượng, địa điểm
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    Sử dụng 5-7 hashtag/video để tối ưu
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    Mix hashtag trending và niche
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    Hashtag ultra-niche giúp tiếp cận đúng người
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    Thử nghiệm và theo dõi hiệu quả
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let allHashtags = [];
+    let selectedHashtags = new Set();
+
+    // Character counter
+    document.getElementById('videoDescription').addEventListener('input', function() {
+        const length = this.value.length;
+        const counter = document.getElementById('charCounter');
+        counter.textContent = `${length} / 1000`;
+
+        if (length > 900) {
+            counter.classList.add('warning');
+        } else {
+            counter.classList.remove('warning');
+        }
+    });
+
+    // Load rate limit on page load
+    window.addEventListener('load', async function() {
+        try {
+            const response = await fetch('/Hashtag/CheckLimit');
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById('remainingCount').textContent = data.remaining;
+            }
+        } catch (error) {
+            console.error('Error checking rate limit:', error);
+        }
+    });
+
+    async function generateHashtags() {
+        const description = document.getElementById('videoDescription').value.trim();
+        const generateBtn = document.getElementById('generateBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const errorMessage = document.getElementById('errorMessage');
+        const resultsContainer = document.getElementById('resultsContainer');
+
+        // Validate
+        if (description.length < 10) {
+            showError('Vui lòng nhập mô tả ít nhất 10 ký tự.');
+            return;
+        }
+
+        // Hide previous results/errors
+        errorMessage.style.display = 'none';
+        resultsContainer.style.display = 'none';
+
+        // Show loading
+        generateBtn.disabled = true;
+        loadingSpinner.style.display = 'block';
+
+        try {
+            const response = await fetch('/Hashtag/Generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ description: description })
+            });
+
+            const data = await response.json();
+
+            console.log('Response data:', data);
+
+            if (data.success && data.recommendation) {
+                console.log('Recommendation:', data.recommendation);
+                console.log('Trending:', data.recommendation.trendingHashtags);
+                console.log('Niche:', data.recommendation.nicheHashtags);
+                console.log('Ultra:', data.recommendation.ultraNicheHashtags);
+                displayResults(data.recommendation);
+
+                // Update rate limit
+                const limitResponse = await fetch('/Hashtag/CheckLimit');
+                const limitData = await limitResponse.json();
+                if (limitData.success) {
+                    document.getElementById('remainingCount').textContent = limitData.remaining;
+                }
+            } else {
+                showError(data.errorMessage || 'Đã xảy ra lỗi. Vui lòng thử lại.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showError('Không thể kết nối với máy chủ. Vui lòng thử lại.');
+        } finally {
+            generateBtn.disabled = false;
+            loadingSpinner.style.display = 'none';
+        }
+    }
+
+    function displayResults(recommendation) {
+        // Store all hashtags
+        allHashtags = [];
+        selectedHashtags.clear();
+
+        // Debug log
+        console.log('Recommendation received:', recommendation);
+
+        // Display reasoning
+        document.getElementById('reasoningText').textContent = recommendation.reasoning || 'AI đã phân tích và đề xuất các hashtag phù hợp nhất cho nội dung của bạn.';
+
+        // Display hashtags by category
+        displayCategory('trending', recommendation.trendingHashtags, 'trendingList', 'trendingSection');
+        displayCategory('niche', recommendation.nicheHashtags, 'nicheList', 'nicheSection');
+        displayCategory('ultra', recommendation.ultraNicheHashtags, 'ultraList', 'ultraSection');
+
+        // Show results
+        document.getElementById('resultsContainer').style.display = 'block';
+
+        // Scroll to results
+        document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Attach click event listeners to hashtag items
+        attachHashtagClickListeners();
+
+        updateSelectedCount();
+    }
+
+    function attachHashtagClickListeners() {
+        // Add click listeners to entire hashtag items (open detail page)
+        document.querySelectorAll('.hashtag-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Check if hashtag exists in database
+                const existsInDb = this.getAttribute('data-exists') === 'true';
+
+                if (!existsInDb) {
+                    // Don't navigate, show warning
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return;
+                }
+
+                const tag = this.getAttribute('data-tag');
+                window.open(`/hashtag/${tag}`, '_blank');
+            });
+        });
+    }
+
+    function displayCategory(type, hashtags, listId, sectionId) {
+        const listElement = document.getElementById(listId);
+        const sectionElement = document.getElementById(sectionId);
+
+        if (!hashtags || hashtags.length === 0) {
+            sectionElement.style.display = 'none';
+            return;
+        }
+
+        sectionElement.style.display = 'block';
+        listElement.innerHTML = '';
+
+        hashtags.forEach(hashtag => {
+            // Remove # prefix if exists (AI might return with or without #)
+            const cleanTag = hashtag.tag.startsWith('#') ? hashtag.tag.substring(1) : hashtag.tag;
+
+            const hashtagData = {
+                type: type,
+                tag: cleanTag,
+                viewCount: hashtag.viewCount,
+                postCount: hashtag.postCount,
+                competitionLevel: hashtag.competitionLevel,
+                expectedReach: hashtag.expectedReach,
+                viralProbability: hashtag.viralProbability,
+                recommendationNote: hashtag.recommendationNote,
+                existsInDatabase: hashtag.existsInDatabase  // IMPORTANT: Pass through existence flag
+            };
+
+            allHashtags.push(hashtagData);
+            selectedHashtags.add(cleanTag);
+
+            const itemHtml = createHashtagItem(hashtagData);
+            listElement.innerHTML += itemHtml;
+        });
+    }
+
+    function createHashtagItem(hashtag) {
+        const viralColor = hashtag.viralProbability >= 70 ? 'success' : hashtag.viralProbability >= 40 ? 'warning' : 'secondary';
+
+        // Fix: Only true if explicitly true, undefined or false means not exists
+        const existsInDb = hashtag.existsInDatabase === true;
+        const cursorStyle = existsInDb ? 'cursor: pointer;' : 'cursor: not-allowed; opacity: 0.8;';
+        const disabledClass = existsInDb ? '' : 'hashtag-not-found';
+
+        // Debug log
+        console.log(`Hashtag: ${hashtag.tag}, existsInDatabase: ${hashtag.existsInDatabase}, computed existsInDb: ${existsInDb}`);
+
+        return `
+            <div class="hashtag-item selected ${disabledClass}" data-tag="${hashtag.tag}" data-exists="${existsInDb}" style="${cursorStyle}">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="flex-grow-1">
+                        <div class="hashtag-tag">#${hashtag.tag} ${!existsInDb ? '<span class="badge bg-secondary ms-2" style="font-size: 0.7rem;">Chưa có data</span>' : ''}</div>
+                        <div class="hashtag-meta ${!existsInDb ? 'd-none' : ''}">
+                            <span><i class="bi bi-eye"></i> ${formatNumber(hashtag.viewCount)} views</span>
+                            <span><i class="bi bi-file-text"></i> ${formatNumber(hashtag.postCount || 0)} posts</span>
+                            <span><i class="bi bi-bar-chart"></i> ${hashtag.competitionLevel}</span>
+                        </div>
+                        ${hashtag.recommendationNote ? `<small class="text-muted mt-2 d-block"><i class="bi bi-lightbulb"></i> ${hashtag.recommendationNote}</small>` : ''}
+                        ${!existsInDb ? '<small class="text-warning mt-1 d-block"><i class="bi bi-exclamation-triangle"></i> Hashtag này chưa có dữ liệu, không thể xem chi tiết.</small>' : ''}
+                    </div>
+                    <span class="viral-badge bg-${viralColor} text-white">
+                        ${hashtag.viralProbability}% viral
+                    </span>
+                </div>
+            </div>
+        `;
+    }
+
+    function toggleHashtag(tag) {
+        const item = document.querySelector(`[data-tag="${tag}"]`);
+
+        if (selectedHashtags.has(tag)) {
+            selectedHashtags.delete(tag);
+            item.classList.remove('selected');
+        } else {
+            selectedHashtags.add(tag);
+            item.classList.add('selected');
+        }
+
+        updateSelectedCount();
+    }
+
+    function updateSelectedCount() {
+        document.getElementById('selectedCount').textContent = selectedHashtags.size;
+    }
+
+    function copySelectedHashtags(event) {
+        if (selectedHashtags.size === 0) {
+            showError('Vui lòng chọn ít nhất một hashtag.');
+            return;
+        }
+
+        const text = Array.from(selectedHashtags).map(tag => `#${tag}`).join(' ');
+
+        navigator.clipboard.writeText(text).then(() => {
+            // Show success feedback
+            const btn = event.target.closest('button');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="bi bi-check-circle"></i> Đã Copy!';
+            btn.classList.add('btn-success');
+            btn.classList.remove('btn-primary');
+
+            setTimeout(() => {
+                btn.innerHTML = originalHtml;
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-primary');
+            }, 2000);
+        }).catch(err => {
+            console.error('Copy failed:', err);
+            showError('Không thể sao chép. Vui lòng thử lại.');
+        });
+    }
+
+    function resetGenerator() {
+        document.getElementById('videoDescription').value = '';
+        document.getElementById('charCounter').textContent = '0 / 1000';
+        document.getElementById('resultsContainer').style.display = 'none';
+        document.getElementById('errorMessage').style.display = 'none';
+        allHashtags = [];
+        selectedHashtags.clear();
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showError(message) {
+        const errorMessage = document.getElementById('errorMessage');
+        document.getElementById('errorText').textContent = message;
+        errorMessage.style.display = 'block';
+        errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function formatNumber(num) {
+        if (num >= 1000000000) return (num / 1000000000).toFixed(1) + 'B';
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+        return num.toString();
+    }
+
+    // Allow Enter key in textarea but not to submit
+    document.getElementById('videoDescription').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && e.ctrlKey) {
+            generateHashtags();
+        }
+    });
+</script>
