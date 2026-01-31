@@ -29,7 +29,8 @@
       "Bash(dir:*)",
       "Bash(dotnet publish:*)",
       "Bash(findstr:*)",
-      "Bash(del \"C:\\\\Users\\\\dell\\\\AppData\\\\Roaming\\\\Microsoft\\\\UserSecrets\\\\a13f1a5e-9889-4392-9e31-76bdd6de0b58\\\\secrets.json\")"
+      "Bash(del \"C:\\\\Users\\\\dell\\\\AppData\\\\Roaming\\\\Microsoft\\\\UserSecrets\\\\a13f1a5e-9889-4392-9e31-76bdd6de0b58\\\\secrets.json\")",
+      "Bash(taskkill:*)"
     ]
   }
 }
