@@ -381,7 +381,19 @@ public class BlogController : Controller
             ? post.FeaturedImage
             : "https://viralhashtag.vn/images/blog-default.png";
 
-        return $@"{{
+        var categoryUrl = post.Category != null
+            ? $"https://viralhashtag.vn/blog/category/{post.Category.Slug}"
+            : "https://viralhashtag.vn/blog";
+
+        var categoryDisplayName = post.Category != null
+            ? (!string.IsNullOrEmpty(post.Category.DisplayNameVi) ? post.Category.DisplayNameVi : post.Category.Name)
+            : "Blog";
+
+        // Combine Article schema with BreadcrumbList for better SEO
+        var schemas = new List<string>();
+
+        // Article Schema
+        schemas.Add($@"{{
             ""@context"": ""https://schema.org"",
             ""@type"": ""Article"",
             ""headline"": ""{EscapeJson(post.Title)}"",
@@ -404,7 +416,151 @@ public class BlogController : Controller
             ""articleSection"": ""{EscapeJson(categoryName)}"",
             ""wordCount"": {post.Content?.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries).Length ?? 0},
             ""url"": ""{canonicalUrl}""
+        }}");
+
+        // BreadcrumbList Schema
+        schemas.Add($@"{{
+            ""@context"": ""https://schema.org"",
+            ""@type"": ""BreadcrumbList"",
+            ""itemListElement"": [
+                {{
+                    ""@type"": ""ListItem"",
+                    ""position"": 1,
+                    ""name"": ""Trang chủ"",
+                    ""item"": ""https://viralhashtag.vn""
+                }},
+                {{
+                    ""@type"": ""ListItem"",
+                    ""position"": 2,
+                    ""name"": ""Blog"",
+                    ""item"": ""https://viralhashtag.vn/blog""
+                }},
+                {{
+                    ""@type"": ""ListItem"",
+                    ""position"": 3,
+                    ""name"": ""{EscapeJson(categoryDisplayName)}"",
+                    ""item"": ""{categoryUrl}""
+                }},
+                {{
+                    ""@type"": ""ListItem"",
+                    ""position"": 4,
+                    ""name"": ""{EscapeJson(post.Title)}""
+                }}
+            ]
+        }}");
+
+        // HowTo Schema - detect if post is a guide/tutorial
+        if (IsHowToPost(post.Title))
+        {
+            var howToSchema = CreateHowToSchema(post, imageUrl);
+            if (!string.IsNullOrEmpty(howToSchema))
+            {
+                schemas.Add(howToSchema);
+            }
+        }
+
+        return "[" + string.Join(",", schemas) + "]";
+    }
+
+    /// <summary>
+    /// Detect if a blog post is a how-to/guide based on title patterns
+    /// </summary>
+    private bool IsHowToPost(string title)
+    {
+        if (string.IsNullOrEmpty(title))
+            return false;
+
+        var howToPatterns = new[]
+        {
+            "cách ", "hướng dẫn ", "làm sao ", "làm thế nào ",
+            "bước ", "tips ", "mẹo ", "bí quyết ",
+            "how to ", "guide ", "tutorial "
+        };
+
+        var lowerTitle = title.ToLowerInvariant();
+        return howToPatterns.Any(pattern => lowerTitle.Contains(pattern));
+    }
+
+    /// <summary>
+    /// Create HowTo schema for tutorial/guide posts
+    /// </summary>
+    private string CreateHowToSchema(BlogPost post, string imageUrl)
+    {
+        // Extract steps from content (look for numbered lists or h2/h3 headers)
+        var steps = ExtractStepsFromContent(post.Content ?? "");
+
+        if (steps.Count < 2)
+            return string.Empty; // Need at least 2 steps for HowTo schema
+
+        var stepsJson = string.Join(",", steps.Select((step, index) => $@"
+            {{
+                ""@type"": ""HowToStep"",
+                ""position"": {index + 1},
+                ""name"": ""{EscapeJson(step.Name)}"",
+                ""text"": ""{EscapeJson(step.Text)}""
+            }}"));
+
+        return $@"{{
+            ""@context"": ""https://schema.org"",
+            ""@type"": ""HowTo"",
+            ""name"": ""{EscapeJson(post.Title)}"",
+            ""description"": ""{EscapeJson(post.Excerpt ?? post.Title)}"",
+            ""image"": ""{imageUrl}"",
+            ""step"": [{stepsJson}]
         }}";
+    }
+
+    /// <summary>
+    /// Extract steps from blog content for HowTo schema
+    /// Looks for patterns like "Bước 1:", "1.", numbered lists, or headers
+    /// </summary>
+    private List<(string Name, string Text)> ExtractStepsFromContent(string content)
+    {
+        var steps = new List<(string Name, string Text)>();
+
+        if (string.IsNullOrEmpty(content))
+            return steps;
+
+        // Remove HTML tags for analysis
+        var plainText = System.Text.RegularExpressions.Regex.Replace(content, "<[^>]+>", " ");
+
+        // Pattern 1: "Bước X:" or "Step X:"
+        var stepPattern = new System.Text.RegularExpressions.Regex(
+            @"(?:Bước|Step)\s*(\d+)\s*[:\.]?\s*([^\n]+)",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+        var matches = stepPattern.Matches(plainText);
+        foreach (System.Text.RegularExpressions.Match match in matches)
+        {
+            var stepName = $"Bước {match.Groups[1].Value}";
+            var stepText = match.Groups[2].Value.Trim();
+            if (stepText.Length > 10) // Minimum meaningful content
+            {
+                steps.Add((stepName, stepText.Length > 200 ? stepText.Substring(0, 200) + "..." : stepText));
+            }
+        }
+
+        // Pattern 2: Numbered lists "1.", "2.", etc.
+        if (steps.Count < 2)
+        {
+            var numberedPattern = new System.Text.RegularExpressions.Regex(
+                @"(?:^|\n)\s*(\d+)\.\s+([^\n]+)",
+                System.Text.RegularExpressions.RegexOptions.Multiline);
+
+            matches = numberedPattern.Matches(plainText);
+            steps.Clear();
+            foreach (System.Text.RegularExpressions.Match match in matches)
+            {
+                var stepName = $"Bước {match.Groups[1].Value}";
+                var stepText = match.Groups[2].Value.Trim();
+                if (stepText.Length > 10)
+                {
+                    steps.Add((stepName, stepText.Length > 200 ? stepText.Substring(0, 200) + "..." : stepText));
+                }
+            }
+        }
+
+        return steps.Take(10).ToList(); // Max 10 steps for schema
     }
 
     private string EscapeJson(string text)

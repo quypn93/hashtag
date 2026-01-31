@@ -128,9 +128,12 @@ public class SitemapService : ISitemapService
             //     WriteUrl(writer, $"{baseUrl}/chu-de/{category.Slug}", DateTime.UtcNow, "0.8", "daily");
             // }
 
-            // 8. Static pages
-            // WriteUrl(writer, $"{baseUrl}/Privacy", DateTime.UtcNow, "0.3", "yearly");
-            // WriteUrl(writer, $"{baseUrl}/GrowthTracker", DateTime.UtcNow, "0.7", "daily");
+            // 8. Static/Tool pages (important for SEO)
+            WriteUrl(writer, $"{baseUrl}/hashtag/tao-hashtag-ai", DateTime.UtcNow, "0.9", "daily");
+            WriteUrl(writer, $"{baseUrl}/phan-tich/theo-doi-tang-truong", DateTime.UtcNow, "0.8", "daily");
+            WriteUrl(writer, $"{baseUrl}/chinh-sach-bao-mat", DateTime.UtcNow, "0.3", "yearly");
+            WriteUrl(writer, $"{baseUrl}/dieu-khoan-su-dung", DateTime.UtcNow, "0.3", "yearly");
+            WriteUrl(writer, $"{baseUrl}/hashtag/search", DateTime.UtcNow, "0.7", "daily");
 
             writer.WriteEndElement(); // urlset
             writer.WriteEndDocument();
