@@ -1,8 +1,13 @@
 @using HashTag.Helpers
+@using Microsoft.AspNetCore.Localization
 @model HashtagDetailsViewModel
 @{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.UICulture.Name ?? "vi";
+    var isEnglish = currentCulture.StartsWith("en");
+
     var categoryName = Model.Hashtag.Category != null
-        ? (!string.IsNullOrEmpty(Model.Hashtag.Category.DisplayNameVi) ? Model.Hashtag.Category.DisplayNameVi : Model.Hashtag.Category.Name)
+        ? (!isEnglish && !string.IsNullOrEmpty(Model.Hashtag.Category.DisplayNameVi) ? Model.Hashtag.Category.DisplayNameVi : Model.Hashtag.Category.Name)
         : "TikTok";
 
     var viewCount = Model.Hashtag.LatestViewCount.HasValue && Model.Hashtag.LatestViewCount > 0
@@ -10,12 +15,12 @@
             ? $"{Model.Hashtag.LatestViewCount.Value / 1_000_000_000.0:F1}B"
             : Model.Hashtag.LatestViewCount.Value >= 1_000_000
                 ? $"{Model.Hashtag.LatestViewCount.Value / 1_000_000.0:F1}M"
-                : "nhiều")
-        : "nhiều";
+                : Localizer["Details_Many"].Value)
+        : Localizer["Details_Many"].Value;
 
-    ViewData["Title"] = $"{Model.Hashtag.TagDisplay} - Hashtag TikTok Trending | TrendTag";
-    ViewData["Description"] = $"Phân tích chi tiết hashtag {Model.Hashtag.TagDisplay} trên TikTok. {viewCount} lượt xem, xuất hiện {Model.Hashtag.TotalAppearances} lần trong trending. Tìm hiểu cách sử dụng hashtag {categoryName} hiệu quả để tăng view, tăng tương tác cho video TikTok.";
-    ViewData["Keywords"] = $"{Model.Hashtag.Tag.Trim()}, hashtag tiktok, {categoryName}, trending hashtag, viral hashtag, hashtag hot, tìm hashtag tiktok, phân tích hashtag, tăng view tiktok, tăng tương tác tiktok";
+    ViewData["Title"] = string.Format(Localizer["Details_PageTitle"].Value, Model.Hashtag.TagDisplay);
+    ViewData["Description"] = string.Format(Localizer["Details_PageDescription"].Value, Model.Hashtag.TagDisplay, viewCount, Model.Hashtag.TotalAppearances, categoryName);
+    ViewData["Keywords"] = $"{Model.Hashtag.Tag.Trim()}, hashtag tiktok, {categoryName}, trending hashtag, viral hashtag, hashtag hot";
     Layout = "_LayoutPublic";
 }
 
@@ -110,11 +115,11 @@
             @if (Model.Hashtag.Category != null)
             {
                 <span class="info-badge bg-white text-dark">
-                    <i class="bi bi-folder"></i> @(!string.IsNullOrEmpty(Model.Hashtag.Category.DisplayNameVi) ? Model.Hashtag.Category.DisplayNameVi : Model.Hashtag.Category.Name)
+                    <i class="bi bi-folder"></i> @(!isEnglish && !string.IsNullOrEmpty(Model.Hashtag.Category.DisplayNameVi) ? Model.Hashtag.Category.DisplayNameVi : Model.Hashtag.Category.Name)
                 </span>
             }
             @if (!string.IsNullOrEmpty(Model.Hashtag.DifficultyLevel))
-            {               
+            {
                 var badgeClass = Model.Hashtag.DifficultyLevel switch
                 {
                     "Easy" => "bg-success",
@@ -122,17 +127,17 @@
                     "Hard" => "bg-danger",
                     _ => "bg-secondary"
                 };
-                var difficultyVi = Model.Hashtag.DifficultyLevel switch
+                var difficultyText = Model.Hashtag.DifficultyLevel switch
                 {
-                    "Easy" => "Thấp",
-                    "Medium" => "Trung Bình",
-                    "Hard" => "Cao",
-                    "Very Hard" => "Rất Cao",
+                    "Easy" => Localizer["Difficulty_Low"].Value,
+                    "Medium" => Localizer["Difficulty_Medium"].Value,
+                    "Hard" => Localizer["Difficulty_High"].Value,
+                    "Very Hard" => Localizer["Difficulty_VeryHigh"].Value,
                     _ => Model.Hashtag.DifficultyLevel
                 };
-                <span class="text-white">Mức độ cạnh tranh: </span>
+                <span class="text-white">@Localizer["Details_CompetitionLevel"] </span>
                 <span class="info-badge @badgeClass text-white">
-                    <i class="bi bi-speedometer"></i> @difficultyVi
+                    <i class="bi bi-speedometer"></i> @difficultyText
                 </span>
             }
         </div>
@@ -152,7 +157,7 @@
                         </div>
                     </div>
                     <div class="metric-value">@Model.Hashtag.TotalAppearances</div>
-                    <div class="metric-label">Tổng Số Lần Xuất Hiện</div>
+                    <div class="metric-label">@Localizer["Details_TotalAppearances"]</div>
                 </div>
             </div>
         </div>
@@ -177,7 +182,7 @@
                             </div>
                         </div>
                         <div class="metric-value text-danger">@viewCountFormatted</div>
-                        <div class="metric-label">Lượt Xem Gần Nhất</div>
+                        <div class="metric-label">@Localizer["Details_LatestViews"]</div>
                     </div>
                 </div>
             </div>
@@ -201,7 +206,7 @@
                             </div>
                         </div>
                         <div class="metric-value text-success">@postCountFormatted</div>
-                        <div class="metric-label">Số Bài Viết Gần Nhất</div>
+                        <div class="metric-label">@Localizer["Details_LatestPosts"]</div>
                     </div>
                 </div>
             </div>
@@ -227,7 +232,7 @@
                             </div>
                         </div>
                         <div class="metric-value text-warning">@totalViewsFormatted</div>
-                        <div class="metric-label">Tổng Lượt Xem</div>
+                        <div class="metric-label">@Localizer["Details_TotalViews"]</div>
                     </div>
                 </div>
             </div>
@@ -240,7 +245,7 @@
         <div class="col-lg-8">
             <div class="card metric-card">
                 <div class="card-header card-header-gradient-secondary">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-info-circle-fill"></i> Thông Tin Hashtag</h5>
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-info-circle-fill"></i> @Localizer["Details_HashtagInfo"]</h5>
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
@@ -248,7 +253,7 @@
                             <div class="d-flex align-items-center p-3 bg-light rounded">
                                 <i class="bi bi-calendar-check text-primary fs-3 me-3"></i>
                                 <div>
-                                    <small class="text-muted d-block">Lần Đầu Xuất Hiện</small>
+                                    <small class="text-muted d-block">@Localizer["Details_FirstAppearance"]</small>
                                     <strong>@Model.Hashtag.FirstSeen.ToVietnameseString()</strong>
                                 </div>
                             </div>
@@ -257,7 +262,7 @@
                             <div class="d-flex align-items-center p-3 bg-light rounded">
                                 <i class="bi bi-clock-history text-success fs-3 me-3"></i>
                                 <div>
-                                    <small class="text-muted d-block">Lần Cuối Xuất Hiện</small>
+                                    <small class="text-muted d-block">@Localizer["Details_LastAppearance"]</small>
                                     <strong>@Model.Hashtag.LastSeen.ToVietnameseString()</strong>
                                 </div>
                             </div>
@@ -275,7 +280,7 @@
                                 <div class="d-flex align-items-center p-3 bg-light rounded">
                                     <i class="bi bi-graph-up text-info fs-3 me-3"></i>
                                     <div>
-                                        <small class="text-muted d-block">Trung Bình Lượt Xem/Bài</small>
+                                        <small class="text-muted d-block">@Localizer["Details_AvgViewsPerPost"]</small>
                                         <strong class="text-info">@avgViewsFormatted</strong>
                                     </div>
                                 </div>
@@ -300,7 +305,7 @@
                                 <div class="d-flex align-items-center p-3 bg-light rounded">
                                     <i class="bi bi-graph-up-arrow text-warning fs-3 me-3"></i>
                                     <div>
-                                        <small class="text-muted d-block">Dự Đoán Lượt Xem</small>
+                                        <small class="text-muted d-block">@Localizer["Details_PredictedViews"]</small>
                                         <strong class="text-warning">@minFormatted - @maxFormatted</strong>
                                     </div>
                                 </div>
@@ -311,7 +316,7 @@
                     @if (Model.Metrics != null && Model.Metrics.PredictedViewMin.HasValue)
                     {
                         <div class="alert alert-info alert-border-info mt-3 mb-0">
-                            <i class="bi bi-info-circle"></i> Ước tính lượt xem cho video mới của bạn khi sử dụng hashtag này
+                            <i class="bi bi-info-circle"></i> @Localizer["Details_PredictedViewsHint"]
                         </div>
                     }
                 </div>
@@ -323,7 +328,7 @@
             @* Related Hashtags *@
             <div class="card metric-card mb-4">
                 <div class="card-header card-header-gradient-primary">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-link-45deg"></i> Hashtag Liên Quan</h5>
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-link-45deg"></i> @Localizer["Details_RelatedHashtags"]</h5>
                 </div>
                 <div class="card-body">
                     @if (Model.RelatedHashtags.Any())
@@ -348,7 +353,7 @@
                                     </span>
                                     @if (viewCountFormatted != null)
                                     {
-                                        <span class="badge bg-primary rounded-pill" title="@relatedHashtag.LatestViewCount!.Value.ToString("N0") lượt xem">
+                                        <span class="badge bg-primary rounded-pill" title="@relatedHashtag.LatestViewCount!.Value.ToString("N0") @Localizer["Details_Views"]">
                                             @viewCountFormatted
                                         </span>
                                     }
@@ -359,7 +364,7 @@
                     else
                     {
                         <p class="text-muted mb-0 text-center py-3">
-                            <i class="bi bi-info-circle"></i> Chưa có hashtag cùng chủ đề
+                            <i class="bi bi-info-circle"></i> @Localizer["Details_NoRelatedHashtags"]
                         </p>
                     }
                 </div>
@@ -377,7 +382,7 @@
             {
                 <div class="card metric-card">
                     <div class="card-header card-header-gradient-success">
-                        <h5 class="mb-0 fw-bold"><i class="bi bi-people-fill"></i> Top Creators</h5>
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-people-fill"></i> @Localizer["Details_TopCreators"]</h5>
                     </div>
                     <div class="card-body">
                         <div id="creatorsContainer" data-creators='@latestHistoryWithCreators.FeaturedCreatorsJson'></div>
@@ -392,38 +397,37 @@
         <div class="col-12">
             <div class="card metric-card">
                 <div class="card-header card-header-gradient-primary">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-lightbulb-fill"></i> Cách Sử Dụng Hashtag @Model.Hashtag.TagDisplay Hiệu Quả</h5>
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-lightbulb-fill"></i> @string.Format(Localizer["Details_HowToUse"].Value, Model.Hashtag.TagDisplay)</h5>
                 </div>
                 <div class="card-body">
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <h6 class="fw-bold text-primary mb-3"><i class="bi bi-check2-circle"></i> Tối Ưu Nội Dung</h6>
+                            <h6 class="fw-bold text-primary mb-3"><i class="bi bi-check2-circle"></i> @Localizer["Details_OptimizeContent"]</h6>
                             <ul class="list-unstyled">
-                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>Đặt hashtag trong phần mô tả video hoặc bình luận đầu tiên</li>
-                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>Kết hợp 3-5 hashtag liên quan để tăng độ phủ sóng</li>
-                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>Tạo nội dung chất lượng cao phù hợp với chủ đề hashtag</li>
-                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>Đăng video vào khung giờ vàng (19h-22h) để tối đa hóa tương tác</li>
+                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>@Localizer["Details_Tip1"]</li>
+                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>@Localizer["Details_Tip2"]</li>
+                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>@Localizer["Details_Tip3"]</li>
+                                <li class="mb-2"><i class="bi bi-arrow-right-circle-fill text-success me-2"></i>@Localizer["Details_Tip4"]</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
-                            <h6 class="fw-bold text-primary mb-3"><i class="bi bi-x-circle"></i> Lưu Ý Khi Sử Dụng</h6>
+                            <h6 class="fw-bold text-primary mb-3"><i class="bi bi-x-circle"></i> @Localizer["Details_UsageNotes"]</h6>
                             <ul class="list-unstyled">
-                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Tránh spam quá nhiều hashtag (không nên dùng hơn 8 hashtag)</li>
-                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Đảm bảo nội dung video phù hợp với ý nghĩa hashtag</li>
-                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Kiểm tra độ cạnh tranh trước khi sử dụng</li>
-                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Cập nhật hashtag trending thường xuyên để bắt kịp xu hướng</li>
+                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>@Localizer["Details_Warning1"]</li>
+                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>@Localizer["Details_Warning2"]</li>
+                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>@Localizer["Details_Warning3"]</li>
+                                <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>@Localizer["Details_Warning4"]</li>
                             </ul>
                         </div>
                     </div>
 
                     @if (Model.Hashtag.Category != null)
                     {
-                        var tipCategoryName = !string.IsNullOrEmpty(Model.Hashtag.Category.DisplayNameVi)
+                        var tipCategoryName = !isEnglish && !string.IsNullOrEmpty(Model.Hashtag.Category.DisplayNameVi)
                             ? Model.Hashtag.Category.DisplayNameVi
                             : Model.Hashtag.Category.Name;
                         <div class="alert alert-info mt-3 mb-0 border-start border-4" style="border-left-color: #0dcaf0 !important;">
-                            <i class="bi bi-info-circle-fill"></i> <strong>Mẹo:</strong> Hashtag này thuộc chủ đề <strong>@tipCategoryName</strong>.
-                            Kết hợp với các hashtag cùng chủ đề ở phần "Hashtag Liên Quan" để tăng khả năng viral!
+                            <i class="bi bi-info-circle-fill"></i> @Html.Raw(string.Format(Localizer["Details_CategoryTip"].Value, $"<strong>{tipCategoryName}</strong>"))
                         </div>
                     }
                 </div>
@@ -436,7 +440,7 @@
         <div class="col-12">
             <div class="card metric-card">
                 <div class="card-header card-header-gradient-success">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-graph-up-arrow"></i> Phân Tích & Thống Kê Chi Tiết</h5>
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-graph-up-arrow"></i> @Localizer["Details_AnalyticsTitle"]</h5>
                 </div>
                 <div class="card-body">
                     <div class="row g-4">
@@ -444,18 +448,18 @@
                         <div class="col-md-4">
                             <div class="p-4 bg-light rounded text-center h-100">
                                 <i class="bi bi-fire text-danger fs-1 mb-3 d-block"></i>
-                                <h6 class="fw-bold mb-2">Mức Độ Hot</h6>
+                                <h6 class="fw-bold mb-2">@Localizer["Details_HotLevel"]</h6>
                                 @{
-                                    var trendLevel = Model.Hashtag.TotalAppearances >= 20 ? "Rất Hot"
-                                        : Model.Hashtag.TotalAppearances >= 10 ? "Hot"
-                                        : Model.Hashtag.TotalAppearances >= 5 ? "Khá Hot"
-                                        : "Mới Nổi";
+                                    var trendLevel = Model.Hashtag.TotalAppearances >= 20 ? Localizer["Details_VeryHot"].Value
+                                        : Model.Hashtag.TotalAppearances >= 10 ? Localizer["Details_Hot"].Value
+                                        : Model.Hashtag.TotalAppearances >= 5 ? Localizer["Details_QuiteHot"].Value
+                                        : Localizer["Details_Emerging"].Value;
                                     var trendClass = Model.Hashtag.TotalAppearances >= 20 ? "text-danger"
                                         : Model.Hashtag.TotalAppearances >= 10 ? "text-warning"
                                         : "text-info";
                                 }
                                 <p class="fs-4 fw-bold @trendClass mb-2">@trendLevel</p>
-                                <small class="text-muted">Xuất hiện @Model.Hashtag.TotalAppearances lần trong trending</small>
+                                <small class="text-muted">@string.Format(Localizer["Details_AppearancesInTrending"].Value, Model.Hashtag.TotalAppearances)</small>
                             </div>
                         </div>
 
@@ -463,15 +467,15 @@
                         <div class="col-md-4">
                             <div class="p-4 bg-light rounded text-center h-100">
                                 <i class="bi bi-speedometer2 text-primary fs-1 mb-3 d-block"></i>
-                                <h6 class="fw-bold mb-2">Cạnh Tranh</h6>
+                                <h6 class="fw-bold mb-2">@Localizer["Details_Competition"]</h6>
                                 @{
                                     var competitionText = Model.Hashtag.DifficultyLevel switch
                                     {
-                                        "Easy" => "Thấp - Dễ lên top",
-                                        "Medium" => "Trung Bình",
-                                        "Hard" => "Cao - Khó lên top",
-                                        "Very Hard" => "Rất Cao",
-                                        _ => "Chưa xác định"
+                                        "Easy" => Localizer["Details_CompetitionLow"].Value,
+                                        "Medium" => Localizer["Details_CompetitionMedium"].Value,
+                                        "Hard" => Localizer["Details_CompetitionHigh"].Value,
+                                        "Very Hard" => Localizer["Details_CompetitionVeryHigh"].Value,
+                                        _ => Localizer["Details_CompetitionUnknown"].Value
                                     };
                                     var competitionClass = Model.Hashtag.DifficultyLevel switch
                                     {
@@ -484,7 +488,7 @@
                                 <p class="fs-5 fw-bold @competitionClass mb-2">@competitionText</p>
                                 @if (Model.Hashtag.LatestPostCount.HasValue && Model.Hashtag.LatestPostCount > 0)
                                 {
-                                    <small class="text-muted">@Model.Hashtag.LatestPostCount.Value.ToString("N0") bài viết đang sử dụng</small>
+                                    <small class="text-muted">@string.Format(Localizer["Details_PostsUsing"].Value, Model.Hashtag.LatestPostCount.Value.ToString("N0"))</small>
                                 }
                             </div>
                         </div>
@@ -493,15 +497,15 @@
                         <div class="col-md-4">
                             <div class="p-4 bg-light rounded text-center h-100">
                                 <i class="bi bi-star-fill text-warning fs-1 mb-3 d-block"></i>
-                                <h6 class="fw-bold mb-2">Hiệu Suất</h6>
+                                <h6 class="fw-bold mb-2">@Localizer["Details_Performance"]</h6>
                                 @{
                                     // Calculate performance based on views/post ratio
                                     var performanceScore = Model.Metrics != null && Model.Metrics.EngagementRate > 0
-                                        ? (Model.Metrics.EngagementRate >= 100000 ? "Xuất Sắc"
-                                            : Model.Metrics.EngagementRate >= 50000 ? "Tốt"
-                                            : Model.Metrics.EngagementRate >= 10000 ? "Khá"
-                                            : "Trung Bình")
-                                        : "Đang thu thập dữ liệu";
+                                        ? (Model.Metrics.EngagementRate >= 100000 ? Localizer["Details_PerformanceExcellent"].Value
+                                            : Model.Metrics.EngagementRate >= 50000 ? Localizer["Details_PerformanceGood"].Value
+                                            : Model.Metrics.EngagementRate >= 10000 ? Localizer["Details_PerformanceFair"].Value
+                                            : Localizer["Details_PerformanceAverage"].Value)
+                                        : Localizer["Details_CollectingData"].Value;
                                     var performanceClass = Model.Metrics != null && Model.Metrics.EngagementRate >= 50000
                                         ? "text-success"
                                         : "text-info";
@@ -514,7 +518,7 @@
                                         : Model.Metrics.EngagementRate >= 1000
                                             ? $"{(Model.Metrics.EngagementRate / 1000m):F1}K"
                                             : $"{Model.Metrics.EngagementRate:N0}";
-                                    <small class="text-muted">Trung bình @avgViews views/bài</small>
+                                    <small class="text-muted">@string.Format(Localizer["Details_AvgViews"].Value, avgViews)</small>
                                 }
                             </div>
                         </div>
@@ -524,23 +528,24 @@
                     @{
                         var daysSinceFirst = (Model.Hashtag.LastSeen - Model.Hashtag.FirstSeen).Days;
                         var isStillHot = (DateTime.UtcNow - Model.Hashtag.LastSeen).TotalDays <= 7;
+                        var daysSinceLastSeen = (int)(DateTime.UtcNow - Model.Hashtag.LastSeen).TotalDays;
                     }
                     <div class="alert @(isStillHot ? "alert-success" : "alert-warning") mt-4 mb-0 border-start border-4">
                         <div class="row align-items-center">
                             <div class="col-md-8">
                                 <i class="bi bi-@(isStillHot ? "check-circle-fill" : "clock-history") me-2"></i>
-                                <strong>Tình Trạng:</strong>
+                                <strong>@Localizer["Details_Status"]</strong>
                                 @if (isStillHot)
                                 {
-                                    <span>Hashtag này <strong class="text-success">vẫn đang hot</strong> (xuất hiện lần cuối @((DateTime.UtcNow - Model.Hashtag.LastSeen).TotalDays < 1 ? "hôm nay" : $"{(int)(DateTime.UtcNow - Model.Hashtag.LastSeen).TotalDays} ngày trước"))</span>
+                                    <span><strong class="text-success">@Localizer["Details_StillHot"]</strong> (@(daysSinceLastSeen < 1 ? Localizer["Details_LastSeenToday"].Value : string.Format(Localizer["Details_LastSeenDaysAgo"].Value, daysSinceLastSeen)))</span>
                                 }
                                 else
                                 {
-                                    <span>Hashtag này đã <strong>nguội đi</strong> (không xuất hiện trong trending @((int)(DateTime.UtcNow - Model.Hashtag.LastSeen).TotalDays) ngày)</span>
+                                    <span><strong>@Localizer["Details_CooledDown"]</strong> (@string.Format(Localizer["Details_NotInTrendingDays"].Value, daysSinceLastSeen))</span>
                                 }
                             </div>
                             <div class="col-md-4 text-md-end mt-2 mt-md-0">
-                                <small class="text-muted">Thời gian hot: @daysSinceFirst ngày</small>
+                                <small class="text-muted">@string.Format(Localizer["Details_HotDuration"].Value, daysSinceFirst)</small>
                             </div>
                         </div>
                     </div>
@@ -554,19 +559,19 @@
         <div class="col-12">
             <div class="card metric-card">
                 <div class="card-header card-header-gradient-warning">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-question-circle-fill"></i> Câu Hỏi Thường Gặp</h5>
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-question-circle-fill"></i> @Localizer["Details_FAQTitle"]</h5>
                 </div>
                 <div class="card-body">
                     <div class="accordion" id="faqAccordion">
                         <div class="accordion-item border-0 mb-2">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                                    <i class="bi bi-1-circle-fill text-primary me-2"></i> Làm thế nào để hashtag @Model.Hashtag.TagDisplay giúp video của tôi viral?
+                                    <i class="bi bi-1-circle-fill text-primary me-2"></i> @string.Format(Localizer["Details_FAQ1_Question"].Value, Model.Hashtag.TagDisplay)
                                 </button>
                             </h2>
                             <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    Sử dụng hashtag @Model.Hashtag.TagDisplay giúp video của bạn xuất hiện trong feed của những người đang quan tâm đến chủ đề này.
+                                    @string.Format(Localizer["Details_FAQ1_Answer"].Value, Model.Hashtag.TagDisplay)
                                     @if (Model.Metrics != null && Model.Metrics.PredictedViewMin.HasValue)
                                     {
                                         var minViews = Model.Metrics.PredictedViewMin.Value >= 1_000_000
@@ -581,9 +586,9 @@
                                                     ? $"{Model.Metrics.PredictedViewMax.Value / 1000.0:F1}K"
                                                     : Model.Metrics.PredictedViewMax.Value.ToString("N0"))
                                             : minViews;
-                                        <text>Theo dữ liệu của chúng tôi, video sử dụng hashtag này có thể đạt từ <strong>@minViews đến @maxViews lượt xem</strong>.</text>
+                                        @Html.Raw(string.Format(Localizer["Details_FAQ1_ViewPrediction"].Value, $"<strong>{minViews}</strong>", $"<strong>{maxViews}</strong>"))
                                     }
-                                    Kết hợp với nội dung chất lượng và thời điểm đăng phù hợp sẽ tăng cơ hội lên trending.
+                                    @Localizer["Details_FAQ1_Conclusion"]
                                 </div>
                             </div>
                         </div>
@@ -591,28 +596,19 @@
                         <div class="accordion-item border-0 mb-2">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                                    <i class="bi bi-2-circle-fill text-primary me-2"></i> Nên kết hợp hashtag @Model.Hashtag.TagDisplay với hashtag nào?
+                                    <i class="bi bi-2-circle-fill text-primary me-2"></i> @string.Format(Localizer["Details_FAQ2_Question"].Value, Model.Hashtag.TagDisplay)
                                 </button>
                             </h2>
                             <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
                                     @if (Model.RelatedHashtags.Any())
                                     {
-                                        <text>Bạn nên kết hợp với các hashtag liên quan như: </text>
-                                        @string.Join(", ", Model.RelatedHashtags.Take(5).Select(h => h.Tag.Trim()))
-                                        <text>. Việc kết hợp 3-5 hashtag cùng chủ đề sẽ giúp tăng độ phủ sóng và tiếp cận đúng đối tượng mục tiêu.</text>
+                                        var relatedTags = string.Join(", ", Model.RelatedHashtags.Take(5).Select(h => h.Tag.Trim()));
+                                        @string.Format(Localizer["Details_FAQ2_Answer_WithRelated"].Value, relatedTags)
                                     }
                                     else
                                     {
-                                        <text>Bạn nên tìm các hashtag cùng chủ đề </text>
-                                        @if (Model.Hashtag.Category != null)
-                                        {
-                                            var faqCategoryName = !string.IsNullOrEmpty(Model.Hashtag.Category.DisplayNameVi)
-                                                ? Model.Hashtag.Category.DisplayNameVi
-                                                : Model.Hashtag.Category.Name;
-                                            <text><strong>@faqCategoryName</strong> </text>
-                                        }
-                                        <text>để kết hợp. Việc sử dụng 3-5 hashtag liên quan sẽ giúp tăng độ phủ sóng của video.</text>
+                                        @Localizer["Details_FAQ2_Answer_NoRelated"]
                                     }
                                 </div>
                             </div>
@@ -621,12 +617,12 @@
                         <div class="accordion-item border-0 mb-2">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                                    <i class="bi bi-3-circle-fill text-primary me-2"></i> Khi nào là thời điểm tốt nhất để đăng video với hashtag này?
+                                    <i class="bi bi-3-circle-fill text-primary me-2"></i> @Localizer["Details_FAQ3_Question"]
                                 </button>
                             </h2>
                             <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    Thời điểm tốt nhất để đăng video trên TikTok là <strong>19h-22h</strong> (giờ vàng) và <strong>12h-14h</strong> (giờ trưa).
+                                    @Html.Raw(Localizer["Details_FAQ3_Answer"].Value)
                                     @{
                                         var isWeekendTrend = Model.Hashtag.Tag.ToLower().Contains("weekend") ||
                                                            Model.Hashtag.Tag.ToLower().Contains("cuoituan") ||
@@ -635,13 +631,13 @@
                                     }
                                     @if (isWeekendTrend)
                                     {
-                                        <text>Đặc biệt, với hashtag này bạn nên đăng vào <strong>cuối tuần</strong> để tối đa hóa tương tác.</text>
+                                        @Localizer["Details_FAQ3_WeekendTip"]
                                     }
                                     else if (Model.Hashtag.Category != null && (Model.Hashtag.Category.Name.Contains("Music") || Model.Hashtag.Category.Name.Contains("Entertainment")))
                                     {
-                                        <text>Với chủ đề giải trí, buổi tối và cuối tuần thường có tương tác cao nhất.</text>
+                                        @Localizer["Details_FAQ3_EntertainmentTip"]
                                     }
-                                    Hãy theo dõi phản hồi của khán giả để tìm ra thời điểm phù hợp nhất với đối tượng của bạn.
+                                    @Localizer["Details_FAQ3_Conclusion"]
                                 </div>
                             </div>
                         </div>
@@ -649,28 +645,26 @@
                         <div class="accordion-item border-0">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
-                                    <i class="bi bi-4-circle-fill text-primary me-2"></i> Hashtag @Model.Hashtag.TagDisplay có phù hợp cho người mới bắt đầu không?
+                                    <i class="bi bi-4-circle-fill text-primary me-2"></i> @string.Format(Localizer["Details_FAQ4_Question"].Value, Model.Hashtag.TagDisplay)
                                 </button>
                             </h2>
                             <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
                                     @{
                                         var isGoodForBeginners = Model.Hashtag.DifficultyLevel == "Easy" || Model.Hashtag.DifficultyLevel == "Medium";
+                                        var difficultyTextFaq = Model.Hashtag.DifficultyLevel == "Easy" ? Localizer["Difficulty_Low"].Value : Localizer["Difficulty_Medium"].Value;
                                     }
                                     @if (isGoodForBeginners)
                                     {
-                                        <text><strong class="text-success">Có!</strong> Hashtag này có mức độ cạnh tranh <strong>@(Model.Hashtag.DifficultyLevel == "Easy" ? "thấp" : "trung bình")</strong>,
-                                        rất phù hợp cho người mới bắt đầu. Bạn có cơ hội cao để video của mình được nhiều người xem.</text>
+                                        @Html.Raw(string.Format(Localizer["Details_FAQ4_Answer_Yes"].Value, difficultyTextFaq))
                                     }
                                     else if (Model.Hashtag.DifficultyLevel == "Hard" || Model.Hashtag.DifficultyLevel == "Very Hard")
                                     {
-                                        <text><strong class="text-warning">Khuyến nghị cẩn trọng.</strong> Hashtag này có mức độ cạnh tranh <strong>cao</strong>,
-                                        phù hợp hơn cho các creator đã có kinh nghiệm và lượng follower nhất định.
-                                        Người mới nên kết hợp với các hashtag cạnh tranh thấp hơn để tăng cơ hội tiếp cận.</text>
+                                        @Localizer["Details_FAQ4_Answer_Caution"]
                                     }
                                     else
                                     {
-                                        <text>Hashtag này phù hợp cho mọi đối tượng. Hãy thử nghiệm và theo dõi hiệu quả để đánh giá xem có phù hợp với nội dung của bạn không.</text>
+                                        @Localizer["Details_FAQ4_Answer_General"]
                                     }
                                 </div>
                             </div>
@@ -686,7 +680,7 @@
         <div class="col-12">
             <div class="card metric-card">
                 <div class="card-header card-header-gradient-secondary">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history"></i> Lịch Sử Xếp Hạng (30 Ngày Gần Nhất)</h5>
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history"></i> @Localizer["Details_HistoryTitle"]</h5>
                 </div>
                 <div class="card-body">
                     @if (Model.History.Any())
@@ -695,9 +689,9 @@
                             <table class="table history-table table-hover align-middle mb-0">
                                 <thead>
                                     <tr>
-                                        <th><i class="bi bi-calendar"></i> Ngày</th>
-                                        <th><i class="bi bi-database"></i> Nguồn</th>
-                                        <th><i class="bi bi-trophy"></i> Xếp Hạng</th>
+                                        <th><i class="bi bi-calendar"></i> @Localizer["Details_HistoryDate"]</th>
+                                        <th><i class="bi bi-database"></i> @Localizer["Details_HistorySource"]</th>
+                                        <th><i class="bi bi-trophy"></i> @Localizer["Details_HistoryRank"]</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -716,7 +710,7 @@
                     else
                     {
                         <p class="text-muted mb-0 text-center py-4">
-                            <i class="bi bi-info-circle"></i> Chưa có dữ liệu lịch sử
+                            <i class="bi bi-info-circle"></i> @Localizer["Details_NoHistory"]
                         </p>
                     }
                 </div>
@@ -731,7 +725,7 @@
             <div class="col-12">
                 <div class="card metric-card">
                     <div class="card-header card-header-gradient-warning">
-                        <h5 class="mb-0 fw-bold"><i class="bi bi-key"></i> Từ Khóa Liên Quan</h5>
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-key"></i> @Localizer["Details_RelatedKeywords"]</h5>
                     </div>
                     <div class="card-body">
                         <div class="d-flex flex-wrap gap-2">
@@ -752,7 +746,7 @@
     <div class="row mb-4">
         <div class="col-12 text-center">
             <a href="#" id="backButton" class="btn btn-gradient-primary btn-lg px-5">
-                <i class="bi bi-arrow-left"></i> <span id="backButtonText">Quay về Trang Chủ</span>
+                <i class="bi bi-arrow-left"></i> <span id="backButtonText">@Localizer["Details_BackToHome"]</span>
             </a>
         </div>
     </div>
@@ -769,22 +763,22 @@
                 // Check if came from search page
                 if (referrer.includes('/Home/Search') || referrer.includes('/search')) {
                     backButton.href = '@Url.Action("Search", "Home")' + window.location.search;
-                    backButtonText.textContent = 'Quay về Kết Quả Tìm Kiếm';
+                    backButtonText.textContent = '@Localizer["Details_BackToSearch"].Value';
                 }
                 // Check if came from home page
                 else if (referrer.includes('/Home/Index') || referrer === window.location.origin + '/' || referrer.endsWith(window.location.hostname + '/')) {
                     backButton.href = '@Url.Action("Index", "Home")';
-                    backButtonText.textContent = 'Quay về Trang Chủ';
+                    backButtonText.textContent = '@Localizer["Details_BackToHome"].Value';
                 }
                 // Came from somewhere else on site - use browser back
                 else {
                     backButton.href = 'javascript:history.back()';
-                    backButtonText.textContent = 'Quay Lại';
+                    backButtonText.textContent = '@Localizer["Details_Back"].Value';
                 }
             } else {
                 // Came from external site or direct URL - go to home
                 backButton.href = '@Url.Action("Index", "Home")';
-                backButtonText.textContent = 'Quay về Trang Chủ';
+                backButtonText.textContent = '@Localizer["Details_BackToHome"].Value';
             }
         })();
     </script>
@@ -817,11 +811,11 @@
                         `).join('');
                         creatorsContainer.innerHTML = html;
                     } else {
-                        creatorsContainer.innerHTML = '<p class="text-muted mb-0 text-center py-3"><i class="bi bi-info-circle"></i> Chưa có thông tin creators</p>';
+                        creatorsContainer.innerHTML = '<p class="text-muted mb-0 text-center py-3"><i class="bi bi-info-circle"></i> @Localizer["Details_NoCreatorsInfo"].Value</p>';
                     }
                 } catch (e) {
                     console.error('Error parsing creators JSON:', e);
-                    creatorsContainer.innerHTML = '<p class="text-muted mb-0 text-center py-3"><i class="bi bi-exclamation-triangle"></i> Lỗi khi tải thông tin creators</p>';
+                    creatorsContainer.innerHTML = '<p class="text-muted mb-0 text-center py-3"><i class="bi bi-exclamation-triangle"></i> @Localizer["Details_CreatorsLoadError"].Value</p>';
                 }
             }
         }

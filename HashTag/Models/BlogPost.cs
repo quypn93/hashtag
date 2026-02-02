@@ -11,6 +11,7 @@ public class BlogPost
     [Key]
     public int Id { get; set; }
 
+    // Vietnamese fields (default)
     [Required]
     [MaxLength(200)]
     public required string Title { get; set; }
@@ -25,10 +26,22 @@ public class BlogPost
     [Required]
     public required string Content { get; set; }
 
+    // English fields
+    [MaxLength(200)]
+    public string? TitleEn { get; set; }
+
+    [MaxLength(250)]
+    public string? SlugEn { get; set; }
+
+    [MaxLength(500)]
+    public string? ExcerptEn { get; set; }
+
+    public string? ContentEn { get; set; }
+
     [MaxLength(500)]
     public string? FeaturedImage { get; set; }
 
-    // SEO Fields
+    // SEO Fields (Vietnamese)
     [MaxLength(200)]
     public string? MetaTitle { get; set; }
 
@@ -37,6 +50,16 @@ public class BlogPost
 
     [MaxLength(500)]
     public string? MetaKeywords { get; set; }
+
+    // SEO Fields (English)
+    [MaxLength(200)]
+    public string? MetaTitleEn { get; set; }
+
+    [MaxLength(500)]
+    public string? MetaDescriptionEn { get; set; }
+
+    [MaxLength(500)]
+    public string? MetaKeywordsEn { get; set; }
 
     // Author & Category
     [MaxLength(100)]
@@ -83,4 +106,33 @@ public class BlogPost
             return Math.Max(1, (int)Math.Ceiling(wordCount / 200.0));
         }
     }
+
+    // Localized content helper methods
+    public string GetLocalizedTitle(bool isEnglish) =>
+        isEnglish && !string.IsNullOrEmpty(TitleEn) ? TitleEn : Title;
+
+    public string GetLocalizedSlug(bool isEnglish) =>
+        isEnglish && !string.IsNullOrEmpty(SlugEn) ? SlugEn : Slug;
+
+    public string? GetLocalizedExcerpt(bool isEnglish) =>
+        isEnglish && !string.IsNullOrEmpty(ExcerptEn) ? ExcerptEn : Excerpt;
+
+    public string GetLocalizedContent(bool isEnglish) =>
+        isEnglish && !string.IsNullOrEmpty(ContentEn) ? ContentEn : Content;
+
+    public string? GetLocalizedMetaTitle(bool isEnglish) =>
+        isEnglish && !string.IsNullOrEmpty(MetaTitleEn) ? MetaTitleEn : MetaTitle;
+
+    public string? GetLocalizedMetaDescription(bool isEnglish) =>
+        isEnglish && !string.IsNullOrEmpty(MetaDescriptionEn) ? MetaDescriptionEn : MetaDescription;
+
+    public string? GetLocalizedMetaKeywords(bool isEnglish) =>
+        isEnglish && !string.IsNullOrEmpty(MetaKeywordsEn) ? MetaKeywordsEn : MetaKeywords;
+
+    /// <summary>
+    /// Check if English translation is available
+    /// </summary>
+    [NotMapped]
+    public bool HasEnglishTranslation =>
+        !string.IsNullOrEmpty(TitleEn) && !string.IsNullOrEmpty(ContentEn);
 }

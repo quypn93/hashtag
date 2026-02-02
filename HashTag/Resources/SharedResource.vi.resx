@@ -1,0 +1,1523 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Navigation -->
+  <data name="Nav_Home" xml:space="preserve">
+    <value>Trang chủ</value>
+  </data>
+  <data name="Nav_AIHashtag" xml:space="preserve">
+    <value>Tạo Hashtag AI</value>
+  </data>
+  <data name="Nav_Blog" xml:space="preserve">
+    <value>Blog</value>
+  </data>
+  <data name="Nav_GrowthTracking" xml:space="preserve">
+    <value>Theo Dõi Tăng Trưởng</value>
+  </data>
+  <data name="Nav_Admin" xml:space="preserve">
+    <value>Quản trị</value>
+  </data>
+  <data name="Nav_Dashboard" xml:space="preserve">
+    <value>Bảng điều khiển</value>
+  </data>
+  <data name="Nav_ManualCrawl" xml:space="preserve">
+    <value>Thu thập thủ công</value>
+  </data>
+  <data name="Nav_CalculateMetrics" xml:space="preserve">
+    <value>Tính toán số liệu</value>
+  </data>
+  <data name="Nav_SyncLatestCounts" xml:space="preserve">
+    <value>Đồng bộ số liệu mới nhất</value>
+  </data>
+  <data name="Nav_TrendingHashtags" xml:space="preserve">
+    <value>Hashtag xu hướng</value>
+  </data>
+  <data name="Nav_CrawlLogs" xml:space="preserve">
+    <value>Nhật ký thu thập</value>
+  </data>
+  <data name="Nav_Privacy" xml:space="preserve">
+    <value>Chính sách bảo mật</value>
+  </data>
+  <data name="Nav_Login" xml:space="preserve">
+    <value>Đăng nhập</value>
+  </data>
+  <data name="Nav_Logout" xml:space="preserve">
+    <value>Đăng xuất</value>
+  </data>
+
+  <!-- Home Page -->
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Tìm Hashtag TikTok Trending - Công Cụ Tìm Kiếm Hashtag Viral</value>
+  </data>
+  <data name="Home_PageDescription" xml:space="preserve">
+    <value>Công cụ tìm kiếm hashtag TikTok trending miễn phí. Tìm hashtag viral, hashtag hot, hashtag xu hướng để tăng view, tăng tương tác cho video TikTok của bạn.</value>
+  </data>
+  <data name="Home_PageKeywords" xml:space="preserve">
+    <value>tìm hashtag tiktok, hashtag trending, hashtag viral, hashtag tiktok hot, tìm kiếm hashtag, công cụ hashtag, hashtag xu hướng, tăng view tiktok, tăng tương tác tiktok</value>
+  </data>
+  <data name="Home_HeroTitle" xml:space="preserve">
+    <value>Tìm Hashtag TikTok Trending Viral</value>
+  </data>
+  <data name="Home_HeroSubtitle" xml:space="preserve">
+    <value>Công cụ phân tích và tìm kiếm hashtag trending miễn phí - Cập nhật real-time mỗi 6 giờ từ TikTok Việt Nam</value>
+  </data>
+  <data name="Home_SearchPlaceholder" xml:space="preserve">
+    <value>Tìm kiếm hashtag... (VD: dulich, amnhac, thethao)</value>
+  </data>
+  <data name="Home_SearchButton" xml:space="preserve">
+    <value>Tìm Kiếm</value>
+  </data>
+  <data name="Home_SearchTip" xml:space="preserve">
+    <value>Thử tìm kiếm: "bongda", "amnhac", "dulich" hoặc "amthuc"</value>
+  </data>
+  <data name="Home_Feature1_Title" xml:space="preserve">
+    <value>Trending Real-time</value>
+  </data>
+  <data name="Home_Feature1_Desc" xml:space="preserve">
+    <value>Cập nhật hashtag trending mới nhất mỗi 6 giờ từ nhiều nguồn uy tín</value>
+  </data>
+  <data name="Home_Feature1_Link" xml:space="preserve">
+    <value>Theo dõi tăng trưởng</value>
+  </data>
+  <data name="Home_Feature2_Title" xml:space="preserve">
+    <value>Đa Nguồn Dữ Liệu</value>
+  </data>
+  <data name="Home_Feature2_Desc" xml:space="preserve">
+    <value>Thu thập từ TikTok và nhiều nền tảng khác</value>
+  </data>
+  <data name="Home_Feature2_Link" xml:space="preserve">
+    <value>Xem hashtag trending</value>
+  </data>
+  <data name="Home_Feature3_Title" xml:space="preserve">
+    <value>Gợi Ý Thông Minh</value>
+  </data>
+  <data name="Home_Feature3_Desc" xml:space="preserve">
+    <value>Nhận đề xuất hashtag thông minh ngay khi bạn gõ từ khóa</value>
+  </data>
+  <data name="Home_Feature3_Link" xml:space="preserve">
+    <value>Tạo hashtag AI</value>
+  </data>
+  <data name="Home_Value1_Title" xml:space="preserve">
+    <value>Cập Nhật Mỗi 6 Giờ</value>
+  </data>
+  <data name="Home_Value1_Desc" xml:space="preserve">
+    <value>Dữ liệu trending realtime từ TikTok và nhiều nguồn uy tín khác</value>
+  </data>
+  <data name="Home_Value2_Title" xml:space="preserve">
+    <value>100% Miễn Phí</value>
+  </data>
+  <data name="Home_Value2_Desc" xml:space="preserve">
+    <value>Không cần đăng ký tài khoản, không giới hạn số lần tra cứu hashtag</value>
+  </data>
+  <data name="Home_Value3_Title" xml:space="preserve">
+    <value>Phân Tích Chuyên Sâu</value>
+  </data>
+  <data name="Home_Value3_Desc" xml:space="preserve">
+    <value>Độ khó cạnh tranh, lượt xem, số bài đăng chi tiết cho mỗi hashtag trending</value>
+  </data>
+  <data name="Home_Value4_Title" xml:space="preserve">
+    <value>16+ Chủ Đề</value>
+  </data>
+  <data name="Home_Value4_Desc" xml:space="preserve">
+    <value>Từ Giáo Dục, Tin Tức đến Du Lịch, Thể Thao - tìm hashtag theo ngành dễ dàng</value>
+  </data>
+  <data name="Home_Top10Trending" xml:space="preserve">
+    <value>Top 10 Hashtag Trending</value>
+  </data>
+  <data name="Home_AllCategories" xml:space="preserve">
+    <value>Tất Cả Chủ Đề</value>
+  </data>
+  <data name="Home_Table_Category" xml:space="preserve">
+    <value>Chủ Đề</value>
+  </data>
+  <data name="Home_Table_Views" xml:space="preserve">
+    <value>Lượt Xem</value>
+  </data>
+  <data name="Home_Table_Posts" xml:space="preserve">
+    <value>Số Bài Đăng</value>
+  </data>
+  <data name="Home_Table_Difficulty" xml:space="preserve">
+    <value>Mức Độ Cạnh Tranh</value>
+  </data>
+  <data name="Home_Table_Rank" xml:space="preserve">
+    <value>Hạng</value>
+  </data>
+  <data name="Home_Appearances" xml:space="preserve">
+    <value>lần xuất hiện</value>
+  </data>
+  <data name="Home_NoHashtags" xml:space="preserve">
+    <value>Chưa có hashtag trending nào</value>
+  </data>
+  <data name="Home_LatestPosts" xml:space="preserve">
+    <value>Bài Viết Mới Nhất</value>
+  </data>
+  <data name="Home_LatestPostsDesc" xml:space="preserve">
+    <value>Khám phá các tips, chiến lược và phân tích chuyên sâu về hashtag TikTok</value>
+  </data>
+  <data name="Home_ViewAllPosts" xml:space="preserve">
+    <value>Xem Tất Cả Bài Viết</value>
+  </data>
+  <data name="Home_MinRead" xml:space="preserve">
+    <value>phút đọc</value>
+  </data>
+  <data name="Home_Title" xml:space="preserve">
+    <value>TrendTag - Công Cụ Tìm Hashtag TikTok Trending Hàng Đầu Việt Nam</value>
+  </data>
+  <data name="Home_Subtitle" xml:space="preserve">
+    <value>Khám phá hashtag TikTok trending. Cập nhật mỗi 6 giờ với phân tích độ khó, lượt xem và dự đoán viral.</value>
+  </data>
+  <data name="Home_TopHashtags" xml:space="preserve">
+    <value>Top Hashtag Xu Hướng</value>
+  </data>
+  <data name="Home_ViewCount" xml:space="preserve">
+    <value>Lượt xem</value>
+  </data>
+  <data name="Home_PostCount" xml:space="preserve">
+    <value>Bài đăng</value>
+  </data>
+  <data name="Home_Difficulty" xml:space="preserve">
+    <value>Độ khó</value>
+  </data>
+  <data name="Home_CopyHashtag" xml:space="preserve">
+    <value>Sao chép</value>
+  </data>
+  <data name="Home_CopyAll" xml:space="preserve">
+    <value>Sao chép tất cả</value>
+  </data>
+  <data name="Home_Copied" xml:space="preserve">
+    <value>Đã sao chép!</value>
+  </data>
+  <data name="Home_RecentBlogPosts" xml:space="preserve">
+    <value>Bài viết mới nhất</value>
+  </data>
+  <data name="Home_ReadMore" xml:space="preserve">
+    <value>Đọc thêm</value>
+  </data>
+  <data name="Home_Search" xml:space="preserve">
+    <value>Tìm kiếm hashtag...</value>
+  </data>
+
+  <!-- Difficulty Levels -->
+  <data name="Difficulty_Easy" xml:space="preserve">
+    <value>Dễ</value>
+  </data>
+  <data name="Difficulty_Medium" xml:space="preserve">
+    <value>Trung bình</value>
+  </data>
+  <data name="Difficulty_Hard" xml:space="preserve">
+    <value>Khó</value>
+  </data>
+  <data name="Difficulty_VeryHard" xml:space="preserve">
+    <value>Rất khó</value>
+  </data>
+  <data name="Difficulty_Low" xml:space="preserve">
+    <value>Thấp</value>
+  </data>
+  <data name="Difficulty_High" xml:space="preserve">
+    <value>Cao</value>
+  </data>
+  <data name="Difficulty_VeryHigh" xml:space="preserve">
+    <value>Rất Cao</value>
+  </data>
+
+  <!-- Common -->
+  <data name="Common_Loading" xml:space="preserve">
+    <value>Đang tải...</value>
+  </data>
+  <data name="Common_Error" xml:space="preserve">
+    <value>Đã xảy ra lỗi</value>
+  </data>
+  <data name="Common_NoResults" xml:space="preserve">
+    <value>Không tìm thấy kết quả</value>
+  </data>
+  <data name="Common_ViewAll" xml:space="preserve">
+    <value>Xem tất cả</value>
+  </data>
+  <data name="Common_Back" xml:space="preserve">
+    <value>Quay lại</value>
+  </data>
+  <data name="Common_Submit" xml:space="preserve">
+    <value>Gửi</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
+  <data name="Common_Edit" xml:space="preserve">
+    <value>Sửa</value>
+  </data>
+
+  <!-- Footer -->
+  <data name="Footer_Copyright" xml:space="preserve">
+    <value>© 2025 TrendTag. Phát triển cho cộng đồng TikTok Việt Nam.</value>
+  </data>
+  <data name="Footer_PrivacyPolicy" xml:space="preserve">
+    <value>Chính sách bảo mật</value>
+  </data>
+  <data name="Footer_TermsOfUse" xml:space="preserve">
+    <value>Điều khoản sử dụng</value>
+  </data>
+  <data name="Footer_Description" xml:space="preserve">
+    <value>Công cụ phân tích hashtag TikTok hàng đầu Việt Nam. Giúp bạn tìm hashtag viral, dự đoán lượt xem và tăng trưởng kênh.</value>
+  </data>
+  <data name="Footer_Features" xml:space="preserve">
+    <value>Tính Năng</value>
+  </data>
+  <data name="Footer_Feature1" xml:space="preserve">
+    <value>Phân tích độ khó hashtag</value>
+  </data>
+  <data name="Footer_Feature2" xml:space="preserve">
+    <value>Dự đoán lượt xem</value>
+  </data>
+  <data name="Footer_Feature3" xml:space="preserve">
+    <value>Theo dõi trending real-time</value>
+  </data>
+  <data name="Footer_Feature4" xml:space="preserve">
+    <value>Gợi ý hashtag liên quan</value>
+  </data>
+  <data name="Footer_Contact" xml:space="preserve">
+    <value>Liên Hệ</value>
+  </data>
+
+  <!-- SEO -->
+  <data name="SEO_HomeTitle" xml:space="preserve">
+    <value>TrendTag - Công Cụ Tìm Hashtag TikTok Trending Hàng Đầu Việt Nam</value>
+  </data>
+  <data name="SEO_HomeDescription" xml:space="preserve">
+    <value>Công cụ phân tích hashtag TikTok hàng đầu Việt Nam. Tìm hashtag trending, dự đoán lượt xem, phân tích độ khó cạnh tranh và tăng trưởng kênh TikTok hiệu quả. Cập nhật mỗi 6 giờ, 100% miễn phí.</value>
+  </data>
+  <data name="SEO_HomeKeywords" xml:space="preserve">
+    <value>hashtag tiktok trending, công cụ tìm hashtag, hashtag tiktok việt nam, hashtag viral, phân tích hashtag tiktok, tăng view tiktok</value>
+  </data>
+
+  <!-- Region Filter -->
+  <data name="Region_Global" xml:space="preserve">
+    <value>Toàn cầu</value>
+  </data>
+  <data name="Region_US" xml:space="preserve">
+    <value>Hoa Kỳ</value>
+  </data>
+  <data name="Region_UK" xml:space="preserve">
+    <value>Vương quốc Anh</value>
+  </data>
+  <data name="Region_VN" xml:space="preserve">
+    <value>Việt Nam</value>
+  </data>
+  <data name="Region_BR" xml:space="preserve">
+    <value>Brazil</value>
+  </data>
+  <data name="Region_IN" xml:space="preserve">
+    <value>Ấn Độ</value>
+  </data>
+  <data name="Region_SelectRegion" xml:space="preserve">
+    <value>Chọn khu vực</value>
+  </data>
+
+  <!-- Language -->
+  <data name="Language_English" xml:space="preserve">
+    <value>Tiếng Anh</value>
+  </data>
+  <data name="Language_Vietnamese" xml:space="preserve">
+    <value>Tiếng Việt</value>
+  </data>
+  <data name="Language_Select" xml:space="preserve">
+    <value>Ngôn ngữ</value>
+  </data>
+
+  <!-- Hashtag Page -->
+  <data name="Hashtag_PageTitle" xml:space="preserve">
+    <value>Hashtag Trending TikTok Việt Nam</value>
+  </data>
+  <data name="Hashtag_HeroTitle" xml:space="preserve">
+    <value>Hashtag Trending TikTok</value>
+  </data>
+  <data name="Hashtag_HeroSubtitle" xml:space="preserve">
+    <value>Khám phá hashtag viral, phân tích độ khó và dự đoán lượt xem cho video của bạn</value>
+  </data>
+  <data name="Hashtag_SearchPlaceholder" xml:space="preserve">
+    <value>Tìm kiếm hashtag... (VD: bongdavietnam, seagame)</value>
+  </data>
+  <data name="Hashtag_SearchLabel" xml:space="preserve">
+    <value>Tìm kiếm hashtag</value>
+  </data>
+  <data name="Hashtag_TotalHashtags" xml:space="preserve">
+    <value>Tổng Hashtag</value>
+  </data>
+  <data name="Hashtag_DataSources" xml:space="preserve">
+    <value>Nguồn Dữ Liệu</value>
+  </data>
+  <data name="Hashtag_CollectedToday" xml:space="preserve">
+    <value>Thu Thập Hôm Nay</value>
+  </data>
+  <data name="Hashtag_LastUpdated" xml:space="preserve">
+    <value>Cập Nhật Lần Cuối</value>
+  </data>
+  <data name="Hashtag_AdvancedFilters" xml:space="preserve">
+    <value>Bộ Lọc Nâng Cao</value>
+  </data>
+  <data name="Hashtag_StartDate" xml:space="preserve">
+    <value>Ngày Bắt Đầu</value>
+  </data>
+  <data name="Hashtag_EndDate" xml:space="preserve">
+    <value>Ngày Kết Thúc</value>
+  </data>
+  <data name="Hashtag_MinRank" xml:space="preserve">
+    <value>Xếp Hạng Thấp Nhất</value>
+  </data>
+  <data name="Hashtag_MaxRank" xml:space="preserve">
+    <value>Xếp Hạng Cao Nhất</value>
+  </data>
+  <data name="Hashtag_MinRankPlaceholder" xml:space="preserve">
+    <value>VD: 1</value>
+  </data>
+  <data name="Hashtag_MaxRankPlaceholder" xml:space="preserve">
+    <value>VD: 50</value>
+  </data>
+  <data name="Hashtag_SortBy" xml:space="preserve">
+    <value>Sắp Xếp Theo</value>
+  </data>
+  <data name="Hashtag_Sort_BestRank" xml:space="preserve">
+    <value>Xếp hạng tốt nhất</value>
+  </data>
+  <data name="Hashtag_Sort_MostAppearances" xml:space="preserve">
+    <value>Xuất hiện nhiều nhất</value>
+  </data>
+  <data name="Hashtag_Sort_Latest" xml:space="preserve">
+    <value>Mới nhất</value>
+  </data>
+  <data name="Hashtag_Sort_Momentum" xml:space="preserve">
+    <value>Tăng trưởng mạnh nhất</value>
+  </data>
+  <data name="Hashtag_ApplyFilters" xml:space="preserve">
+    <value>Áp Dụng Bộ Lọc</value>
+  </data>
+  <data name="Hashtag_ClearFilters" xml:space="preserve">
+    <value>Xóa Bộ Lọc</value>
+  </data>
+  <data name="Hashtag_Source" xml:space="preserve">
+    <value>Nguồn</value>
+  </data>
+  <data name="Hashtag_Appearances" xml:space="preserve">
+    <value>Xuất Hiện</value>
+  </data>
+  <data name="Hashtag_LastSeen" xml:space="preserve">
+    <value>Lần Cuối</value>
+  </data>
+  <data name="Hashtag_Actions" xml:space="preserve">
+    <value>Thao Tác</value>
+  </data>
+  <data name="Hashtag_ViewDetails" xml:space="preserve">
+    <value>Xem Chi Tiết</value>
+  </data>
+  <data name="Hashtag_Previous" xml:space="preserve">
+    <value>Trước</value>
+  </data>
+  <data name="Hashtag_Next" xml:space="preserve">
+    <value>Tiếp</value>
+  </data>
+  <data name="Hashtag_PageInfo" xml:space="preserve">
+    <value>Trang {0} / {1} (Tổng {2} hashtags)</value>
+  </data>
+  <data name="Hashtag_NoResults" xml:space="preserve">
+    <value>Không tìm thấy hashtag nào</value>
+  </data>
+  <data name="Hashtag_NoResultsHint" xml:space="preserve">
+    <value>Thử điều chỉnh bộ lọc hoặc đợi đến lần thu thập dữ liệu tiếp theo.</value>
+  </data>
+  <data name="Common_NotAvailable" xml:space="preserve">
+    <value>Chưa có</value>
+  </data>
+
+  <!-- Hashtag Details Page -->
+  <data name="Details_PageTitle" xml:space="preserve">
+    <value>{0} - Hashtag TikTok Trending | TrendTag</value>
+  </data>
+  <data name="Details_PageDescription" xml:space="preserve">
+    <value>Phân tích chi tiết hashtag {0} trên TikTok. {1} lượt xem, xuất hiện {2} lần trong trending. Tìm hiểu cách sử dụng hashtag {3} hiệu quả để tăng view, tăng tương tác cho video TikTok.</value>
+  </data>
+  <data name="Details_CompetitionLevel" xml:space="preserve">
+    <value>Mức độ cạnh tranh:</value>
+  </data>
+  <data name="Details_TotalAppearances" xml:space="preserve">
+    <value>Tổng Số Lần Xuất Hiện</value>
+  </data>
+  <data name="Details_LatestViews" xml:space="preserve">
+    <value>Lượt Xem Gần Nhất</value>
+  </data>
+  <data name="Details_LatestPosts" xml:space="preserve">
+    <value>Số Bài Viết Gần Nhất</value>
+  </data>
+  <data name="Details_TotalViews" xml:space="preserve">
+    <value>Tổng Lượt Xem</value>
+  </data>
+  <data name="Details_HashtagInfo" xml:space="preserve">
+    <value>Thông Tin Hashtag</value>
+  </data>
+  <data name="Details_FirstAppearance" xml:space="preserve">
+    <value>Lần Đầu Xuất Hiện</value>
+  </data>
+  <data name="Details_LastAppearance" xml:space="preserve">
+    <value>Lần Cuối Xuất Hiện</value>
+  </data>
+  <data name="Details_AvgViewsPerPost" xml:space="preserve">
+    <value>Trung Bình Lượt Xem/Bài</value>
+  </data>
+  <data name="Details_PredictedViews" xml:space="preserve">
+    <value>Dự Đoán Lượt Xem</value>
+  </data>
+  <data name="Details_PredictedViewsHint" xml:space="preserve">
+    <value>Ước tính lượt xem cho video mới của bạn khi sử dụng hashtag này</value>
+  </data>
+  <data name="Details_RelatedHashtags" xml:space="preserve">
+    <value>Hashtag Liên Quan</value>
+  </data>
+  <data name="Details_Views" xml:space="preserve">
+    <value>lượt xem</value>
+  </data>
+  <data name="Details_NoRelatedHashtags" xml:space="preserve">
+    <value>Chưa có hashtag cùng chủ đề</value>
+  </data>
+  <data name="Details_TopCreators" xml:space="preserve">
+    <value>Top Creators</value>
+  </data>
+  <data name="Details_HowToUse" xml:space="preserve">
+    <value>Cách Sử Dụng Hashtag {0} Hiệu Quả</value>
+  </data>
+  <data name="Details_OptimizeContent" xml:space="preserve">
+    <value>Tối Ưu Nội Dung</value>
+  </data>
+  <data name="Details_Tip1" xml:space="preserve">
+    <value>Đặt hashtag trong phần mô tả video hoặc bình luận đầu tiên</value>
+  </data>
+  <data name="Details_Tip2" xml:space="preserve">
+    <value>Kết hợp 3-5 hashtag liên quan để tăng độ phủ sóng</value>
+  </data>
+  <data name="Details_Tip3" xml:space="preserve">
+    <value>Tạo nội dung chất lượng cao phù hợp với chủ đề hashtag</value>
+  </data>
+  <data name="Details_Tip4" xml:space="preserve">
+    <value>Đăng video vào khung giờ vàng (19h-22h) để tối đa hóa tương tác</value>
+  </data>
+  <data name="Details_UsageNotes" xml:space="preserve">
+    <value>Lưu Ý Khi Sử Dụng</value>
+  </data>
+  <data name="Details_Warning1" xml:space="preserve">
+    <value>Tránh spam quá nhiều hashtag (không nên dùng hơn 8 hashtag)</value>
+  </data>
+  <data name="Details_Warning2" xml:space="preserve">
+    <value>Đảm bảo nội dung video phù hợp với ý nghĩa hashtag</value>
+  </data>
+  <data name="Details_Warning3" xml:space="preserve">
+    <value>Kiểm tra độ cạnh tranh trước khi sử dụng</value>
+  </data>
+  <data name="Details_Warning4" xml:space="preserve">
+    <value>Cập nhật hashtag trending thường xuyên để bắt kịp xu hướng</value>
+  </data>
+  <data name="Details_CategoryTip" xml:space="preserve">
+    <value>Mẹo: Hashtag này thuộc chủ đề {0}. Kết hợp với các hashtag cùng chủ đề ở phần "Hashtag Liên Quan" để tăng khả năng viral!</value>
+  </data>
+  <data name="Details_AnalyticsTitle" xml:space="preserve">
+    <value>Phân Tích &amp; Thống Kê Chi Tiết</value>
+  </data>
+  <data name="Details_HotLevel" xml:space="preserve">
+    <value>Mức Độ Hot</value>
+  </data>
+  <data name="Details_VeryHot" xml:space="preserve">
+    <value>Rất Hot</value>
+  </data>
+  <data name="Details_Hot" xml:space="preserve">
+    <value>Hot</value>
+  </data>
+  <data name="Details_QuiteHot" xml:space="preserve">
+    <value>Khá Hot</value>
+  </data>
+  <data name="Details_Emerging" xml:space="preserve">
+    <value>Mới Nổi</value>
+  </data>
+  <data name="Details_AppearancesInTrending" xml:space="preserve">
+    <value>Xuất hiện {0} lần trong trending</value>
+  </data>
+  <data name="Details_Competition" xml:space="preserve">
+    <value>Cạnh Tranh</value>
+  </data>
+  <data name="Details_CompetitionLow" xml:space="preserve">
+    <value>Thấp - Dễ lên top</value>
+  </data>
+  <data name="Details_CompetitionMedium" xml:space="preserve">
+    <value>Trung Bình</value>
+  </data>
+  <data name="Details_CompetitionHigh" xml:space="preserve">
+    <value>Cao - Khó lên top</value>
+  </data>
+  <data name="Details_CompetitionVeryHigh" xml:space="preserve">
+    <value>Rất Cao</value>
+  </data>
+  <data name="Details_CompetitionUnknown" xml:space="preserve">
+    <value>Chưa xác định</value>
+  </data>
+  <data name="Details_PostsUsing" xml:space="preserve">
+    <value>{0} bài viết đang sử dụng</value>
+  </data>
+  <data name="Details_Performance" xml:space="preserve">
+    <value>Hiệu Suất</value>
+  </data>
+  <data name="Details_PerformanceExcellent" xml:space="preserve">
+    <value>Xuất Sắc</value>
+  </data>
+  <data name="Details_PerformanceGood" xml:space="preserve">
+    <value>Tốt</value>
+  </data>
+  <data name="Details_PerformanceFair" xml:space="preserve">
+    <value>Khá</value>
+  </data>
+  <data name="Details_PerformanceAverage" xml:space="preserve">
+    <value>Trung Bình</value>
+  </data>
+  <data name="Details_CollectingData" xml:space="preserve">
+    <value>Đang thu thập dữ liệu</value>
+  </data>
+  <data name="Details_AvgViews" xml:space="preserve">
+    <value>Trung bình {0} views/bài</value>
+  </data>
+  <data name="Details_Status" xml:space="preserve">
+    <value>Tình Trạng:</value>
+  </data>
+  <data name="Details_StillHot" xml:space="preserve">
+    <value>Hashtag này vẫn đang hot</value>
+  </data>
+  <data name="Details_LastSeenToday" xml:space="preserve">
+    <value>xuất hiện lần cuối hôm nay</value>
+  </data>
+  <data name="Details_LastSeenDaysAgo" xml:space="preserve">
+    <value>xuất hiện lần cuối {0} ngày trước</value>
+  </data>
+  <data name="Details_CooledDown" xml:space="preserve">
+    <value>Hashtag này đã nguội đi</value>
+  </data>
+  <data name="Details_NotInTrendingDays" xml:space="preserve">
+    <value>không xuất hiện trong trending {0} ngày</value>
+  </data>
+  <data name="Details_HotDuration" xml:space="preserve">
+    <value>Thời gian hot: {0} ngày</value>
+  </data>
+  <data name="Details_FAQTitle" xml:space="preserve">
+    <value>Câu Hỏi Thường Gặp</value>
+  </data>
+  <data name="Details_FAQ1_Question" xml:space="preserve">
+    <value>Làm thế nào để hashtag {0} giúp video của tôi viral?</value>
+  </data>
+  <data name="Details_FAQ1_Answer" xml:space="preserve">
+    <value>Sử dụng hashtag {0} giúp video của bạn xuất hiện trong feed của những người đang quan tâm đến chủ đề này.</value>
+  </data>
+  <data name="Details_FAQ1_ViewPrediction" xml:space="preserve">
+    <value>Theo dữ liệu của chúng tôi, video sử dụng hashtag này có thể đạt từ {0} đến {1} lượt xem.</value>
+  </data>
+  <data name="Details_FAQ1_Conclusion" xml:space="preserve">
+    <value>Kết hợp với nội dung chất lượng và thời điểm đăng phù hợp sẽ tăng cơ hội lên trending.</value>
+  </data>
+  <data name="Details_FAQ2_Question" xml:space="preserve">
+    <value>Nên kết hợp hashtag {0} với hashtag nào?</value>
+  </data>
+  <data name="Details_FAQ2_Answer_WithRelated" xml:space="preserve">
+    <value>Bạn nên kết hợp với các hashtag liên quan như: {0}. Việc kết hợp 3-5 hashtag cùng chủ đề sẽ giúp tăng độ phủ sóng và tiếp cận đúng đối tượng mục tiêu.</value>
+  </data>
+  <data name="Details_FAQ2_Answer_NoRelated" xml:space="preserve">
+    <value>Bạn nên tìm các hashtag cùng chủ đề để kết hợp. Việc sử dụng 3-5 hashtag liên quan sẽ giúp tăng độ phủ sóng của video.</value>
+  </data>
+  <data name="Details_FAQ3_Question" xml:space="preserve">
+    <value>Khi nào là thời điểm tốt nhất để đăng video với hashtag này?</value>
+  </data>
+  <data name="Details_FAQ3_Answer" xml:space="preserve">
+    <value>Thời điểm tốt nhất để đăng video trên TikTok là 19h-22h (giờ vàng) và 12h-14h (giờ trưa).</value>
+  </data>
+  <data name="Details_FAQ3_WeekendTip" xml:space="preserve">
+    <value>Đặc biệt, với hashtag này bạn nên đăng vào cuối tuần để tối đa hóa tương tác.</value>
+  </data>
+  <data name="Details_FAQ3_EntertainmentTip" xml:space="preserve">
+    <value>Với chủ đề giải trí, buổi tối và cuối tuần thường có tương tác cao nhất.</value>
+  </data>
+  <data name="Details_FAQ3_Conclusion" xml:space="preserve">
+    <value>Hãy theo dõi phản hồi của khán giả để tìm ra thời điểm phù hợp nhất với đối tượng của bạn.</value>
+  </data>
+  <data name="Details_FAQ4_Question" xml:space="preserve">
+    <value>Hashtag {0} có phù hợp cho người mới bắt đầu không?</value>
+  </data>
+  <data name="Details_FAQ4_Answer_Yes" xml:space="preserve">
+    <value>Có! Hashtag này có mức độ cạnh tranh {0}, rất phù hợp cho người mới bắt đầu. Bạn có cơ hội cao để video của mình được nhiều người xem.</value>
+  </data>
+  <data name="Details_FAQ4_Answer_Caution" xml:space="preserve">
+    <value>Khuyến nghị cẩn trọng. Hashtag này có mức độ cạnh tranh cao, phù hợp hơn cho các creator đã có kinh nghiệm và lượng follower nhất định. Người mới nên kết hợp với các hashtag cạnh tranh thấp hơn để tăng cơ hội tiếp cận.</value>
+  </data>
+  <data name="Details_FAQ4_Answer_General" xml:space="preserve">
+    <value>Hashtag này phù hợp cho mọi đối tượng. Hãy thử nghiệm và theo dõi hiệu quả để đánh giá xem có phù hợp với nội dung của bạn không.</value>
+  </data>
+  <data name="Details_HistoryTitle" xml:space="preserve">
+    <value>Lịch Sử Xếp Hạng (30 Ngày Gần Nhất)</value>
+  </data>
+  <data name="Details_HistoryDate" xml:space="preserve">
+    <value>Ngày</value>
+  </data>
+  <data name="Details_HistorySource" xml:space="preserve">
+    <value>Nguồn</value>
+  </data>
+  <data name="Details_HistoryRank" xml:space="preserve">
+    <value>Xếp Hạng</value>
+  </data>
+  <data name="Details_NoHistory" xml:space="preserve">
+    <value>Chưa có dữ liệu lịch sử</value>
+  </data>
+  <data name="Details_RelatedKeywords" xml:space="preserve">
+    <value>Từ Khóa Liên Quan</value>
+  </data>
+  <data name="Details_BackToHome" xml:space="preserve">
+    <value>Quay về Trang Chủ</value>
+  </data>
+  <data name="Details_BackToSearch" xml:space="preserve">
+    <value>Quay về Kết Quả Tìm Kiếm</value>
+  </data>
+  <data name="Details_Back" xml:space="preserve">
+    <value>Quay Lại</value>
+  </data>
+  <data name="Details_NoCreatorsInfo" xml:space="preserve">
+    <value>Chưa có thông tin creators</value>
+  </data>
+  <data name="Details_CreatorsLoadError" xml:space="preserve">
+    <value>Lỗi khi tải thông tin creators</value>
+  </data>
+  <data name="Details_TopCreator" xml:space="preserve">
+    <value>Top {0} Creator</value>
+  </data>
+  <data name="Details_Many" xml:space="preserve">
+    <value>nhiều</value>
+  </data>
+
+  <!-- Blog Page -->
+  <data name="Blog_PageTitle" xml:space="preserve">
+    <value>Blog</value>
+  </data>
+  <data name="Blog_HeaderTitle" xml:space="preserve">
+    <value>Blog TrendTag</value>
+  </data>
+  <data name="Blog_HeaderSubtitle" xml:space="preserve">
+    <value>Tips, chiến lược và phân tích chuyên sâu về hashtag TikTok trending</value>
+  </data>
+  <data name="Blog_Minutes" xml:space="preserve">
+    <value>phút</value>
+  </data>
+  <data name="Blog_Previous" xml:space="preserve">
+    <value>Trước</value>
+  </data>
+  <data name="Blog_Next" xml:space="preserve">
+    <value>Sau</value>
+  </data>
+  <data name="Blog_NoPosts" xml:space="preserve">
+    <value>Chưa có bài viết</value>
+  </data>
+  <data name="Blog_NoPostsHint" xml:space="preserve">
+    <value>Hãy quay lại sau để đọc những bài viết mới nhất!</value>
+  </data>
+  <data name="Blog_BackToHome" xml:space="preserve">
+    <value>Về Trang Chủ</value>
+  </data>
+  <data name="Blog_Categories" xml:space="preserve">
+    <value>Danh Mục</value>
+  </data>
+  <data name="Blog_PopularTags" xml:space="preserve">
+    <value>Tags Phổ Biến</value>
+  </data>
+  <data name="Blog_RecentPosts" xml:space="preserve">
+    <value>Bài Mới Nhất</value>
+  </data>
+  <data name="Blog_FindTrending" xml:space="preserve">
+    <value>Tìm Hashtag Trending</value>
+  </data>
+  <data name="Blog_FindTrendingDesc" xml:space="preserve">
+    <value>Top hashtag TikTok được cập nhật mỗi 6 giờ</value>
+  </data>
+  <data name="Blog_MinuteRead" xml:space="preserve">
+    <value>phút đọc</value>
+  </data>
+  <data name="Blog_ViewCount" xml:space="preserve">
+    <value>lượt xem</value>
+  </data>
+  <data name="Blog_UsefulTools" xml:space="preserve">
+    <value>Công Cụ Hữu Ích Cho TikToker</value>
+  </data>
+  <data name="Blog_AIHashtag" xml:space="preserve">
+    <value>Tạo Hashtag AI</value>
+  </data>
+  <data name="Blog_AIHashtagDesc" xml:space="preserve">
+    <value>Gợi ý hashtag thông minh</value>
+  </data>
+  <data name="Blog_TrendingHashtag" xml:space="preserve">
+    <value>Hashtag Trending</value>
+  </data>
+  <data name="Blog_TrendingHashtagDesc" xml:space="preserve">
+    <value>Top hashtag hot nhất</value>
+  </data>
+  <data name="Blog_GrowthTracking" xml:space="preserve">
+    <value>Theo Dõi Tăng Trưởng</value>
+  </data>
+  <data name="Blog_GrowthTrackingDesc" xml:space="preserve">
+    <value>Phân tích xu hướng</value>
+  </data>
+  <data name="Blog_SharePost" xml:space="preserve">
+    <value>Chia sẻ bài viết:</value>
+  </data>
+  <data name="Blog_RelatedPosts" xml:space="preserve">
+    <value>Bài Viết Liên Quan</value>
+  </data>
+  <data name="Blog_ExploreMore" xml:space="preserve">
+    <value>Khám Phá Thêm</value>
+  </data>
+  <data name="Blog_ExploreMoreDesc" xml:space="preserve">
+    <value>Xem tất cả bài viết về hashtag TikTok trending</value>
+  </data>
+  <data name="Blog_BackToBlog" xml:space="preserve">
+    <value>Quay Về Blog</value>
+  </data>
+  <data name="Blog_DiscoverTrending" xml:space="preserve">
+    <value>Khám phá top hashtag TikTok đang trending ngay bây giờ</value>
+  </data>
+
+  <!-- Privacy Page -->
+  <data name="Privacy_Title" xml:space="preserve">
+    <value>Chính Sách Bảo Mật - TrendTag</value>
+  </data>
+  <data name="Privacy_Description" xml:space="preserve">
+    <value>Chính sách bảo mật của TrendTag. Chúng tôi cam kết bảo vệ quyền riêng tư và không thu thập thông tin cá nhân của người dùng.</value>
+  </data>
+  <data name="Privacy_PageTitle" xml:space="preserve">
+    <value>Chính Sách Bảo Mật</value>
+  </data>
+  <data name="Privacy_Intro" xml:space="preserve">
+    <value>TrendTag cam kết bảo vệ quyền riêng tư và thông tin cá nhân của người dùng.</value>
+  </data>
+  <data name="Privacy_InformationCollected" xml:space="preserve">
+    <value>Thông Tin Thu Thập</value>
+  </data>
+  <data name="Privacy_InformationCollectedText" xml:space="preserve">
+    <value>TrendTag là công cụ phân tích hashtag công khai. Chúng tôi KHÔNG thu thập bất kỳ thông tin cá nhân nào của người dùng.</value>
+  </data>
+  <data name="Privacy_NoAccountRequired" xml:space="preserve">
+    <value>Không yêu cầu đăng ký tài khoản</value>
+  </data>
+  <data name="Privacy_NoSearchHistory" xml:space="preserve">
+    <value>Không lưu trữ lịch sử tìm kiếm cá nhân</value>
+  </data>
+  <data name="Privacy_NoEmailPhone" xml:space="preserve">
+    <value>Không thu thập địa chỉ email hoặc số điện thoại</value>
+  </data>
+  <data name="Privacy_PublicData" xml:space="preserve">
+    <value>Dữ Liệu Công Khai</value>
+  </data>
+  <data name="Privacy_PublicDataText" xml:space="preserve">
+    <value>Tất cả dữ liệu hashtag được hiển thị trên TrendTag đều là thông tin công khai được thu thập từ:</value>
+  </data>
+  <data name="Privacy_PublicDataSource1" xml:space="preserve">
+    <value>TikTok Creative Center</value>
+  </data>
+  <data name="Privacy_PublicDataSource2" xml:space="preserve">
+    <value>Google Trends</value>
+  </data>
+  <data name="Privacy_PublicDataSource3" xml:space="preserve">
+    <value>Các nền tảng phân tích công khai khác</value>
+  </data>
+  <data name="Privacy_CookiesSession" xml:space="preserve">
+    <value>Cookies &amp; Phiên Làm Việc</value>
+  </data>
+  <data name="Privacy_CookiesText" xml:space="preserve">
+    <value>Website sử dụng cookies và session để đảm bảo trải nghiệm người dùng tốt nhất:</value>
+  </data>
+  <data name="Privacy_SessionCookies" xml:space="preserve">
+    <value>Lưu trữ thông tin phiên làm việc tạm thời (tự động xóa khi đóng trình duyệt)</value>
+  </data>
+  <data name="Privacy_PreferenceCookies" xml:space="preserve">
+    <value>Ghi nhớ cài đặt hiển thị của bạn (chủ đề, bộ lọc)</value>
+  </data>
+  <data name="Privacy_NoTracking" xml:space="preserve">
+    <value>Chúng tôi KHÔNG sử dụng cookies để theo dõi hành vi cá nhân</value>
+  </data>
+  <data name="Privacy_CookiesNote" xml:space="preserve">
+    <value>Cookies này không chứa thông tin cá nhân nhận dạng và được mã hóa an toàn.</value>
+  </data>
+  <data name="Privacy_Security" xml:space="preserve">
+    <value>Bảo Mật</value>
+  </data>
+  <data name="Privacy_SecurityText" xml:space="preserve">
+    <value>Chúng tôi sử dụng các biện pháp bảo mật tiêu chuẩn để bảo vệ website và dữ liệu công khai. Tuy nhiên, do không thu thập thông tin cá nhân, rủi ro về quyền riêng tư được giảm thiểu tối đa.</value>
+  </data>
+  <data name="Privacy_PolicyUpdates" xml:space="preserve">
+    <value>Cập Nhật Chính Sách</value>
+  </data>
+  <data name="Privacy_PolicyUpdatesText" xml:space="preserve">
+    <value>Chính sách bảo mật này có thể được cập nhật theo thời gian. Mọi thay đổi sẽ được thông báo trên trang này.</value>
+  </data>
+  <data name="Privacy_Contact" xml:space="preserve">
+    <value>Liên Hệ</value>
+  </data>
+  <data name="Privacy_ContactText" xml:space="preserve">
+    <value>Nếu bạn có bất kỳ câu hỏi nào về chính sách bảo mật, vui lòng liên hệ:</value>
+  </data>
+  <data name="Privacy_LastUpdated" xml:space="preserve">
+    <value>Cập nhật lần cuối:</value>
+  </data>
+  <data name="Privacy_BackToHome" xml:space="preserve">
+    <value>Quay Về Trang Chủ</value>
+  </data>
+
+  <!-- How to Use Section -->
+  <data name="Home_HowToUseTitle" xml:space="preserve">
+    <value>Cách Sử Dụng TrendTag Hiệu Quả</value>
+  </data>
+  <data name="Home_HowToUseSubtitle" xml:space="preserve">
+    <value>3 bước đơn giản để tìm hashtag trending phù hợp với nội dung của bạn</value>
+  </data>
+  <data name="Home_Step1_Title" xml:space="preserve">
+    <value>Chọn Chủ Đề</value>
+  </data>
+  <data name="Home_Step1_Desc" xml:space="preserve">
+    <value>Lọc hashtag theo chủ đề phù hợp với nội dung của bạn: Giáo Dục, Du Lịch, Thời Trang, Công Nghệ, v.v. Có 16+ chủ đề để lựa chọn.</value>
+  </data>
+  <data name="Home_Step2_Title" xml:space="preserve">
+    <value>Phân Tích Hashtag</value>
+  </data>
+  <data name="Home_Step2_Desc" xml:space="preserve">
+    <value>Xem số lượt xem, số bài đăng, và mức độ cạnh tranh của mỗi hashtag. Chọn hashtag có mức độ cạnh tranh Thấp hoặc Trung Bình để dễ viral hơn.</value>
+  </data>
+  <data name="Home_Step3_Title" xml:space="preserve">
+    <value>Sao Chép &amp; Đăng Video</value>
+  </data>
+  <data name="Home_Step3_Desc" xml:space="preserve">
+    <value>Click vào hashtag để xem chi tiết và sao chép. Sử dụng 3-5 hashtag trending kết hợp với 2-3 hashtag ngách để tối ưu reach và engagement.</value>
+  </data>
+  <data name="Home_ProTip_Title" xml:space="preserve">
+    <value>Mẹo Pro:</value>
+  </data>
+  <data name="Home_ProTip_Desc" xml:space="preserve">
+    <value>Kết hợp hashtag trending có mức độ cạnh tranh Thấp với hashtag ngách (niche) của bạn để video dễ lên FYP hơn. Ví dụ: #dulich (trending, cạnh tranh cao) + #dulichdalat2025 (ngách, cạnh tranh thấp) = Tăng cơ hội viral!</value>
+  </data>
+
+  <!-- FAQ Section -->
+  <data name="Home_FAQTitle" xml:space="preserve">
+    <value>Câu Hỏi Thường Gặp (FAQ)</value>
+  </data>
+  <data name="Home_FAQSubtitle" xml:space="preserve">
+    <value>Tất cả những gì bạn cần biết về hashtag TikTok trending và cách sử dụng TrendTag</value>
+  </data>
+  <data name="Home_FAQ1_Question" xml:space="preserve">
+    <value>Hashtag TikTok trending là gì?</value>
+  </data>
+  <data name="Home_FAQ1_Answer" xml:space="preserve">
+    <value>Hashtag TikTok trending là những hashtag đang được sử dụng nhiều nhất trên TikTok tại một thời điểm cụ thể. Sử dụng hashtag trending giúp video của bạn tiếp cận nhiều người xem hơn, tăng tương tác và có cơ hội cao hơn để xuất hiện trên trang For You (FYP). TrendTag cập nhật danh sách hashtag trending mỗi 6 giờ để đảm bảo bạn luôn có dữ liệu mới nhất.</value>
+  </data>
+  <data name="Home_FAQ2_Question" xml:space="preserve">
+    <value>Cách chọn hashtag TikTok hiệu quả nhất?</value>
+  </data>
+  <data name="Home_FAQ2_Answer" xml:space="preserve">
+    <value>Để chọn hashtag hiệu quả, hãy kết hợp 3-5 hashtag trending có mức độ cạnh tranh Thấp hoặc Trung Bình với 2-3 hashtag ngách (niche) liên quan đến nội dung của bạn. Ví dụ: Nếu bạn làm video về du lịch Đà Lạt, hãy kết hợp #dulich (trending, cạnh tranh cao) với #dulichdalat2025 (ngách, cạnh tranh thấp). Chiến lược này giúp tăng cơ hội viral trong cả nhóm đối tượng rộng lẫn đối tượng mục tiêu cụ thể.</value>
+  </data>
+  <data name="Home_FAQ3_Question" xml:space="preserve">
+    <value>TrendTag cập nhật dữ liệu hashtag bao lâu một lần?</value>
+  </data>
+  <data name="Home_FAQ3_Answer" xml:space="preserve">
+    <value>TrendTag tự động cập nhật dữ liệu hashtag mỗi 6 giờ từ nhiều nguồn uy tín như TikTok Creative Center và các nguồn khác. Điều này đảm bảo bạn luôn có danh sách hashtag trending mới nhất và chính xác nhất để tối ưu video của mình.</value>
+  </data>
+  <data name="Home_FAQ4_Question" xml:space="preserve">
+    <value>Mức độ cạnh tranh của hashtag là gì?</value>
+  </data>
+  <data name="Home_FAQ4_Answer" xml:space="preserve">
+    <value>Mức độ cạnh tranh cho biết độ khó để video của bạn nổi bật khi sử dụng hashtag đó. TrendTag phân loại thành 4 mức:</value>
+  </data>
+  <data name="Home_FAQ4_Level1" xml:space="preserve">
+    <value>Thấp: Dễ viral, ít người dùng → Phù hợp cho creator mới</value>
+  </data>
+  <data name="Home_FAQ4_Level2" xml:space="preserve">
+    <value>Trung Bình: Cơ hội tốt nếu nội dung chất lượng</value>
+  </data>
+  <data name="Home_FAQ4_Level3" xml:space="preserve">
+    <value>Cao: Khó viral, nhiều người dùng → Cần nội dung xuất sắc</value>
+  </data>
+  <data name="Home_FAQ4_Level4" xml:space="preserve">
+    <value>Rất Cao: Cực kỳ cạnh tranh → Chỉ phù hợp creator lớn</value>
+  </data>
+  <data name="Home_FAQ5_Question" xml:space="preserve">
+    <value>Có nên sử dụng hashtag viral có lượt xem cao?</value>
+  </data>
+  <data name="Home_FAQ5_Answer" xml:space="preserve">
+    <value>Không hoàn toàn. Hashtag viral có lượt xem cao thường có mức độ cạnh tranh Rất Cao, khiến video của bạn dễ bị "chìm" trong hàng triệu video khác. Thay vào đó, hãy chọn hashtag có lượt xem vừa phải (100K-5M) và mức độ cạnh tranh Thấp-Trung Bình để tăng cơ hội lên FYP. TrendTag hiển thị cả số lượt xem lẫn mức độ cạnh tranh để bạn đưa ra quyết định thông minh.</value>
+  </data>
+  <data name="Home_FAQ6_Question" xml:space="preserve">
+    <value>TrendTag có miễn phí không?</value>
+  </data>
+  <data name="Home_FAQ6_Answer" xml:space="preserve">
+    <value>100% miễn phí! TrendTag không yêu cầu đăng ký tài khoản, không giới hạn số lần tra cứu hashtag, và không có phí ẩn. Tất cả tính năng phân tích hashtag, xem trending, theo dõi mức độ cạnh tranh đều hoàn toàn miễn phí cho cộng đồng creator TikTok Việt Nam.</value>
+  </data>
+  <data name="Home_FAQ7_Question" xml:space="preserve">
+    <value>Làm sao để tìm hashtag theo chủ đề cụ thể?</value>
+  </data>
+  <data name="Home_FAQ7_Answer" xml:space="preserve">
+    <value>TrendTag cung cấp 16+ chủ đề hashtag để bạn dễ dàng lọc và tìm kiếm. Chỉ cần chọn chủ đề từ dropdown ở đầu trang (ví dụ: Giáo Dục, Du Lịch, Thời Trang, Công Nghệ, v.v.) và hệ thống sẽ tự động hiển thị top 10 hashtag trending trong chủ đề đó. Bạn cũng có thể sử dụng thanh tìm kiếm để tìm hashtag cụ thể.</value>
+  </data>
+  <data name="Home_FAQ8_Question" xml:space="preserve">
+    <value>Nên dùng bao nhiêu hashtag trong một video TikTok?</value>
+  </data>
+  <data name="Home_FAQ8_Answer" xml:space="preserve">
+    <value>TikTok khuyến nghị sử dụng 5-8 hashtag cho mỗi video. Công thức hiệu quả nhất là:</value>
+  </data>
+  <data name="Home_FAQ8_Tip1" xml:space="preserve">
+    <value>3-5 hashtag trending (mức độ cạnh tranh Thấp-Trung Bình) để tăng reach</value>
+  </data>
+  <data name="Home_FAQ8_Tip2" xml:space="preserve">
+    <value>2-3 hashtag ngách (liên quan trực tiếp đến nội dung) để target đúng đối tượng</value>
+  </data>
+  <data name="Home_FAQ8_Warning" xml:space="preserve">
+    <value>Tránh dùng quá nhiều hashtag (>10) vì có thể làm giảm hiệu quả và trông spam.</value>
+  </data>
+  <data name="Home_FAQ9_Question" xml:space="preserve">
+    <value>Hashtag trending có thay đổi theo thời gian không?</value>
+  </data>
+  <data name="Home_FAQ9_Answer" xml:space="preserve">
+    <value>Có, hashtag trending thay đổi liên tục theo xu hướng và sự kiện. Đó là lý do TrendTag cập nhật mỗi 6 giờ. Bạn nên kiểm tra danh sách trending trước khi đăng video để đảm bảo sử dụng hashtag mới nhất.</value>
+  </data>
+  <data name="Home_FAQ10_Question" xml:space="preserve">
+    <value>TrendTag có hỗ trợ hashtag cho các quốc gia khác không?</value>
+  </data>
+  <data name="Home_FAQ10_Answer" xml:space="preserve">
+    <value>Hiện tại TrendTag tập trung vào thị trường Việt Nam với dữ liệu từ TikTok Creative Center. Chúng tôi đang phát triển để hỗ trợ thêm các quốc gia khác trong tương lai.</value>
+  </data>
+  <data name="Home_FAQ11_Question" xml:space="preserve">
+    <value>Hashtag trending có giúp tăng follower không?</value>
+  </data>
+  <data name="Home_FAQ11_Answer" xml:space="preserve">
+    <value>Có, nhưng gián tiếp. Hashtag trending giúp video của bạn tiếp cận nhiều người xem hơn (tăng reach và impressions). Khi video có nhiều lượt xem và tương tác cao, thuật toán TikTok sẽ đẩy video lên For You Page (FYP) rộng hơn, từ đó tăng cơ hội được follow. Tuy nhiên, yếu tố quan trọng nhất vẫn là chất lượng nội dung - hashtag chỉ là công cụ hỗ trợ.</value>
+  </data>
+  <data name="Home_FAQ12_Question" xml:space="preserve">
+    <value>Có nên dùng hashtag bằng tiếng Việt hay tiếng Anh?</value>
+  </data>
+  <data name="Home_FAQ12_Answer" xml:space="preserve">
+    <value>Tùy thuộc vào đối tượng mục tiêu của bạn:</value>
+  </data>
+  <data name="Home_FAQ12_Vietnamese" xml:space="preserve">
+    <value>Hashtag tiếng Việt: Phù hợp nếu bạn target khán giả Việt Nam (ví dụ: #dulich, #giaoduc, #amthuc)</value>
+  </data>
+  <data name="Home_FAQ12_English" xml:space="preserve">
+    <value>Hashtag tiếng Anh: Phù hợp nếu muốn tiếp cận đối tượng quốc tế (ví dụ: #travel, #education, #food)</value>
+  </data>
+  <data name="Home_FAQ12_Tip" xml:space="preserve">
+    <value>Chiến lược tốt nhất là kết hợp cả hai: 3-4 hashtag tiếng Việt + 2-3 hashtag tiếng Anh để maximize reach cả trong lẫn ngoài nước.</value>
+  </data>
+  <data name="Home_FAQ13_Question" xml:space="preserve">
+    <value>Làm sao biết hashtag nào phù hợp với nội dung của mình?</value>
+  </data>
+  <data name="Home_FAQ13_Answer" xml:space="preserve">
+    <value>TrendTag giúp bạn dễ dàng tìm hashtag phù hợp qua 3 bước:</value>
+  </data>
+  <data name="Home_FAQ13_Step1" xml:space="preserve">
+    <value>Chọn chủ đề: Lọc hashtag theo 16+ chủ đề (Giáo Dục, Du Lịch, Thời Trang, v.v.)</value>
+  </data>
+  <data name="Home_FAQ13_Step2" xml:space="preserve">
+    <value>Xem mức độ cạnh tranh: Chọn hashtag có mức độ Thấp-Trung Bình</value>
+  </data>
+  <data name="Home_FAQ13_Step3" xml:space="preserve">
+    <value>Kiểm tra số lượt xem: Chọn hashtag có 100K-5M lượt xem cho tỷ lệ viral tốt nhất</value>
+  </data>
+  <data name="Home_FAQ13_Tip" xml:space="preserve">
+    <value>Bạn cũng có thể sử dụng thanh tìm kiếm để tìm hashtag cụ thể và xem phân tích chi tiết.</value>
+  </data>
+  <data name="Home_FAQ14_Question" xml:space="preserve">
+    <value>Có nên dùng cùng một bộ hashtag cho mọi video?</value>
+  </data>
+  <data name="Home_FAQ14_Answer" xml:space="preserve">
+    <value>Không nên! Mỗi video nên có bộ hashtag riêng biệt phù hợp với nội dung cụ thể. Sử dụng cùng một bộ hashtag cho mọi video có thể:</value>
+  </data>
+  <data name="Home_FAQ14_Problem1" xml:space="preserve">
+    <value>Làm giảm hiệu quả tiếp cận (thuật toán TikTok phát hiện pattern lặp lại)</value>
+  </data>
+  <data name="Home_FAQ14_Problem2" xml:space="preserve">
+    <value>Không tối ưu cho từng loại nội dung khác nhau</value>
+  </data>
+  <data name="Home_FAQ14_Problem3" xml:space="preserve">
+    <value>Bỏ lỡ cơ hội từ hashtag trending mới</value>
+  </data>
+  <data name="Home_FAQ14_Tip" xml:space="preserve">
+    <value>Hãy dành 2-3 phút để chọn hashtag phù hợp cho mỗi video bằng TrendTag!</value>
+  </data>
+  <data name="Home_FAQ15_Question" xml:space="preserve">
+    <value>TrendTag có hỗ trợ các nền tảng khác ngoài TikTok không?</value>
+  </data>
+  <data name="Home_FAQ15_Answer" xml:space="preserve">
+    <value>Hiện tại, TrendTag tập trung 100% vào TikTok để mang lại dữ liệu chính xác và chuyên sâu nhất cho creator TikTok Việt Nam. Tuy nhiên, nhiều hashtag trending trên TikTok cũng hoạt động tốt trên Instagram Reels và YouTube Shorts. Trong tương lai, chúng tôi có kế hoạch mở rộng sang các nền tảng video ngắn khác dựa trên nhu cầu của cộng đồng.</value>
+  </data>
+  <data name="Home_FAQ_CTA_Title" xml:space="preserve">
+    <value>Vẫn còn thắc mắc?</value>
+  </data>
+  <data name="Home_FAQ_CTA_Desc" xml:space="preserve">
+    <value>Khám phá ngay top 10 hashtag trending hôm nay và bắt đầu tăng view cho video của bạn!</value>
+  </data>
+  <data name="Home_FAQ_CTA_Link" xml:space="preserve">
+    <value>Xem Top 10 Hashtag Trending →</value>
+  </data>
+
+  <!-- SEO Content Section -->
+  <data name="SEO_MainTitle" xml:space="preserve">
+    <value>TrendTag - Công Cụ Tìm Hashtag Trending TikTok Hàng Đầu Việt Nam</value>
+  </data>
+  <data name="SEO_WhatIsHashtag" xml:space="preserve">
+    <value>Hashtag TikTok Trending Là Gì?</value>
+  </data>
+  <data name="SEO_WhatIsHashtag_Text1" xml:space="preserve">
+    <value>Hashtag trending TikTok</value>
+  </data>
+  <data name="SEO_WhatIsHashtag_Text2" xml:space="preserve">
+    <value>là những hashtag đang được sử dụng phổ biến nhất trên nền tảng TikTok tại một thời điểm cụ thể. Những hashtag này giúp video của bạn tiếp cận nhiều người xem hơn, tăng tương tác và có cơ hội xuất hiện trên trang For You (FYP). TrendTag cập nhật</value>
+  </data>
+  <data name="SEO_WhatIsHashtag_Text3" xml:space="preserve">
+    <value>hashtag TikTok Việt Nam</value>
+  </data>
+  <data name="SEO_WhatIsHashtag_Text4" xml:space="preserve">
+    <value>mỗi 6 giờ để bạn luôn bắt kịp xu hướng mới nhất.</value>
+  </data>
+  <data name="SEO_WhyUseTrendTag" xml:space="preserve">
+    <value>Tại Sao Nên Sử Dụng TrendTag?</value>
+  </data>
+  <data name="SEO_Benefit1_Title" xml:space="preserve">
+    <value>Dữ liệu realtime:</value>
+  </data>
+  <data name="SEO_Benefit1_Desc" xml:space="preserve">
+    <value>Cập nhật mỗi 6 giờ từ TikTok</value>
+  </data>
+  <data name="SEO_Benefit2_Title" xml:space="preserve">
+    <value>Phân tích chuyên sâu:</value>
+  </data>
+  <data name="SEO_Benefit2_Desc" xml:space="preserve">
+    <value>Xem độ khó cạnh tranh, lượt xem, số bài đăng</value>
+  </data>
+  <data name="SEO_Benefit3_Title" xml:space="preserve">
+    <value>Theo dõi xu hướng:</value>
+  </data>
+  <data name="SEO_Benefit3_Desc" xml:space="preserve">
+    <value>Biết hashtag nào đang lên, hashtag nào đang xuống</value>
+  </data>
+  <data name="SEO_Benefit4_Title" xml:space="preserve">
+    <value>Phân loại theo ngành:</value>
+  </data>
+  <data name="SEO_Benefit4_Desc" xml:space="preserve">
+    <value>16+ chủ đề từ Giáo Dục đến Giải Trí</value>
+  </data>
+  <data name="SEO_Benefit5_Title" xml:space="preserve">
+    <value>Hoàn toàn miễn phí:</value>
+  </data>
+  <data name="SEO_Benefit5_Desc" xml:space="preserve">
+    <value>Không giới hạn tra cứu, không cần đăng ký</value>
+  </data>
+  <data name="SEO_Benefit6_Title" xml:space="preserve">
+    <value>Dễ sử dụng:</value>
+  </data>
+  <data name="SEO_Benefit6_Desc" xml:space="preserve">
+    <value>Giao diện đơn giản, tìm kiếm nhanh chóng</value>
+  </data>
+  <data name="SEO_HowToChoose" xml:space="preserve">
+    <value>Cách Chọn Hashtag TikTok Hiệu Quả</value>
+  </data>
+  <data name="SEO_HowToChoose_Intro" xml:space="preserve">
+    <value>Để tối ưu video TikTok và</value>
+  </data>
+  <data name="SEO_HowToChoose_IntroStrong" xml:space="preserve">
+    <value>tăng view hiệu quả</value>
+  </data>
+  <data name="SEO_HowToChoose_IntroEnd" xml:space="preserve">
+    <value>, bạn nên kết hợp:</value>
+  </data>
+  <data name="SEO_HowToChoose_Step1" xml:space="preserve">
+    <value>2-3 hashtag trending:</value>
+  </data>
+  <data name="SEO_HowToChoose_Step1_Desc" xml:space="preserve">
+    <value>Hashtag đang hot có lượt xem cao (độ cạnh tranh cao)</value>
+  </data>
+  <data name="SEO_HowToChoose_Step2" xml:space="preserve">
+    <value>3-4 hashtag ngách:</value>
+  </data>
+  <data name="SEO_HowToChoose_Step2_Desc" xml:space="preserve">
+    <value>Hashtag liên quan đến nội dung cụ thể của video</value>
+  </data>
+  <data name="SEO_HowToChoose_Step3" xml:space="preserve">
+    <value>1-2 hashtag brand:</value>
+  </data>
+  <data name="SEO_HowToChoose_Step3_Desc" xml:space="preserve">
+    <value>Hashtag riêng của bạn hoặc thương hiệu</value>
+  </data>
+  <data name="SEO_ProTip" xml:space="preserve">
+    <value>Mẹo:</value>
+  </data>
+  <data name="SEO_ProTip_Text" xml:space="preserve">
+    <value>Chọn hashtag có độ cạnh tranh "Thấp" hoặc "Trung Bình" nếu kênh của bạn còn nhỏ để dễ lên top hơn.</value>
+  </data>
+  <data name="SEO_PopularCategories" xml:space="preserve">
+    <value>Các Chủ Đề Hashtag Phổ Biến Nhất</value>
+  </data>
+  <data name="SEO_Category_Education" xml:space="preserve">
+    <value>Hashtag Giáo Dục Trending</value>
+  </data>
+  <data name="SEO_Category_Entertainment" xml:space="preserve">
+    <value>Hashtag Tin Tức &amp; Giải Trí</value>
+  </data>
+  <data name="SEO_Category_Fashion" xml:space="preserve">
+    <value>Hashtag Thời Trang &amp; Phụ Kiện</value>
+  </data>
+  <data name="SEO_Category_Beauty" xml:space="preserve">
+    <value>Hashtag Làm Đẹp</value>
+  </data>
+  <data name="SEO_Category_Food" xml:space="preserve">
+    <value>Hashtag Thực Phẩm &amp; Đồ Uống</value>
+  </data>
+  <data name="SEO_Category_Travel" xml:space="preserve">
+    <value>Hashtag Du Lịch Trending</value>
+  </data>
+  <data name="SEO_Category_Sports" xml:space="preserve">
+    <value>Hashtag Thể Thao &amp; Ngoài Trời</value>
+  </data>
+  <data name="SEO_Category_Tech" xml:space="preserve">
+    <value>Hashtag Công Nghệ &amp; Điện Tử</value>
+  </data>
+  <data name="SEO_Category_Vehicle" xml:space="preserve">
+    <value>Hashtag Phương Tiện &amp; Giao Thông</value>
+  </data>
+  <data name="SEO_Category_Gaming" xml:space="preserve">
+    <value>Hashtag Gaming &amp; Trò Chơi</value>
+  </data>
+  <data name="SEO_CTA_Title" xml:space="preserve">
+    <value>Bắt đầu ngay:</value>
+  </data>
+  <data name="SEO_CTA_Text" xml:space="preserve">
+    <value>Sử dụng ô tìm kiếm phía trên để tìm hashtag phù hợp với nội dung của bạn, hoặc chọn chủ đề từ dropdown để xem Top 10 hashtag trending trong ngành.</value>
+  </data>
+
+  <!-- Generator Page -->
+  <data name="Generator_Title" xml:space="preserve">
+    <value>Tạo Hashtag Thông Minh</value>
+  </data>
+  <data name="Generator_Header" xml:space="preserve">
+    <value>Tạo Hashtag Thông Minh với AI</value>
+  </data>
+  <data name="Generator_Subtitle" xml:space="preserve">
+    <value>Công nghệ AI giúp bạn tìm hashtag viral cho video TikTok</value>
+  </data>
+  <data name="Generator_Free" xml:space="preserve">
+    <value>Miễn phí:</value>
+  </data>
+  <data name="Generator_DailyLimit" xml:space="preserve">
+    <value>lượt tạo hashtag mỗi ngày</value>
+  </data>
+  <data name="Generator_UpgradePro" xml:space="preserve">
+    <value>Nâng cấp Pro</value>
+  </data>
+  <data name="Generator_DescribeVideo" xml:space="preserve">
+    <value>Mô tả video của bạn</value>
+  </data>
+  <data name="Generator_DescribeHint" xml:space="preserve">
+    <value>Hãy mô tả nội dung video của bạn càng chi tiết càng tốt để AI đề xuất hashtag chính xác nhất.</value>
+  </data>
+  <data name="Generator_Placeholder" xml:space="preserve">
+    <value>VD: Video hướng dẫn làm bánh mì Việt Nam tại nhà, thơm ngon giòn rụm, phù hợp cho người mới bắt đầu...</value>
+  </data>
+  <data name="Generator_MinChars" xml:space="preserve">
+    <value>Tối thiểu 10 ký tự</value>
+  </data>
+  <data name="Generator_CreateNow" xml:space="preserve">
+    <value>Tạo Hashtag Ngay</value>
+  </data>
+  <data name="Generator_Analyzing" xml:space="preserve">
+    <value>AI đang phân tích và tạo hashtag cho bạn...</value>
+  </data>
+  <data name="Generator_Strategy" xml:space="preserve">
+    <value>Chiến Lược Hashtag</value>
+  </data>
+  <data name="Generator_Trending" xml:space="preserve">
+    <value>Trending</value>
+  </data>
+  <data name="Generator_TrendingDesc" xml:space="preserve">
+    <value>Hashtag đang viral, tiếp cận rộng nhưng cạnh tranh cao</value>
+  </data>
+  <data name="Generator_Niche" xml:space="preserve">
+    <value>Niche</value>
+  </data>
+  <data name="Generator_NicheDesc" xml:space="preserve">
+    <value>Hashtag chuyên ngành, cân bằng giữa tiếp cận và cạnh tranh</value>
+  </data>
+  <data name="Generator_UltraNiche" xml:space="preserve">
+    <value>Ultra-Niche</value>
+  </data>
+  <data name="Generator_UltraNicheDesc" xml:space="preserve">
+    <value>Hashtag siêu chuyên biệt, dễ nổi bật trong cộng đồng nhỏ</value>
+  </data>
+  <data name="Generator_CopyHashtags" xml:space="preserve">
+    <value>Sao chép hashtag</value>
+  </data>
+  <data name="Generator_SelectedCount" xml:space="preserve">
+    <value>hashtag đã chọn</value>
+  </data>
+  <data name="Generator_CopyAll" xml:space="preserve">
+    <value>Copy Tất Cả</value>
+  </data>
+  <data name="Generator_Regenerate" xml:space="preserve">
+    <value>Tạo Lại</value>
+  </data>
+  <data name="Generator_ClickToSelect" xml:space="preserve">
+    <value>Click hashtag để chọn/bỏ chọn</value>
+  </data>
+  <data name="Generator_Recommend" xml:space="preserve">
+    <value>Đề xuất: 5-7 hashtag/video</value>
+  </data>
+  <data name="Generator_HowToUse" xml:space="preserve">
+    <value>Cách sử dụng hiệu quả</value>
+  </data>
+  <data name="Generator_Tip1" xml:space="preserve">
+    <value>Mô tả chi tiết nội dung video (50-200 từ)</value>
+  </data>
+  <data name="Generator_Tip2" xml:space="preserve">
+    <value>Đề cập đến chủ đề, đối tượng, địa điểm</value>
+  </data>
+  <data name="Generator_Tip3" xml:space="preserve">
+    <value>Sử dụng 5-7 hashtag/video để tối ưu</value>
+  </data>
+  <data name="Generator_Tip4" xml:space="preserve">
+    <value>Mix hashtag trending và niche</value>
+  </data>
+  <data name="Generator_Tip5" xml:space="preserve">
+    <value>Hashtag ultra-niche giúp tiếp cận đúng người</value>
+  </data>
+  <data name="Generator_Tip6" xml:space="preserve">
+    <value>Thử nghiệm và theo dõi hiệu quả</value>
+  </data>
+  <data name="Generator_Error_MinChars" xml:space="preserve">
+    <value>Vui lòng nhập mô tả ít nhất 10 ký tự.</value>
+  </data>
+  <data name="Generator_Error_Generic" xml:space="preserve">
+    <value>Đã xảy ra lỗi. Vui lòng thử lại.</value>
+  </data>
+  <data name="Generator_Error_Connection" xml:space="preserve">
+    <value>Không thể kết nối với máy chủ. Vui lòng thử lại.</value>
+  </data>
+  <data name="Generator_DefaultReasoning" xml:space="preserve">
+    <value>AI đã phân tích và đề xuất các hashtag phù hợp nhất cho nội dung của bạn.</value>
+  </data>
+  <data name="Generator_NoData" xml:space="preserve">
+    <value>Chưa có data</value>
+  </data>
+  <data name="Generator_NoDataWarning" xml:space="preserve">
+    <value>Hashtag này chưa có dữ liệu, không thể xem chi tiết.</value>
+  </data>
+  <data name="Generator_Error_SelectOne" xml:space="preserve">
+    <value>Vui lòng chọn ít nhất một hashtag.</value>
+  </data>
+  <data name="Generator_Copied" xml:space="preserve">
+    <value>Đã Copy!</value>
+  </data>
+  <data name="Generator_Error_Copy" xml:space="preserve">
+    <value>Không thể sao chép. Vui lòng thử lại.</value>
+  </data>
+
+  <!-- Search Page -->
+  <data name="Search_PageTitle" xml:space="preserve">
+    <value>Tìm kiếm: {0}</value>
+  </data>
+  <data name="Search_HeaderTitle" xml:space="preserve">
+    <value>Kết quả tìm kiếm: "{0}"</value>
+  </data>
+  <data name="Search_FoundResults" xml:space="preserve">
+    <value>Tìm thấy {0} hashtag</value>
+  </data>
+  <data name="Search_ViewsByHashtag" xml:space="preserve">
+    <value>Lượt Xem Theo Hashtag</value>
+  </data>
+  <data name="Search_NoResults" xml:space="preserve">
+    <value>Không tìm thấy kết quả cho "{0}"</value>
+  </data>
+  <data name="Search_NoResultsHint" xml:space="preserve">
+    <value>Thử tìm kiếm với từ khóa khác hoặc kiểm tra lại chính tả.</value>
+  </data>
+  <data name="Search_GoBack" xml:space="preserve">
+    <value>Quay lại</value>
+  </data>
+  <data name="Search_LiveResult" xml:space="preserve">
+    <value>Kết quả trực tiếp từ TikTok</value>
+  </data>
+  <data name="Search_NotInDatabase" xml:space="preserve">
+    <value>Hashtag này chưa có trong database, nhưng chúng tôi đã tìm thấy trên TikTok Creative Center:</value>
+  </data>
+  <data name="Search_Posts" xml:space="preserve">
+    <value>Bài viết:</value>
+  </data>
+  <data name="Search_Source" xml:space="preserve">
+    <value>Nguồn:</value>
+  </data>
+  <data name="Search_SearchedAt" xml:space="preserve">
+    <value>Thời gian tìm:</value>
+  </data>
+  <data name="Search_AddToTracking" xml:space="preserve">
+    <value>Thêm vào danh sách theo dõi</value>
+  </data>
+  <data name="Search_WillBeTracked" xml:space="preserve">
+    <value>Hashtag này sẽ được theo dõi trong các lần crawl tiếp theo</value>
+  </data>
+  <data name="Search_Copied" xml:space="preserve">
+    <value>ĐÃ COPY!</value>
+  </data>
+
+  <!-- 404 Not Found Page -->
+  <data name="NotFound_PageTitle" xml:space="preserve">
+    <value>404 - Không Tìm Thấy Trang | TrendTag</value>
+  </data>
+  <data name="NotFound_PageDescription" xml:space="preserve">
+    <value>Trang bạn đang tìm kiếm không tồn tại. Hãy quay lại trang chủ để tìm hashtag TikTok trending.</value>
+  </data>
+  <data name="NotFound_Title" xml:space="preserve">
+    <value>Oops! Trang Không Tồn Tại</value>
+  </data>
+  <data name="NotFound_Description" xml:space="preserve">
+    <value>Trang bạn đang tìm kiếm có thể đã bị xóa, đổi tên hoặc tạm thời không khả dụng.</value>
+  </data>
+  <data name="NotFound_Suggestions" xml:space="preserve">
+    <value>Bạn có thể thử:</value>
+  </data>
+  <data name="NotFound_CheckUrl" xml:space="preserve">
+    <value>Kiểm tra lại địa chỉ URL</value>
+  </data>
+  <data name="NotFound_UseSearch" xml:space="preserve">
+    <value>Sử dụng thanh tìm kiếm để tìm hashtag</value>
+  </data>
+  <data name="NotFound_GoHome" xml:space="preserve">
+    <value>Quay lại trang chủ và bắt đầu lại</value>
+  </data>
+  <data name="NotFound_BackToHome" xml:space="preserve">
+    <value>Về Trang Chủ</value>
+  </data>
+  <data name="NotFound_SearchHashtag" xml:space="preserve">
+    <value>Tìm Hashtag</value>
+  </data>
+  <data name="NotFound_PopularPages" xml:space="preserve">
+    <value>Trang phổ biến:</value>
+  </data>
+  <data name="NotFound_TopHashtag" xml:space="preserve">
+    <value>Top Hashtag</value>
+  </data>
+  <data name="NotFound_Analysis" xml:space="preserve">
+    <value>Phân Tích</value>
+  </data>
+  <data name="NotFound_Entertainment" xml:space="preserve">
+    <value>Giải Trí</value>
+  </data>
+  <data name="NotFound_Education" xml:space="preserve">
+    <value>Giáo Dục</value>
+  </data>
+
+  <!-- Growth Analytics Page -->
+  <data name="Growth_PageTitle" xml:space="preserve">
+    <value>Phân Tích Tăng Trưởng Hashtag TikTok 7 Ngày | Growth Tracker</value>
+  </data>
+  <data name="Growth_PageDescription" xml:space="preserve">
+    <value>Theo dõi tốc độ tăng trưởng hashtag TikTok trong 7 ngày gần nhất. Phát hiện hashtag bùng nổ, trending mạnh và xu hướng tăng/giảm để tối ưu chiến lược content.</value>
+  </data>
+  <data name="Growth_PageKeywords" xml:space="preserve">
+    <value>phân tích tăng trưởng hashtag, hashtag trending nhanh, hashtag bùng nổ, growth tracker tiktok, xu hướng hashtag, hashtag đang lên, tìm hashtag viral</value>
+  </data>
+  <data name="Growth_Title" xml:space="preserve">
+    <value>Theo Dõi Tăng Trưởng</value>
+  </data>
+  <data name="Growth_Subtitle" xml:space="preserve">
+    <value>Phân tích tăng trưởng hashtag trong 7 ngày gần nhất</value>
+  </data>
+  <data name="Growth_FilterCategory" xml:space="preserve">
+    <value>Lọc theo chủ đề</value>
+  </data>
+  <data name="Growth_AllCategories" xml:space="preserve">
+    <value>Tất cả chủ đề</value>
+  </data>
+  <data name="Growth_Feature1_Title" xml:space="preserve">
+    <value>Phát Hiện Hashtag Bùng Nổ</value>
+  </data>
+  <data name="Growth_Feature1_Desc" xml:space="preserve">
+    <value>Theo dõi hashtag có tốc độ tăng trưởng nhanh nhất trong 7 ngày. Bắt kịp trend ngay từ giai đoạn đầu để tối đa hóa reach.</value>
+  </data>
+  <data name="Growth_Feature2_Title" xml:space="preserve">
+    <value>Phân Tích Xu Hướng</value>
+  </data>
+  <data name="Growth_Feature2_Desc" xml:space="preserve">
+    <value>Xem hashtag nào đang trending mạnh với lượng view tăng cao nhất. Dữ liệu cập nhật real-time từ TikTok Creative Center.</value>
+  </data>
+  <data name="Growth_Feature3_Title" xml:space="preserve">
+    <value>Tối Ưu Chiến Lược</value>
+  </data>
+  <data name="Growth_Feature3_Desc" xml:space="preserve">
+    <value>Nhận gợi ý sử dụng hashtag dựa trên tình trạng tăng trưởng. Tránh hashtag đang giảm, tập trung vào hashtag đang lên.</value>
+  </data>
+  <data name="Growth_FastestGrowing" xml:space="preserve">
+    <value>Tăng trưởng nhanh nhất (Top 10)</value>
+  </data>
+  <data name="Growth_FastestGrowingDesc" xml:space="preserve">
+    <value>Hashtag có tỷ lệ tăng trưởng cao nhất</value>
+  </data>
+  <data name="Growth_TrendingGrowth" xml:space="preserve">
+    <value>Trending mạnh nhất (Top 10)</value>
+  </data>
+  <data name="Growth_TrendingGrowthDesc" xml:space="preserve">
+    <value>Hashtag có lượng tăng lượt xem cao nhất</value>
+  </data>
+  <data name="Growth_Declining" xml:space="preserve">
+    <value>Đang giảm (Top 10)</value>
+  </data>
+  <data name="Growth_DecliningDesc" xml:space="preserve">
+    <value>Hashtag có xu hướng giảm đáng kể</value>
+  </data>
+  <data name="Growth_NoGrowthData" xml:space="preserve">
+    <value>Không có hashtag tăng trưởng trong khoảng thời gian này.</value>
+  </data>
+  <data name="Growth_NoTrendingData" xml:space="preserve">
+    <value>Không có dữ liệu trending trong khoảng thời gian này.</value>
+  </data>
+</root>

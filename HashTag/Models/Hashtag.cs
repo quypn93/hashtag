@@ -15,6 +15,12 @@ public class Hashtag
     public required string TagDisplay { get; set; }
 
     /// <summary>
+    /// Country/region code for this hashtag data (e.g., "VN", "US", "UK")
+    /// Default is "VN" for backwards compatibility
+    /// </summary>
+    public string CountryCode { get; set; } = "VN";
+
+    /// <summary>
     /// First time this hashtag was seen in any source
     /// </summary>
     public DateTime FirstSeen { get; set; }

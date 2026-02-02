@@ -9,6 +9,7 @@ public interface IBlogRepository
     Task<IEnumerable<BlogPost>> GetPostsByCategoryAsync(string categorySlug, int pageNumber = 1, int pageSize = 10);
     Task<IEnumerable<BlogPost>> GetPostsByTagAsync(string tagSlug, int pageNumber = 1, int pageSize = 10);
     Task<BlogPost?> GetPostBySlugAsync(string slug);
+    Task<BlogPost?> GetPostByEnglishSlugAsync(string slugEn);
     Task<BlogPost?> GetPostByIdAsync(int id);
     Task<int> GetTotalPublishedPostsCountAsync();
     Task<int> GetPostCountByCategoryAsync(string categorySlug);

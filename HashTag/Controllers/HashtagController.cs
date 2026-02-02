@@ -159,6 +159,10 @@ public class HashtagController : Controller
         }
     }
 
+    // Vietnamese route
+    [Route("tim-kiem")]
+    // English route
+    [Route("search")]
     [Route("Hashtag/Search")]
     public async Task<IActionResult> Search(string q, int page = 1)
     {
@@ -259,8 +263,11 @@ public class HashtagController : Controller
 
     /// <summary>
     /// Hashtag Generator page - Public facing feature
+    /// Vietnamese route: /hashtag/tao-hashtag-ai
+    /// English route: /hashtag/ai-generator
     /// </summary>
     [Route("hashtag/tao-hashtag-ai")]
+    [Route("hashtag/ai-generator")]
     public IActionResult Generator()
     {
         return View();

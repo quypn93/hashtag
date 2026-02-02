@@ -13,7 +13,8 @@ CREATE OR ALTER PROCEDURE [dbo].[sp_GetTrendingHashtags]
     @StartDate DATETIME = NULL,
     @EndDate DATETIME = NULL,
     @SortBy NVARCHAR(50) = 'BestRank', -- BestRank, TotalAppearances, LastSeen, TrendMomentum
-    @Limit INT = 100
+    @Limit INT = 100,
+    @CountryCode NVARCHAR(5) = 'VN' -- Country/region filter (VN, US, GB, AU)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -78,6 +79,7 @@ BEGIN
     LEFT JOIN HashtagCategories c ON h.CategoryId = c.Id
     WHERE
         h.IsActive = 1
+        AND h.CountryCode = @CountryCode
         AND (@DifficultyLevel IS NULL OR h.DifficultyLevel = @DifficultyLevel)
     ORDER BY
         CASE

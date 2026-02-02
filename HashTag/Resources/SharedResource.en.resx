@@ -1,0 +1,1523 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Navigation -->
+  <data name="Nav_Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Nav_AIHashtag" xml:space="preserve">
+    <value>AI Hashtag Generator</value>
+  </data>
+  <data name="Nav_Blog" xml:space="preserve">
+    <value>Blog</value>
+  </data>
+  <data name="Nav_GrowthTracking" xml:space="preserve">
+    <value>Growth Tracking</value>
+  </data>
+  <data name="Nav_Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Nav_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Nav_ManualCrawl" xml:space="preserve">
+    <value>Manual Crawl</value>
+  </data>
+  <data name="Nav_CalculateMetrics" xml:space="preserve">
+    <value>Calculate Metrics</value>
+  </data>
+  <data name="Nav_SyncLatestCounts" xml:space="preserve">
+    <value>Sync Latest Counts</value>
+  </data>
+  <data name="Nav_TrendingHashtags" xml:space="preserve">
+    <value>Trending Hashtags</value>
+  </data>
+  <data name="Nav_CrawlLogs" xml:space="preserve">
+    <value>Crawl Logs</value>
+  </data>
+  <data name="Nav_Privacy" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="Nav_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Nav_Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+
+  <!-- Home Page -->
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Find Trending TikTok Hashtags - Viral Hashtag Search Tool</value>
+  </data>
+  <data name="Home_PageDescription" xml:space="preserve">
+    <value>Free TikTok trending hashtag search tool. Find viral hashtags, hot hashtags, trending hashtags to increase views and engagement for your TikTok videos.</value>
+  </data>
+  <data name="Home_PageKeywords" xml:space="preserve">
+    <value>tiktok hashtags, trending hashtags, viral hashtags, hot tiktok hashtags, hashtag search, hashtag tool, trending hashtags, increase tiktok views</value>
+  </data>
+  <data name="Home_HeroTitle" xml:space="preserve">
+    <value>Find Trending Viral TikTok Hashtags</value>
+  </data>
+  <data name="Home_HeroSubtitle" xml:space="preserve">
+    <value>Free hashtag analysis and search tool - Real-time updates every 6 hours from TikTok</value>
+  </data>
+  <data name="Home_SearchPlaceholder" xml:space="preserve">
+    <value>Search hashtags... (e.g., travel, music, sports)</value>
+  </data>
+  <data name="Home_SearchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Home_SearchTip" xml:space="preserve">
+    <value>Try searching: "travel", "music", "fitness" or "food"</value>
+  </data>
+  <data name="Home_Feature1_Title" xml:space="preserve">
+    <value>Real-time Trending</value>
+  </data>
+  <data name="Home_Feature1_Desc" xml:space="preserve">
+    <value>Updated trending hashtags every 6 hours from reliable sources</value>
+  </data>
+  <data name="Home_Feature1_Link" xml:space="preserve">
+    <value>Track growth</value>
+  </data>
+  <data name="Home_Feature2_Title" xml:space="preserve">
+    <value>Multi-Source Data</value>
+  </data>
+  <data name="Home_Feature2_Desc" xml:space="preserve">
+    <value>Collected from TikTok and multiple platforms</value>
+  </data>
+  <data name="Home_Feature2_Link" xml:space="preserve">
+    <value>View trending hashtags</value>
+  </data>
+  <data name="Home_Feature3_Title" xml:space="preserve">
+    <value>Smart Suggestions</value>
+  </data>
+  <data name="Home_Feature3_Desc" xml:space="preserve">
+    <value>Get smart hashtag suggestions as you type keywords</value>
+  </data>
+  <data name="Home_Feature3_Link" xml:space="preserve">
+    <value>AI Hashtag Generator</value>
+  </data>
+  <data name="Home_Value1_Title" xml:space="preserve">
+    <value>Updated Every 6 Hours</value>
+  </data>
+  <data name="Home_Value1_Desc" xml:space="preserve">
+    <value>Real-time trending data from TikTok and other reliable sources</value>
+  </data>
+  <data name="Home_Value2_Title" xml:space="preserve">
+    <value>100% Free</value>
+  </data>
+  <data name="Home_Value2_Desc" xml:space="preserve">
+    <value>No account required, unlimited hashtag searches</value>
+  </data>
+  <data name="Home_Value3_Title" xml:space="preserve">
+    <value>Deep Analytics</value>
+  </data>
+  <data name="Home_Value3_Desc" xml:space="preserve">
+    <value>Competition difficulty, views, and post counts for each trending hashtag</value>
+  </data>
+  <data name="Home_Value4_Title" xml:space="preserve">
+    <value>16+ Categories</value>
+  </data>
+  <data name="Home_Value4_Desc" xml:space="preserve">
+    <value>From Education to Travel, Sports to Tech - find hashtags by industry easily</value>
+  </data>
+  <data name="Home_Top10Trending" xml:space="preserve">
+    <value>Top 10 Trending Hashtags</value>
+  </data>
+  <data name="Home_AllCategories" xml:space="preserve">
+    <value>All Categories</value>
+  </data>
+  <data name="Home_Table_Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="Home_Table_Views" xml:space="preserve">
+    <value>Views</value>
+  </data>
+  <data name="Home_Table_Posts" xml:space="preserve">
+    <value>Posts</value>
+  </data>
+  <data name="Home_Table_Difficulty" xml:space="preserve">
+    <value>Competition Level</value>
+  </data>
+  <data name="Home_Table_Rank" xml:space="preserve">
+    <value>Rank</value>
+  </data>
+  <data name="Home_Appearances" xml:space="preserve">
+    <value>appearances</value>
+  </data>
+  <data name="Home_NoHashtags" xml:space="preserve">
+    <value>No trending hashtags yet</value>
+  </data>
+  <data name="Home_LatestPosts" xml:space="preserve">
+    <value>Latest Blog Posts</value>
+  </data>
+  <data name="Home_LatestPostsDesc" xml:space="preserve">
+    <value>Discover tips, strategies and in-depth analysis about TikTok hashtags</value>
+  </data>
+  <data name="Home_ViewAllPosts" xml:space="preserve">
+    <value>View All Posts</value>
+  </data>
+  <data name="Home_MinRead" xml:space="preserve">
+    <value>min read</value>
+  </data>
+  <data name="Home_Title" xml:space="preserve">
+    <value>TrendTag - #1 TikTok Trending Hashtag Tool</value>
+  </data>
+  <data name="Home_Subtitle" xml:space="preserve">
+    <value>Discover trending TikTok hashtags. Updated every 6 hours with difficulty analysis, views, and viral predictions.</value>
+  </data>
+  <data name="Home_TopHashtags" xml:space="preserve">
+    <value>Top Trending Hashtags</value>
+  </data>
+  <data name="Home_ViewCount" xml:space="preserve">
+    <value>Views</value>
+  </data>
+  <data name="Home_PostCount" xml:space="preserve">
+    <value>Posts</value>
+  </data>
+  <data name="Home_Difficulty" xml:space="preserve">
+    <value>Difficulty</value>
+  </data>
+  <data name="Home_CopyHashtag" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Home_CopyAll" xml:space="preserve">
+    <value>Copy All</value>
+  </data>
+  <data name="Home_Copied" xml:space="preserve">
+    <value>Copied!</value>
+  </data>
+  <data name="Home_RecentBlogPosts" xml:space="preserve">
+    <value>Recent Blog Posts</value>
+  </data>
+  <data name="Home_ReadMore" xml:space="preserve">
+    <value>Read More</value>
+  </data>
+  <data name="Home_Search" xml:space="preserve">
+    <value>Search hashtags...</value>
+  </data>
+
+  <!-- Difficulty Levels -->
+  <data name="Difficulty_Easy" xml:space="preserve">
+    <value>Easy</value>
+  </data>
+  <data name="Difficulty_Medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Difficulty_Hard" xml:space="preserve">
+    <value>Hard</value>
+  </data>
+  <data name="Difficulty_VeryHard" xml:space="preserve">
+    <value>Very Hard</value>
+  </data>
+  <data name="Difficulty_Low" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="Difficulty_High" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="Difficulty_VeryHigh" xml:space="preserve">
+    <value>Very High</value>
+  </data>
+
+  <!-- Common -->
+  <data name="Common_Loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Common_Error" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
+  <data name="Common_NoResults" xml:space="preserve">
+    <value>No results found</value>
+  </data>
+  <data name="Common_ViewAll" xml:space="preserve">
+    <value>View All</value>
+  </data>
+  <data name="Common_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Common_Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Common_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+
+  <!-- Footer -->
+  <data name="Footer_Copyright" xml:space="preserve">
+    <value>© 2025 TrendTag. Built for the global TikTok community.</value>
+  </data>
+  <data name="Footer_PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="Footer_TermsOfUse" xml:space="preserve">
+    <value>Terms of Use</value>
+  </data>
+  <data name="Footer_Description" xml:space="preserve">
+    <value>The leading TikTok hashtag analysis tool. Find viral hashtags, predict views, and grow your TikTok channel effectively.</value>
+  </data>
+  <data name="Footer_Features" xml:space="preserve">
+    <value>Features</value>
+  </data>
+  <data name="Footer_Feature1" xml:space="preserve">
+    <value>Hashtag difficulty analysis</value>
+  </data>
+  <data name="Footer_Feature2" xml:space="preserve">
+    <value>View count predictions</value>
+  </data>
+  <data name="Footer_Feature3" xml:space="preserve">
+    <value>Real-time trending tracking</value>
+  </data>
+  <data name="Footer_Feature4" xml:space="preserve">
+    <value>Related hashtag suggestions</value>
+  </data>
+  <data name="Footer_Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+
+  <!-- SEO -->
+  <data name="SEO_HomeTitle" xml:space="preserve">
+    <value>TrendTag - Best Free TikTok Hashtag Generator Tool 2026</value>
+  </data>
+  <data name="SEO_HomeDescription" xml:space="preserve">
+    <value>Discover top trending TikTok hashtags with real-time analytics. Free hashtag generator with difficulty analysis, view counts, and viral predictions. Updated every 6 hours.</value>
+  </data>
+  <data name="SEO_HomeKeywords" xml:space="preserve">
+    <value>tiktok hashtag generator, trending hashtags, viral hashtags, tiktok hashtag tool, free hashtag generator, hashtag analytics</value>
+  </data>
+
+  <!-- Region Filter -->
+  <data name="Region_Global" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="Region_US" xml:space="preserve">
+    <value>United States</value>
+  </data>
+  <data name="Region_UK" xml:space="preserve">
+    <value>United Kingdom</value>
+  </data>
+  <data name="Region_VN" xml:space="preserve">
+    <value>Vietnam</value>
+  </data>
+  <data name="Region_BR" xml:space="preserve">
+    <value>Brazil</value>
+  </data>
+  <data name="Region_IN" xml:space="preserve">
+    <value>India</value>
+  </data>
+  <data name="Region_SelectRegion" xml:space="preserve">
+    <value>Select Region</value>
+  </data>
+
+  <!-- Language -->
+  <data name="Language_English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Language_Select" xml:space="preserve">
+    <value>Language</value>
+  </data>
+
+  <!-- Hashtag Page -->
+  <data name="Hashtag_PageTitle" xml:space="preserve">
+    <value>TikTok Trending Hashtags</value>
+  </data>
+  <data name="Hashtag_HeroTitle" xml:space="preserve">
+    <value>TikTok Trending Hashtags</value>
+  </data>
+  <data name="Hashtag_HeroSubtitle" xml:space="preserve">
+    <value>Discover viral hashtags, analyze difficulty and predict views for your videos</value>
+  </data>
+  <data name="Hashtag_SearchPlaceholder" xml:space="preserve">
+    <value>Search hashtags... (e.g., travel, gaming)</value>
+  </data>
+  <data name="Hashtag_SearchLabel" xml:space="preserve">
+    <value>Search hashtags</value>
+  </data>
+  <data name="Hashtag_TotalHashtags" xml:space="preserve">
+    <value>Total Hashtags</value>
+  </data>
+  <data name="Hashtag_DataSources" xml:space="preserve">
+    <value>Data Sources</value>
+  </data>
+  <data name="Hashtag_CollectedToday" xml:space="preserve">
+    <value>Collected Today</value>
+  </data>
+  <data name="Hashtag_LastUpdated" xml:space="preserve">
+    <value>Last Updated</value>
+  </data>
+  <data name="Hashtag_AdvancedFilters" xml:space="preserve">
+    <value>Advanced Filters</value>
+  </data>
+  <data name="Hashtag_StartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="Hashtag_EndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="Hashtag_MinRank" xml:space="preserve">
+    <value>Minimum Rank</value>
+  </data>
+  <data name="Hashtag_MaxRank" xml:space="preserve">
+    <value>Maximum Rank</value>
+  </data>
+  <data name="Hashtag_MinRankPlaceholder" xml:space="preserve">
+    <value>e.g., 1</value>
+  </data>
+  <data name="Hashtag_MaxRankPlaceholder" xml:space="preserve">
+    <value>e.g., 50</value>
+  </data>
+  <data name="Hashtag_SortBy" xml:space="preserve">
+    <value>Sort By</value>
+  </data>
+  <data name="Hashtag_Sort_BestRank" xml:space="preserve">
+    <value>Best Rank</value>
+  </data>
+  <data name="Hashtag_Sort_MostAppearances" xml:space="preserve">
+    <value>Most Appearances</value>
+  </data>
+  <data name="Hashtag_Sort_Latest" xml:space="preserve">
+    <value>Latest</value>
+  </data>
+  <data name="Hashtag_Sort_Momentum" xml:space="preserve">
+    <value>Strongest Growth</value>
+  </data>
+  <data name="Hashtag_ApplyFilters" xml:space="preserve">
+    <value>Apply Filters</value>
+  </data>
+  <data name="Hashtag_ClearFilters" xml:space="preserve">
+    <value>Clear Filters</value>
+  </data>
+  <data name="Hashtag_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Hashtag_Appearances" xml:space="preserve">
+    <value>Appearances</value>
+  </data>
+  <data name="Hashtag_LastSeen" xml:space="preserve">
+    <value>Last Seen</value>
+  </data>
+  <data name="Hashtag_Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Hashtag_ViewDetails" xml:space="preserve">
+    <value>View Details</value>
+  </data>
+  <data name="Hashtag_Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Hashtag_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Hashtag_PageInfo" xml:space="preserve">
+    <value>Page {0} / {1} (Total {2} hashtags)</value>
+  </data>
+  <data name="Hashtag_NoResults" xml:space="preserve">
+    <value>No hashtags found</value>
+  </data>
+  <data name="Hashtag_NoResultsHint" xml:space="preserve">
+    <value>Try adjusting the filters or wait for the next data collection.</value>
+  </data>
+  <data name="Common_NotAvailable" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+
+  <!-- Hashtag Details Page -->
+  <data name="Details_PageTitle" xml:space="preserve">
+    <value>{0} - TikTok Trending Hashtag | TrendTag</value>
+  </data>
+  <data name="Details_PageDescription" xml:space="preserve">
+    <value>Detailed analysis of hashtag {0} on TikTok. {1} views, appeared {2} times in trending. Learn how to effectively use {3} hashtags to increase views and engagement for your TikTok videos.</value>
+  </data>
+  <data name="Details_CompetitionLevel" xml:space="preserve">
+    <value>Competition Level:</value>
+  </data>
+  <data name="Details_TotalAppearances" xml:space="preserve">
+    <value>Total Appearances</value>
+  </data>
+  <data name="Details_LatestViews" xml:space="preserve">
+    <value>Latest Views</value>
+  </data>
+  <data name="Details_LatestPosts" xml:space="preserve">
+    <value>Latest Posts</value>
+  </data>
+  <data name="Details_TotalViews" xml:space="preserve">
+    <value>Total Views</value>
+  </data>
+  <data name="Details_HashtagInfo" xml:space="preserve">
+    <value>Hashtag Information</value>
+  </data>
+  <data name="Details_FirstAppearance" xml:space="preserve">
+    <value>First Appeared</value>
+  </data>
+  <data name="Details_LastAppearance" xml:space="preserve">
+    <value>Last Appeared</value>
+  </data>
+  <data name="Details_AvgViewsPerPost" xml:space="preserve">
+    <value>Avg Views/Post</value>
+  </data>
+  <data name="Details_PredictedViews" xml:space="preserve">
+    <value>Predicted Views</value>
+  </data>
+  <data name="Details_PredictedViewsHint" xml:space="preserve">
+    <value>Estimated views for your new video using this hashtag</value>
+  </data>
+  <data name="Details_RelatedHashtags" xml:space="preserve">
+    <value>Related Hashtags</value>
+  </data>
+  <data name="Details_Views" xml:space="preserve">
+    <value>views</value>
+  </data>
+  <data name="Details_NoRelatedHashtags" xml:space="preserve">
+    <value>No related hashtags found</value>
+  </data>
+  <data name="Details_TopCreators" xml:space="preserve">
+    <value>Top Creators</value>
+  </data>
+  <data name="Details_HowToUse" xml:space="preserve">
+    <value>How to Use Hashtag {0} Effectively</value>
+  </data>
+  <data name="Details_OptimizeContent" xml:space="preserve">
+    <value>Optimize Content</value>
+  </data>
+  <data name="Details_Tip1" xml:space="preserve">
+    <value>Place hashtag in video description or first comment</value>
+  </data>
+  <data name="Details_Tip2" xml:space="preserve">
+    <value>Combine 3-5 related hashtags for better reach</value>
+  </data>
+  <data name="Details_Tip3" xml:space="preserve">
+    <value>Create high-quality content relevant to the hashtag topic</value>
+  </data>
+  <data name="Details_Tip4" xml:space="preserve">
+    <value>Post during peak hours (7-10 PM) to maximize engagement</value>
+  </data>
+  <data name="Details_UsageNotes" xml:space="preserve">
+    <value>Usage Notes</value>
+  </data>
+  <data name="Details_Warning1" xml:space="preserve">
+    <value>Avoid spamming too many hashtags (don't use more than 8)</value>
+  </data>
+  <data name="Details_Warning2" xml:space="preserve">
+    <value>Ensure video content matches the hashtag meaning</value>
+  </data>
+  <data name="Details_Warning3" xml:space="preserve">
+    <value>Check competition level before using</value>
+  </data>
+  <data name="Details_Warning4" xml:space="preserve">
+    <value>Update trending hashtags regularly to stay current</value>
+  </data>
+  <data name="Details_CategoryTip" xml:space="preserve">
+    <value>Tip: This hashtag belongs to the {0} category. Combine with related hashtags in the "Related Hashtags" section to increase viral potential!</value>
+  </data>
+  <data name="Details_AnalyticsTitle" xml:space="preserve">
+    <value>Analytics &amp; Detailed Statistics</value>
+  </data>
+  <data name="Details_HotLevel" xml:space="preserve">
+    <value>Hot Level</value>
+  </data>
+  <data name="Details_VeryHot" xml:space="preserve">
+    <value>Very Hot</value>
+  </data>
+  <data name="Details_Hot" xml:space="preserve">
+    <value>Hot</value>
+  </data>
+  <data name="Details_QuiteHot" xml:space="preserve">
+    <value>Quite Hot</value>
+  </data>
+  <data name="Details_Emerging" xml:space="preserve">
+    <value>Emerging</value>
+  </data>
+  <data name="Details_AppearancesInTrending" xml:space="preserve">
+    <value>Appeared {0} times in trending</value>
+  </data>
+  <data name="Details_Competition" xml:space="preserve">
+    <value>Competition</value>
+  </data>
+  <data name="Details_CompetitionLow" xml:space="preserve">
+    <value>Low - Easy to rank</value>
+  </data>
+  <data name="Details_CompetitionMedium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Details_CompetitionHigh" xml:space="preserve">
+    <value>High - Hard to rank</value>
+  </data>
+  <data name="Details_CompetitionVeryHigh" xml:space="preserve">
+    <value>Very High</value>
+  </data>
+  <data name="Details_CompetitionUnknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="Details_PostsUsing" xml:space="preserve">
+    <value>{0} posts using this hashtag</value>
+  </data>
+  <data name="Details_Performance" xml:space="preserve">
+    <value>Performance</value>
+  </data>
+  <data name="Details_PerformanceExcellent" xml:space="preserve">
+    <value>Excellent</value>
+  </data>
+  <data name="Details_PerformanceGood" xml:space="preserve">
+    <value>Good</value>
+  </data>
+  <data name="Details_PerformanceFair" xml:space="preserve">
+    <value>Fair</value>
+  </data>
+  <data name="Details_PerformanceAverage" xml:space="preserve">
+    <value>Average</value>
+  </data>
+  <data name="Details_CollectingData" xml:space="preserve">
+    <value>Collecting data</value>
+  </data>
+  <data name="Details_AvgViews" xml:space="preserve">
+    <value>Average {0} views/post</value>
+  </data>
+  <data name="Details_Status" xml:space="preserve">
+    <value>Status:</value>
+  </data>
+  <data name="Details_StillHot" xml:space="preserve">
+    <value>This hashtag is still hot</value>
+  </data>
+  <data name="Details_LastSeenToday" xml:space="preserve">
+    <value>last seen today</value>
+  </data>
+  <data name="Details_LastSeenDaysAgo" xml:space="preserve">
+    <value>last seen {0} days ago</value>
+  </data>
+  <data name="Details_CooledDown" xml:space="preserve">
+    <value>This hashtag has cooled down</value>
+  </data>
+  <data name="Details_NotInTrendingDays" xml:space="preserve">
+    <value>not in trending for {0} days</value>
+  </data>
+  <data name="Details_HotDuration" xml:space="preserve">
+    <value>Hot duration: {0} days</value>
+  </data>
+  <data name="Details_FAQTitle" xml:space="preserve">
+    <value>Frequently Asked Questions</value>
+  </data>
+  <data name="Details_FAQ1_Question" xml:space="preserve">
+    <value>How does hashtag {0} help my video go viral?</value>
+  </data>
+  <data name="Details_FAQ1_Answer" xml:space="preserve">
+    <value>Using hashtag {0} helps your video appear in feeds of people interested in this topic.</value>
+  </data>
+  <data name="Details_FAQ1_ViewPrediction" xml:space="preserve">
+    <value>Based on our data, videos using this hashtag can achieve {0} to {1} views.</value>
+  </data>
+  <data name="Details_FAQ1_Conclusion" xml:space="preserve">
+    <value>Combined with quality content and proper timing, this increases your chance of trending.</value>
+  </data>
+  <data name="Details_FAQ2_Question" xml:space="preserve">
+    <value>Which hashtags should I combine with {0}?</value>
+  </data>
+  <data name="Details_FAQ2_Answer_WithRelated" xml:space="preserve">
+    <value>You should combine with related hashtags such as: {0}. Using 3-5 related hashtags helps increase reach and target the right audience.</value>
+  </data>
+  <data name="Details_FAQ2_Answer_NoRelated" xml:space="preserve">
+    <value>You should find hashtags in the same category to combine. Using 3-5 related hashtags helps increase your video's reach.</value>
+  </data>
+  <data name="Details_FAQ3_Question" xml:space="preserve">
+    <value>When is the best time to post videos with this hashtag?</value>
+  </data>
+  <data name="Details_FAQ3_Answer" xml:space="preserve">
+    <value>The best time to post TikTok videos is 7-10 PM (prime time) and 12-2 PM (lunch hours).</value>
+  </data>
+  <data name="Details_FAQ3_WeekendTip" xml:space="preserve">
+    <value>For this hashtag, you should post on weekends to maximize engagement.</value>
+  </data>
+  <data name="Details_FAQ3_EntertainmentTip" xml:space="preserve">
+    <value>For entertainment topics, evenings and weekends typically have the highest engagement.</value>
+  </data>
+  <data name="Details_FAQ3_Conclusion" xml:space="preserve">
+    <value>Monitor your audience's feedback to find the best time for your target audience.</value>
+  </data>
+  <data name="Details_FAQ4_Question" xml:space="preserve">
+    <value>Is hashtag {0} suitable for beginners?</value>
+  </data>
+  <data name="Details_FAQ4_Answer_Yes" xml:space="preserve">
+    <value>Yes! This hashtag has {0} competition level, very suitable for beginners. You have a high chance of getting your video seen by many.</value>
+  </data>
+  <data name="Details_FAQ4_Answer_Caution" xml:space="preserve">
+    <value>Use with caution. This hashtag has high competition, better suited for experienced creators with established followers. Beginners should combine with lower competition hashtags to increase reach.</value>
+  </data>
+  <data name="Details_FAQ4_Answer_General" xml:space="preserve">
+    <value>This hashtag is suitable for everyone. Try it and monitor performance to see if it fits your content.</value>
+  </data>
+  <data name="Details_HistoryTitle" xml:space="preserve">
+    <value>Ranking History (Last 30 Days)</value>
+  </data>
+  <data name="Details_HistoryDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Details_HistorySource" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Details_HistoryRank" xml:space="preserve">
+    <value>Rank</value>
+  </data>
+  <data name="Details_NoHistory" xml:space="preserve">
+    <value>No history data available</value>
+  </data>
+  <data name="Details_RelatedKeywords" xml:space="preserve">
+    <value>Related Keywords</value>
+  </data>
+  <data name="Details_BackToHome" xml:space="preserve">
+    <value>Back to Home</value>
+  </data>
+  <data name="Details_BackToSearch" xml:space="preserve">
+    <value>Back to Search Results</value>
+  </data>
+  <data name="Details_Back" xml:space="preserve">
+    <value>Go Back</value>
+  </data>
+  <data name="Details_NoCreatorsInfo" xml:space="preserve">
+    <value>No creators information available</value>
+  </data>
+  <data name="Details_CreatorsLoadError" xml:space="preserve">
+    <value>Error loading creators information</value>
+  </data>
+  <data name="Details_TopCreator" xml:space="preserve">
+    <value>Top {0} Creator</value>
+  </data>
+  <data name="Details_Many" xml:space="preserve">
+    <value>many</value>
+  </data>
+
+  <!-- Blog Page -->
+  <data name="Blog_PageTitle" xml:space="preserve">
+    <value>Blog</value>
+  </data>
+  <data name="Blog_HeaderTitle" xml:space="preserve">
+    <value>TrendTag Blog</value>
+  </data>
+  <data name="Blog_HeaderSubtitle" xml:space="preserve">
+    <value>Tips, strategies and in-depth analysis about trending TikTok hashtags</value>
+  </data>
+  <data name="Blog_Minutes" xml:space="preserve">
+    <value>min</value>
+  </data>
+  <data name="Blog_Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Blog_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Blog_NoPosts" xml:space="preserve">
+    <value>No posts yet</value>
+  </data>
+  <data name="Blog_NoPostsHint" xml:space="preserve">
+    <value>Check back later for the latest articles!</value>
+  </data>
+  <data name="Blog_BackToHome" xml:space="preserve">
+    <value>Back to Home</value>
+  </data>
+  <data name="Blog_Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="Blog_PopularTags" xml:space="preserve">
+    <value>Popular Tags</value>
+  </data>
+  <data name="Blog_RecentPosts" xml:space="preserve">
+    <value>Recent Posts</value>
+  </data>
+  <data name="Blog_FindTrending" xml:space="preserve">
+    <value>Find Trending Hashtags</value>
+  </data>
+  <data name="Blog_FindTrendingDesc" xml:space="preserve">
+    <value>Top TikTok hashtags updated every 6 hours</value>
+  </data>
+  <data name="Blog_MinuteRead" xml:space="preserve">
+    <value>min read</value>
+  </data>
+  <data name="Blog_ViewCount" xml:space="preserve">
+    <value>views</value>
+  </data>
+  <data name="Blog_UsefulTools" xml:space="preserve">
+    <value>Useful Tools for TikTokers</value>
+  </data>
+  <data name="Blog_AIHashtag" xml:space="preserve">
+    <value>AI Hashtag Generator</value>
+  </data>
+  <data name="Blog_AIHashtagDesc" xml:space="preserve">
+    <value>Smart hashtag suggestions</value>
+  </data>
+  <data name="Blog_TrendingHashtag" xml:space="preserve">
+    <value>Trending Hashtags</value>
+  </data>
+  <data name="Blog_TrendingHashtagDesc" xml:space="preserve">
+    <value>Top trending hashtags</value>
+  </data>
+  <data name="Blog_GrowthTracking" xml:space="preserve">
+    <value>Growth Tracking</value>
+  </data>
+  <data name="Blog_GrowthTrackingDesc" xml:space="preserve">
+    <value>Trend analysis</value>
+  </data>
+  <data name="Blog_SharePost" xml:space="preserve">
+    <value>Share this post:</value>
+  </data>
+  <data name="Blog_RelatedPosts" xml:space="preserve">
+    <value>Related Posts</value>
+  </data>
+  <data name="Blog_ExploreMore" xml:space="preserve">
+    <value>Explore More</value>
+  </data>
+  <data name="Blog_ExploreMoreDesc" xml:space="preserve">
+    <value>View all articles about trending TikTok hashtags</value>
+  </data>
+  <data name="Blog_BackToBlog" xml:space="preserve">
+    <value>Back to Blog</value>
+  </data>
+  <data name="Blog_DiscoverTrending" xml:space="preserve">
+    <value>Discover top trending TikTok hashtags now</value>
+  </data>
+
+  <!-- Privacy Page -->
+  <data name="Privacy_Title" xml:space="preserve">
+    <value>Privacy Policy - TrendTag</value>
+  </data>
+  <data name="Privacy_Description" xml:space="preserve">
+    <value>TrendTag privacy policy. We are committed to protecting your privacy and do not collect personal information from users.</value>
+  </data>
+  <data name="Privacy_PageTitle" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="Privacy_Intro" xml:space="preserve">
+    <value>TrendTag is committed to protecting the privacy and personal information of users.</value>
+  </data>
+  <data name="Privacy_InformationCollected" xml:space="preserve">
+    <value>Information Collected</value>
+  </data>
+  <data name="Privacy_InformationCollectedText" xml:space="preserve">
+    <value>TrendTag is a public hashtag analytics tool. We do NOT collect any personal information from users.</value>
+  </data>
+  <data name="Privacy_NoAccountRequired" xml:space="preserve">
+    <value>No account registration required</value>
+  </data>
+  <data name="Privacy_NoSearchHistory" xml:space="preserve">
+    <value>No personal search history stored</value>
+  </data>
+  <data name="Privacy_NoEmailPhone" xml:space="preserve">
+    <value>No email addresses or phone numbers collected</value>
+  </data>
+  <data name="Privacy_PublicData" xml:space="preserve">
+    <value>Public Data</value>
+  </data>
+  <data name="Privacy_PublicDataText" xml:space="preserve">
+    <value>All hashtag data displayed on TrendTag is public information collected from:</value>
+  </data>
+  <data name="Privacy_PublicDataSource1" xml:space="preserve">
+    <value>TikTok Creative Center</value>
+  </data>
+  <data name="Privacy_PublicDataSource2" xml:space="preserve">
+    <value>Google Trends</value>
+  </data>
+  <data name="Privacy_PublicDataSource3" xml:space="preserve">
+    <value>Other public analytics platforms</value>
+  </data>
+  <data name="Privacy_CookiesSession" xml:space="preserve">
+    <value>Cookies &amp; Sessions</value>
+  </data>
+  <data name="Privacy_CookiesText" xml:space="preserve">
+    <value>The website uses cookies and sessions to ensure the best user experience:</value>
+  </data>
+  <data name="Privacy_SessionCookies" xml:space="preserve">
+    <value>Stores temporary session information (automatically deleted when browser closes)</value>
+  </data>
+  <data name="Privacy_PreferenceCookies" xml:space="preserve">
+    <value>Remembers your display settings (theme, filters)</value>
+  </data>
+  <data name="Privacy_NoTracking" xml:space="preserve">
+    <value>We do NOT use cookies to track personal behavior</value>
+  </data>
+  <data name="Privacy_CookiesNote" xml:space="preserve">
+    <value>These cookies do not contain personally identifiable information and are securely encrypted.</value>
+  </data>
+  <data name="Privacy_Security" xml:space="preserve">
+    <value>Security</value>
+  </data>
+  <data name="Privacy_SecurityText" xml:space="preserve">
+    <value>We use standard security measures to protect the website and public data. However, since we do not collect personal information, privacy risks are minimized.</value>
+  </data>
+  <data name="Privacy_PolicyUpdates" xml:space="preserve">
+    <value>Policy Updates</value>
+  </data>
+  <data name="Privacy_PolicyUpdatesText" xml:space="preserve">
+    <value>This privacy policy may be updated from time to time. Any changes will be announced on this page.</value>
+  </data>
+  <data name="Privacy_Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Privacy_ContactText" xml:space="preserve">
+    <value>If you have any questions about this privacy policy, please contact:</value>
+  </data>
+  <data name="Privacy_LastUpdated" xml:space="preserve">
+    <value>Last updated:</value>
+  </data>
+  <data name="Privacy_BackToHome" xml:space="preserve">
+    <value>Back to Home</value>
+  </data>
+
+  <!-- How to Use Section -->
+  <data name="Home_HowToUseTitle" xml:space="preserve">
+    <value>How to Use TrendTag Effectively</value>
+  </data>
+  <data name="Home_HowToUseSubtitle" xml:space="preserve">
+    <value>3 simple steps to find trending hashtags that match your content</value>
+  </data>
+  <data name="Home_Step1_Title" xml:space="preserve">
+    <value>Choose a Topic</value>
+  </data>
+  <data name="Home_Step1_Desc" xml:space="preserve">
+    <value>Filter hashtags by topic that matches your content: Education, Travel, Fashion, Technology, etc. There are 16+ topics to choose from.</value>
+  </data>
+  <data name="Home_Step2_Title" xml:space="preserve">
+    <value>Analyze Hashtags</value>
+  </data>
+  <data name="Home_Step2_Desc" xml:space="preserve">
+    <value>View the number of views, posts, and competition level of each hashtag. Choose hashtags with Low or Medium competition to go viral easier.</value>
+  </data>
+  <data name="Home_Step3_Title" xml:space="preserve">
+    <value>Copy &amp; Post Video</value>
+  </data>
+  <data name="Home_Step3_Desc" xml:space="preserve">
+    <value>Click on a hashtag to view details and copy. Use 3-5 trending hashtags combined with 2-3 niche hashtags to optimize reach and engagement.</value>
+  </data>
+  <data name="Home_ProTip_Title" xml:space="preserve">
+    <value>Pro Tip:</value>
+  </data>
+  <data name="Home_ProTip_Desc" xml:space="preserve">
+    <value>Combine trending hashtags with Low competition with your niche hashtags to make videos easier to get on FYP. Example: #travel (trending, high competition) + #dalat2025 (niche, low competition) = Increased chance to go viral!</value>
+  </data>
+
+  <!-- FAQ Section -->
+  <data name="Home_FAQTitle" xml:space="preserve">
+    <value>Frequently Asked Questions (FAQ)</value>
+  </data>
+  <data name="Home_FAQSubtitle" xml:space="preserve">
+    <value>Everything you need to know about TikTok trending hashtags and how to use TrendTag</value>
+  </data>
+  <data name="Home_FAQ1_Question" xml:space="preserve">
+    <value>What are TikTok trending hashtags?</value>
+  </data>
+  <data name="Home_FAQ1_Answer" xml:space="preserve">
+    <value>TikTok trending hashtags are hashtags that are being used the most on TikTok at a specific time. Using trending hashtags helps your video reach more viewers, increase engagement, and have a higher chance of appearing on the For You Page (FYP). TrendTag updates the trending hashtag list every 6 hours to ensure you always have the latest data.</value>
+  </data>
+  <data name="Home_FAQ2_Question" xml:space="preserve">
+    <value>How to choose TikTok hashtags most effectively?</value>
+  </data>
+  <data name="Home_FAQ2_Answer" xml:space="preserve">
+    <value>To choose effective hashtags, combine 3-5 trending hashtags with Low or Medium competition with 2-3 niche hashtags related to your content. For example: If you make a video about traveling to Dalat, combine #travel (trending, high competition) with #dalat2025 (niche, low competition). This strategy helps increase viral chances in both broad and targeted audiences.</value>
+  </data>
+  <data name="Home_FAQ3_Question" xml:space="preserve">
+    <value>How often does TrendTag update hashtag data?</value>
+  </data>
+  <data name="Home_FAQ3_Answer" xml:space="preserve">
+    <value>TrendTag automatically updates hashtag data every 6 hours from trusted sources like TikTok Creative Center and others. This ensures you always have the latest and most accurate trending hashtag list to optimize your videos.</value>
+  </data>
+  <data name="Home_FAQ4_Question" xml:space="preserve">
+    <value>What is hashtag competition level?</value>
+  </data>
+  <data name="Home_FAQ4_Answer" xml:space="preserve">
+    <value>Competition level indicates how difficult it is for your video to stand out when using that hashtag. TrendTag classifies into 4 levels:</value>
+  </data>
+  <data name="Home_FAQ4_Level1" xml:space="preserve">
+    <value>Low: Easy to go viral, few users → Suitable for new creators</value>
+  </data>
+  <data name="Home_FAQ4_Level2" xml:space="preserve">
+    <value>Medium: Good chance with quality content</value>
+  </data>
+  <data name="Home_FAQ4_Level3" xml:space="preserve">
+    <value>High: Hard to go viral, many users → Needs excellent content</value>
+  </data>
+  <data name="Home_FAQ4_Level4" xml:space="preserve">
+    <value>Very High: Extremely competitive → Only suitable for large creators</value>
+  </data>
+  <data name="Home_FAQ5_Question" xml:space="preserve">
+    <value>Should I use viral hashtags with high view counts?</value>
+  </data>
+  <data name="Home_FAQ5_Answer" xml:space="preserve">
+    <value>Not entirely. Viral hashtags with high view counts usually have Very High competition, making your video likely to "sink" among millions of other videos. Instead, choose hashtags with moderate views (100K-5M) and Low-Medium competition to increase FYP chances. TrendTag displays both view counts and competition levels to help you make smart decisions.</value>
+  </data>
+  <data name="Home_FAQ6_Question" xml:space="preserve">
+    <value>Is TrendTag free?</value>
+  </data>
+  <data name="Home_FAQ6_Answer" xml:space="preserve">
+    <value>100% free! TrendTag does not require account registration, has no limits on hashtag lookups, and has no hidden fees. All features for hashtag analysis, viewing trends, and tracking competition levels are completely free for the TikTok creator community.</value>
+  </data>
+  <data name="Home_FAQ7_Question" xml:space="preserve">
+    <value>How to find hashtags by specific topic?</value>
+  </data>
+  <data name="Home_FAQ7_Answer" xml:space="preserve">
+    <value>TrendTag provides 16+ hashtag topics for easy filtering and searching. Simply select a topic from the dropdown at the top of the page (e.g., Education, Travel, Fashion, Technology, etc.) and the system will automatically display the top 10 trending hashtags in that topic. You can also use the search bar to find specific hashtags.</value>
+  </data>
+  <data name="Home_FAQ8_Question" xml:space="preserve">
+    <value>How many hashtags should I use in a TikTok video?</value>
+  </data>
+  <data name="Home_FAQ8_Answer" xml:space="preserve">
+    <value>TikTok recommends using 5-8 hashtags per video. The most effective formula is:</value>
+  </data>
+  <data name="Home_FAQ8_Tip1" xml:space="preserve">
+    <value>3-5 trending hashtags (Low-Medium competition) to increase reach</value>
+  </data>
+  <data name="Home_FAQ8_Tip2" xml:space="preserve">
+    <value>2-3 niche hashtags (directly related to content) to target the right audience</value>
+  </data>
+  <data name="Home_FAQ8_Warning" xml:space="preserve">
+    <value>Avoid using too many hashtags (>10) as it can reduce effectiveness and look spammy.</value>
+  </data>
+  <data name="Home_FAQ9_Question" xml:space="preserve">
+    <value>Do trending hashtags change over time?</value>
+  </data>
+  <data name="Home_FAQ9_Answer" xml:space="preserve">
+    <value>Yes, trending hashtags change constantly based on trends and events. That's why TrendTag updates every 6 hours. You should check the trending list before posting videos to ensure you're using the latest hashtags.</value>
+  </data>
+  <data name="Home_FAQ10_Question" xml:space="preserve">
+    <value>Does TrendTag support hashtags for other countries?</value>
+  </data>
+  <data name="Home_FAQ10_Answer" xml:space="preserve">
+    <value>Currently, TrendTag focuses on the Vietnamese market with data from TikTok Creative Center. We are developing to support additional countries in the future.</value>
+  </data>
+  <data name="Home_FAQ11_Question" xml:space="preserve">
+    <value>Do trending hashtags help increase followers?</value>
+  </data>
+  <data name="Home_FAQ11_Answer" xml:space="preserve">
+    <value>Yes, but indirectly. Trending hashtags help your video reach more viewers (increasing reach and impressions). When videos have high views and engagement, TikTok's algorithm will push the video to a wider For You Page (FYP), thereby increasing follow opportunities. However, the most important factor is still content quality - hashtags are just supporting tools.</value>
+  </data>
+  <data name="Home_FAQ12_Question" xml:space="preserve">
+    <value>Should I use Vietnamese or English hashtags?</value>
+  </data>
+  <data name="Home_FAQ12_Answer" xml:space="preserve">
+    <value>It depends on your target audience:</value>
+  </data>
+  <data name="Home_FAQ12_Vietnamese" xml:space="preserve">
+    <value>Vietnamese hashtags: Suitable if targeting Vietnamese audiences (e.g., #dulich, #giaoduc, #amthuc)</value>
+  </data>
+  <data name="Home_FAQ12_English" xml:space="preserve">
+    <value>English hashtags: Suitable if targeting international audiences (e.g., #travel, #education, #food)</value>
+  </data>
+  <data name="Home_FAQ12_Tip" xml:space="preserve">
+    <value>The best strategy is to combine both: 3-4 Vietnamese hashtags + 2-3 English hashtags to maximize reach both domestically and internationally.</value>
+  </data>
+  <data name="Home_FAQ13_Question" xml:space="preserve">
+    <value>How do I know which hashtag fits my content?</value>
+  </data>
+  <data name="Home_FAQ13_Answer" xml:space="preserve">
+    <value>TrendTag helps you easily find suitable hashtags in 3 steps:</value>
+  </data>
+  <data name="Home_FAQ13_Step1" xml:space="preserve">
+    <value>Choose a topic: Filter hashtags by 16+ topics (Education, Travel, Fashion, etc.)</value>
+  </data>
+  <data name="Home_FAQ13_Step2" xml:space="preserve">
+    <value>Check competition level: Choose hashtags with Low-Medium difficulty</value>
+  </data>
+  <data name="Home_FAQ13_Step3" xml:space="preserve">
+    <value>Check view count: Choose hashtags with 100K-5M views for optimal viral rate</value>
+  </data>
+  <data name="Home_FAQ13_Tip" xml:space="preserve">
+    <value>You can also use the search bar to find specific hashtags and view detailed analysis.</value>
+  </data>
+  <data name="Home_FAQ14_Question" xml:space="preserve">
+    <value>Should I use the same hashtag set for every video?</value>
+  </data>
+  <data name="Home_FAQ14_Answer" xml:space="preserve">
+    <value>Not recommended! Each video should have its own hashtag set suitable for specific content. Using the same hashtag set for every video can:</value>
+  </data>
+  <data name="Home_FAQ14_Problem1" xml:space="preserve">
+    <value>Reduce reach effectiveness (TikTok algorithm detects repeating patterns)</value>
+  </data>
+  <data name="Home_FAQ14_Problem2" xml:space="preserve">
+    <value>Not be optimized for different content types</value>
+  </data>
+  <data name="Home_FAQ14_Problem3" xml:space="preserve">
+    <value>Miss opportunities from new trending hashtags</value>
+  </data>
+  <data name="Home_FAQ14_Tip" xml:space="preserve">
+    <value>Take 2-3 minutes to choose suitable hashtags for each video with TrendTag!</value>
+  </data>
+  <data name="Home_FAQ15_Question" xml:space="preserve">
+    <value>Does TrendTag support platforms other than TikTok?</value>
+  </data>
+  <data name="Home_FAQ15_Answer" xml:space="preserve">
+    <value>Currently, TrendTag focuses 100% on TikTok to provide the most accurate and in-depth data for TikTok creators. However, many trending hashtags on TikTok also work well on Instagram Reels and YouTube Shorts. In the future, we plan to expand to other short video platforms based on community needs.</value>
+  </data>
+  <data name="Home_FAQ_CTA_Title" xml:space="preserve">
+    <value>Still have questions?</value>
+  </data>
+  <data name="Home_FAQ_CTA_Desc" xml:space="preserve">
+    <value>Explore the top 10 trending hashtags today and start increasing views for your videos!</value>
+  </data>
+  <data name="Home_FAQ_CTA_Link" xml:space="preserve">
+    <value>View Top 10 Trending Hashtags →</value>
+  </data>
+
+  <!-- SEO Content Section -->
+  <data name="SEO_MainTitle" xml:space="preserve">
+    <value>TrendTag - The Leading TikTok Trending Hashtag Finder Tool</value>
+  </data>
+  <data name="SEO_WhatIsHashtag" xml:space="preserve">
+    <value>What Are TikTok Trending Hashtags?</value>
+  </data>
+  <data name="SEO_WhatIsHashtag_Text1" xml:space="preserve">
+    <value>TikTok trending hashtags</value>
+  </data>
+  <data name="SEO_WhatIsHashtag_Text2" xml:space="preserve">
+    <value>are the most popular hashtags being used on TikTok at any given time. These hashtags help your videos reach more viewers, increase engagement, and have a better chance of appearing on the For You Page (FYP). TrendTag updates</value>
+  </data>
+  <data name="SEO_WhatIsHashtag_Text3" xml:space="preserve">
+    <value>TikTok hashtags</value>
+  </data>
+  <data name="SEO_WhatIsHashtag_Text4" xml:space="preserve">
+    <value>every 6 hours so you can always stay on top of the latest trends.</value>
+  </data>
+  <data name="SEO_WhyUseTrendTag" xml:space="preserve">
+    <value>Why Use TrendTag?</value>
+  </data>
+  <data name="SEO_Benefit1_Title" xml:space="preserve">
+    <value>Real-time data:</value>
+  </data>
+  <data name="SEO_Benefit1_Desc" xml:space="preserve">
+    <value>Updated every 6 hours from TikTok</value>
+  </data>
+  <data name="SEO_Benefit2_Title" xml:space="preserve">
+    <value>In-depth analytics:</value>
+  </data>
+  <data name="SEO_Benefit2_Desc" xml:space="preserve">
+    <value>View competition difficulty, views, and post count</value>
+  </data>
+  <data name="SEO_Benefit3_Title" xml:space="preserve">
+    <value>Track trends:</value>
+  </data>
+  <data name="SEO_Benefit3_Desc" xml:space="preserve">
+    <value>Know which hashtags are rising and which are declining</value>
+  </data>
+  <data name="SEO_Benefit4_Title" xml:space="preserve">
+    <value>Category sorting:</value>
+  </data>
+  <data name="SEO_Benefit4_Desc" xml:space="preserve">
+    <value>16+ topics from Education to Entertainment</value>
+  </data>
+  <data name="SEO_Benefit5_Title" xml:space="preserve">
+    <value>Completely free:</value>
+  </data>
+  <data name="SEO_Benefit5_Desc" xml:space="preserve">
+    <value>Unlimited searches, no registration required</value>
+  </data>
+  <data name="SEO_Benefit6_Title" xml:space="preserve">
+    <value>Easy to use:</value>
+  </data>
+  <data name="SEO_Benefit6_Desc" xml:space="preserve">
+    <value>Simple interface, quick search</value>
+  </data>
+  <data name="SEO_HowToChoose" xml:space="preserve">
+    <value>How to Choose Effective TikTok Hashtags</value>
+  </data>
+  <data name="SEO_HowToChoose_Intro" xml:space="preserve">
+    <value>To optimize your TikTok videos and</value>
+  </data>
+  <data name="SEO_HowToChoose_IntroStrong" xml:space="preserve">
+    <value>increase views effectively</value>
+  </data>
+  <data name="SEO_HowToChoose_IntroEnd" xml:space="preserve">
+    <value>, you should combine:</value>
+  </data>
+  <data name="SEO_HowToChoose_Step1" xml:space="preserve">
+    <value>2-3 trending hashtags:</value>
+  </data>
+  <data name="SEO_HowToChoose_Step1_Desc" xml:space="preserve">
+    <value>Hot hashtags with high view count (high competition)</value>
+  </data>
+  <data name="SEO_HowToChoose_Step2" xml:space="preserve">
+    <value>3-4 niche hashtags:</value>
+  </data>
+  <data name="SEO_HowToChoose_Step2_Desc" xml:space="preserve">
+    <value>Hashtags related to your specific video content</value>
+  </data>
+  <data name="SEO_HowToChoose_Step3" xml:space="preserve">
+    <value>1-2 brand hashtags:</value>
+  </data>
+  <data name="SEO_HowToChoose_Step3_Desc" xml:space="preserve">
+    <value>Your personal or brand hashtags</value>
+  </data>
+  <data name="SEO_ProTip" xml:space="preserve">
+    <value>Tip:</value>
+  </data>
+  <data name="SEO_ProTip_Text" xml:space="preserve">
+    <value>Choose hashtags with "Low" or "Medium" competition difficulty if your channel is still small to make it easier to reach the top.</value>
+  </data>
+  <data name="SEO_PopularCategories" xml:space="preserve">
+    <value>Most Popular Hashtag Categories</value>
+  </data>
+  <data name="SEO_Category_Education" xml:space="preserve">
+    <value>Trending Education Hashtags</value>
+  </data>
+  <data name="SEO_Category_Entertainment" xml:space="preserve">
+    <value>News &amp; Entertainment Hashtags</value>
+  </data>
+  <data name="SEO_Category_Fashion" xml:space="preserve">
+    <value>Fashion &amp; Accessories Hashtags</value>
+  </data>
+  <data name="SEO_Category_Beauty" xml:space="preserve">
+    <value>Beauty Hashtags</value>
+  </data>
+  <data name="SEO_Category_Food" xml:space="preserve">
+    <value>Food &amp; Beverage Hashtags</value>
+  </data>
+  <data name="SEO_Category_Travel" xml:space="preserve">
+    <value>Trending Travel Hashtags</value>
+  </data>
+  <data name="SEO_Category_Sports" xml:space="preserve">
+    <value>Sports &amp; Outdoor Hashtags</value>
+  </data>
+  <data name="SEO_Category_Tech" xml:space="preserve">
+    <value>Tech &amp; Electronics Hashtags</value>
+  </data>
+  <data name="SEO_Category_Vehicle" xml:space="preserve">
+    <value>Vehicle &amp; Transportation Hashtags</value>
+  </data>
+  <data name="SEO_Category_Gaming" xml:space="preserve">
+    <value>Gaming &amp; Games Hashtags</value>
+  </data>
+  <data name="SEO_CTA_Title" xml:space="preserve">
+    <value>Get started now:</value>
+  </data>
+  <data name="SEO_CTA_Text" xml:space="preserve">
+    <value>Use the search box above to find hashtags suitable for your content, or select a category from the dropdown to view the Top 10 trending hashtags in that industry.</value>
+  </data>
+
+  <!-- Generator Page -->
+  <data name="Generator_Title" xml:space="preserve">
+    <value>Smart Hashtag Generator</value>
+  </data>
+  <data name="Generator_Header" xml:space="preserve">
+    <value>Smart Hashtag Generator with AI</value>
+  </data>
+  <data name="Generator_Subtitle" xml:space="preserve">
+    <value>AI technology helps you find viral hashtags for TikTok videos</value>
+  </data>
+  <data name="Generator_Free" xml:space="preserve">
+    <value>Free:</value>
+  </data>
+  <data name="Generator_DailyLimit" xml:space="preserve">
+    <value>hashtag generations per day</value>
+  </data>
+  <data name="Generator_UpgradePro" xml:space="preserve">
+    <value>Upgrade to Pro</value>
+  </data>
+  <data name="Generator_DescribeVideo" xml:space="preserve">
+    <value>Describe your video</value>
+  </data>
+  <data name="Generator_DescribeHint" xml:space="preserve">
+    <value>Describe your video content in as much detail as possible for the most accurate AI hashtag suggestions.</value>
+  </data>
+  <data name="Generator_Placeholder" xml:space="preserve">
+    <value>E.g.: Tutorial video on making Vietnamese bread at home, fragrant and crispy, suitable for beginners...</value>
+  </data>
+  <data name="Generator_MinChars" xml:space="preserve">
+    <value>Minimum 10 characters</value>
+  </data>
+  <data name="Generator_CreateNow" xml:space="preserve">
+    <value>Generate Hashtags Now</value>
+  </data>
+  <data name="Generator_Analyzing" xml:space="preserve">
+    <value>AI is analyzing and generating hashtags for you...</value>
+  </data>
+  <data name="Generator_Strategy" xml:space="preserve">
+    <value>Hashtag Strategy</value>
+  </data>
+  <data name="Generator_Trending" xml:space="preserve">
+    <value>Trending</value>
+  </data>
+  <data name="Generator_TrendingDesc" xml:space="preserve">
+    <value>Viral hashtags with wide reach but high competition</value>
+  </data>
+  <data name="Generator_Niche" xml:space="preserve">
+    <value>Niche</value>
+  </data>
+  <data name="Generator_NicheDesc" xml:space="preserve">
+    <value>Industry-specific hashtags balancing reach and competition</value>
+  </data>
+  <data name="Generator_UltraNiche" xml:space="preserve">
+    <value>Ultra-Niche</value>
+  </data>
+  <data name="Generator_UltraNicheDesc" xml:space="preserve">
+    <value>Highly specialized hashtags to stand out in small communities</value>
+  </data>
+  <data name="Generator_CopyHashtags" xml:space="preserve">
+    <value>Copy hashtags</value>
+  </data>
+  <data name="Generator_SelectedCount" xml:space="preserve">
+    <value>hashtags selected</value>
+  </data>
+  <data name="Generator_CopyAll" xml:space="preserve">
+    <value>Copy All</value>
+  </data>
+  <data name="Generator_Regenerate" xml:space="preserve">
+    <value>Regenerate</value>
+  </data>
+  <data name="Generator_ClickToSelect" xml:space="preserve">
+    <value>Click hashtag to select/deselect</value>
+  </data>
+  <data name="Generator_Recommend" xml:space="preserve">
+    <value>Recommended: 5-7 hashtags/video</value>
+  </data>
+  <data name="Generator_HowToUse" xml:space="preserve">
+    <value>How to use effectively</value>
+  </data>
+  <data name="Generator_Tip1" xml:space="preserve">
+    <value>Describe video content in detail (50-200 words)</value>
+  </data>
+  <data name="Generator_Tip2" xml:space="preserve">
+    <value>Mention topic, audience, location</value>
+  </data>
+  <data name="Generator_Tip3" xml:space="preserve">
+    <value>Use 5-7 hashtags/video for optimization</value>
+  </data>
+  <data name="Generator_Tip4" xml:space="preserve">
+    <value>Mix trending and niche hashtags</value>
+  </data>
+  <data name="Generator_Tip5" xml:space="preserve">
+    <value>Ultra-niche hashtags help reach the right audience</value>
+  </data>
+  <data name="Generator_Tip6" xml:space="preserve">
+    <value>Experiment and track performance</value>
+  </data>
+  <data name="Generator_Error_MinChars" xml:space="preserve">
+    <value>Please enter a description of at least 10 characters.</value>
+  </data>
+  <data name="Generator_Error_Generic" xml:space="preserve">
+    <value>An error occurred. Please try again.</value>
+  </data>
+  <data name="Generator_Error_Connection" xml:space="preserve">
+    <value>Unable to connect to server. Please try again.</value>
+  </data>
+  <data name="Generator_DefaultReasoning" xml:space="preserve">
+    <value>AI has analyzed and suggested the most suitable hashtags for your content.</value>
+  </data>
+  <data name="Generator_NoData" xml:space="preserve">
+    <value>No data</value>
+  </data>
+  <data name="Generator_NoDataWarning" xml:space="preserve">
+    <value>This hashtag has no data, cannot view details.</value>
+  </data>
+  <data name="Generator_Error_SelectOne" xml:space="preserve">
+    <value>Please select at least one hashtag.</value>
+  </data>
+  <data name="Generator_Copied" xml:space="preserve">
+    <value>Copied!</value>
+  </data>
+  <data name="Generator_Error_Copy" xml:space="preserve">
+    <value>Unable to copy. Please try again.</value>
+  </data>
+
+  <!-- Search Page -->
+  <data name="Search_PageTitle" xml:space="preserve">
+    <value>Search: {0}</value>
+  </data>
+  <data name="Search_HeaderTitle" xml:space="preserve">
+    <value>Search results: "{0}"</value>
+  </data>
+  <data name="Search_FoundResults" xml:space="preserve">
+    <value>Found {0} hashtags</value>
+  </data>
+  <data name="Search_ViewsByHashtag" xml:space="preserve">
+    <value>Views By Hashtag</value>
+  </data>
+  <data name="Search_NoResults" xml:space="preserve">
+    <value>No results found for "{0}"</value>
+  </data>
+  <data name="Search_NoResultsHint" xml:space="preserve">
+    <value>Try searching with a different keyword or check your spelling.</value>
+  </data>
+  <data name="Search_GoBack" xml:space="preserve">
+    <value>Go Back</value>
+  </data>
+  <data name="Search_LiveResult" xml:space="preserve">
+    <value>Live Result from TikTok</value>
+  </data>
+  <data name="Search_NotInDatabase" xml:space="preserve">
+    <value>This hashtag was not found in our database, but we found it on TikTok Creative Center:</value>
+  </data>
+  <data name="Search_Posts" xml:space="preserve">
+    <value>Posts:</value>
+  </data>
+  <data name="Search_Source" xml:space="preserve">
+    <value>Source:</value>
+  </data>
+  <data name="Search_SearchedAt" xml:space="preserve">
+    <value>Searched:</value>
+  </data>
+  <data name="Search_AddToTracking" xml:space="preserve">
+    <value>Add to Tracking List</value>
+  </data>
+  <data name="Search_WillBeTracked" xml:space="preserve">
+    <value>This hashtag will be included in future crawls</value>
+  </data>
+  <data name="Search_Copied" xml:space="preserve">
+    <value>COPIED!</value>
+  </data>
+
+  <!-- 404 Not Found Page -->
+  <data name="NotFound_PageTitle" xml:space="preserve">
+    <value>404 - Page Not Found | TrendTag</value>
+  </data>
+  <data name="NotFound_PageDescription" xml:space="preserve">
+    <value>The page you are looking for does not exist. Go back to the homepage to find trending TikTok hashtags.</value>
+  </data>
+  <data name="NotFound_Title" xml:space="preserve">
+    <value>Oops! Page Not Found</value>
+  </data>
+  <data name="NotFound_Description" xml:space="preserve">
+    <value>The page you are looking for may have been deleted, renamed, or is temporarily unavailable.</value>
+  </data>
+  <data name="NotFound_Suggestions" xml:space="preserve">
+    <value>You can try:</value>
+  </data>
+  <data name="NotFound_CheckUrl" xml:space="preserve">
+    <value>Check the URL address</value>
+  </data>
+  <data name="NotFound_UseSearch" xml:space="preserve">
+    <value>Use the search bar to find hashtags</value>
+  </data>
+  <data name="NotFound_GoHome" xml:space="preserve">
+    <value>Go back to homepage and start again</value>
+  </data>
+  <data name="NotFound_BackToHome" xml:space="preserve">
+    <value>Back to Home</value>
+  </data>
+  <data name="NotFound_SearchHashtag" xml:space="preserve">
+    <value>Find Hashtag</value>
+  </data>
+  <data name="NotFound_PopularPages" xml:space="preserve">
+    <value>Popular pages:</value>
+  </data>
+  <data name="NotFound_TopHashtag" xml:space="preserve">
+    <value>Top Hashtag</value>
+  </data>
+  <data name="NotFound_Analysis" xml:space="preserve">
+    <value>Analytics</value>
+  </data>
+  <data name="NotFound_Entertainment" xml:space="preserve">
+    <value>Entertainment</value>
+  </data>
+  <data name="NotFound_Education" xml:space="preserve">
+    <value>Education</value>
+  </data>
+
+  <!-- Growth Analytics Page -->
+  <data name="Growth_PageTitle" xml:space="preserve">
+    <value>TikTok Hashtag Growth Analysis - 7 Days | Growth Tracker</value>
+  </data>
+  <data name="Growth_PageDescription" xml:space="preserve">
+    <value>Track TikTok hashtag growth rate over the last 7 days. Discover explosive hashtags, strong trending patterns and growth/decline trends to optimize your content strategy.</value>
+  </data>
+  <data name="Growth_PageKeywords" xml:space="preserve">
+    <value>hashtag growth analysis, fast trending hashtags, explosive hashtags, tiktok growth tracker, hashtag trends, rising hashtags, find viral hashtags</value>
+  </data>
+  <data name="Growth_Title" xml:space="preserve">
+    <value>Growth Tracker</value>
+  </data>
+  <data name="Growth_Subtitle" xml:space="preserve">
+    <value>Analyze hashtag growth over the last 7 days</value>
+  </data>
+  <data name="Growth_FilterCategory" xml:space="preserve">
+    <value>Filter by category</value>
+  </data>
+  <data name="Growth_AllCategories" xml:space="preserve">
+    <value>All categories</value>
+  </data>
+  <data name="Growth_Feature1_Title" xml:space="preserve">
+    <value>Discover Explosive Hashtags</value>
+  </data>
+  <data name="Growth_Feature1_Desc" xml:space="preserve">
+    <value>Track hashtags with the fastest growth rate in 7 days. Catch trends early to maximize reach.</value>
+  </data>
+  <data name="Growth_Feature2_Title" xml:space="preserve">
+    <value>Trend Analysis</value>
+  </data>
+  <data name="Growth_Feature2_Desc" xml:space="preserve">
+    <value>See which hashtags are trending strongly with the highest view increase. Real-time data from TikTok Creative Center.</value>
+  </data>
+  <data name="Growth_Feature3_Title" xml:space="preserve">
+    <value>Optimize Strategy</value>
+  </data>
+  <data name="Growth_Feature3_Desc" xml:space="preserve">
+    <value>Get hashtag suggestions based on growth status. Avoid declining hashtags, focus on rising ones.</value>
+  </data>
+  <data name="Growth_FastestGrowing" xml:space="preserve">
+    <value>Fastest Growing (Top 10)</value>
+  </data>
+  <data name="Growth_FastestGrowingDesc" xml:space="preserve">
+    <value>Hashtags with the highest growth rate</value>
+  </data>
+  <data name="Growth_TrendingGrowth" xml:space="preserve">
+    <value>Strongest Trending (Top 10)</value>
+  </data>
+  <data name="Growth_TrendingGrowthDesc" xml:space="preserve">
+    <value>Hashtags with the highest view increase</value>
+  </data>
+  <data name="Growth_Declining" xml:space="preserve">
+    <value>Declining (Top 10)</value>
+  </data>
+  <data name="Growth_DecliningDesc" xml:space="preserve">
+    <value>Hashtags with significant decline trend</value>
+  </data>
+  <data name="Growth_NoGrowthData" xml:space="preserve">
+    <value>No hashtags with growth in this time period.</value>
+  </data>
+  <data name="Growth_NoTrendingData" xml:space="preserve">
+    <value>No trending data in this time period.</value>
+  </data>
+</root>

@@ -34,15 +34,15 @@ public class BlogSeeder
             _logger.LogInformation("BlogSeeder: Found {Count} existing posts, will add 4 new seeded posts...", existingPostCount);
 
             // Seed Categories - check if they exist first
-            var categoryDefinitions = new List<(string Name, string DisplayNameVi, string Slug, string Description)>
+            var categoryDefinitions = new List<(string Name, string NameEn, string DisplayNameVi, string Slug, string Description, string DescriptionEn)>
             {
-                ("Hashtag Trending", "Phân Tích Trending", "phan-tich-trending", "Phân tích các hashtag trending mới nhất"),
-                ("TikTok Tips", "Mẹo TikTok", "meo-tiktok", "Tips và chiến lược tăng trưởng trên TikTok"),
-                ("Creator Guide", "Hướng Dẫn Creator", "huong-dan-creator", "Hướng dẫn cho TikTok creators")
+                ("Phân Tích Trending", "Hashtag Trending", "Phân Tích Trending", "phan-tich-trending", "Phân tích các hashtag trending mới nhất", "Analysis of the latest trending hashtags"),
+                ("Mẹo TikTok", "TikTok Tips", "Mẹo TikTok", "meo-tiktok", "Tips và chiến lược tăng trưởng trên TikTok", "Tips and strategies for TikTok growth"),
+                ("Hướng Dẫn Creator", "Creator Guide", "Hướng Dẫn Creator", "huong-dan-creator", "Hướng dẫn cho TikTok creators", "Guides for TikTok creators")
             };
 
             var addedCategories = new List<BlogCategory>();
-            foreach (var (name, displayNameVi, slug, description) in categoryDefinitions)
+            foreach (var (name, nameEn, displayNameVi, slug, description, descriptionEn) in categoryDefinitions)
             {
                 var existingCat = await _context.BlogCategories.FirstOrDefaultAsync(c => c.Slug == slug);
                 if (existingCat == null)
@@ -50,9 +50,11 @@ public class BlogSeeder
                     var newCat = new BlogCategory
                     {
                         Name = name,
+                        NameEn = nameEn,
                         DisplayNameVi = displayNameVi,
                         Slug = slug,
                         Description = description,
+                        DescriptionEn = descriptionEn,
                         IsActive = true
                     };
                     _context.BlogCategories.Add(newCat);
@@ -61,6 +63,13 @@ public class BlogSeeder
                 }
                 else
                 {
+                    // Update existing category with English fields if missing
+                    if (string.IsNullOrEmpty(existingCat.NameEn))
+                    {
+                        existingCat.NameEn = nameEn;
+                        existingCat.DescriptionEn = descriptionEn;
+                        _logger.LogInformation("BlogSeeder: Updated category '{Name}' with English translations", name);
+                    }
                     addedCategories.Add(existingCat);
                     _logger.LogInformation("BlogSeeder: Category '{Name}' already exists, reusing", name);
                 }

@@ -80,6 +80,16 @@ public class BlogRepository : IBlogRepository
             .FirstOrDefaultAsync();
     }
 
+    public async Task<BlogPost?> GetPostByEnglishSlugAsync(string slugEn)
+    {
+        return await _context.BlogPosts
+            .Where(p => p.SlugEn == slugEn)
+            .Include(p => p.Category)
+            .Include(p => p.BlogPostTags)
+                .ThenInclude(pt => pt.BlogTag)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<BlogPost?> GetPostByIdAsync(int id)
     {
         return await _context.BlogPosts

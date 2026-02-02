@@ -64,15 +64,16 @@ public class AdminController : Controller
         return View(viewModel);
     }
 
-    // Trigger Manual Crawl - All Sources
+    // Trigger Manual Crawl - All Sources for ALL configured regions
     [HttpPost]
     public async Task<IActionResult> CrawlAll()
     {
         try
         {
-            _logger.LogInformation("Manual crawl of all sources triggered");
+            _logger.LogInformation("Manual crawl of all sources for ALL regions triggered");
 
-            var summary = await _crawlerService.CrawlAllSourcesAsync();
+            // Crawl all configured regions (VN, US, GB, AU, etc.)
+            var multiRegionSummary = await _crawlerService.CrawlAllRegionsAsync();
 
             // After crawl, calculate metrics
             _logger.LogInformation("Crawl completed, now calculating metrics...");
@@ -84,8 +85,15 @@ public class AdminController : Controller
             var syncCount = await SyncLatestCountsInternalAsync();
             _logger.LogInformation("Synced {Count} hashtags", syncCount);
 
-            TempData["SuccessMessage"] = $"Crawl completed! Success: {summary.SuccessfulSources}, Failed: {summary.FailedSources}, Total hashtags: {summary.TotalHashtagsCollected}. Metrics: {metricsResult.SuccessfulCalculations} calculated. Synced: {syncCount} hashtags.";
-            TempData["CrawlSummary"] = Newtonsoft.Json.JsonConvert.SerializeObject(summary);
+            // Build detailed success message
+            var regionDetails = string.Join(", ", multiRegionSummary.RegionResults
+                .Select(r => $"{r.Key}: {r.Value.TotalHashtagsCollected}"));
+
+            TempData["SuccessMessage"] = $"Multi-region crawl completed! Regions: {multiRegionSummary.SuccessfulRegions}/{multiRegionSummary.TotalRegions} successful. Total hashtags: {multiRegionSummary.TotalHashtagsCollected}. ({regionDetails}). Metrics: {metricsResult.SuccessfulCalculations} calculated. Synced: {syncCount} hashtags.";
+
+            // Store first region's summary for backward compatibility with CrawlResults view
+            var firstSummary = multiRegionSummary.RegionResults.Values.FirstOrDefault() ?? new CrawlSummary();
+            TempData["CrawlSummary"] = Newtonsoft.Json.JsonConvert.SerializeObject(firstSummary);
 
             return RedirectToAction(nameof(CrawlResults));
         }

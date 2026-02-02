@@ -25,6 +25,11 @@ public class BlogIndexViewModel
     public string? FilterType { get; set; } // null, "category", "tag"
     public string? FilterSlug { get; set; }
     public string? FilterName { get; set; }
+
+    /// <summary>
+    /// Whether current view is in English
+    /// </summary>
+    public bool IsEnglish { get; set; }
 }
 
 /// <summary>
@@ -36,6 +41,11 @@ public class BlogDetailsViewModel
     public IEnumerable<BlogPost> RelatedPosts { get; set; } = new List<BlogPost>();
     public IEnumerable<BlogPost> RecentPosts { get; set; } = new List<BlogPost>();
     public SeoMetadata? SeoMetadata { get; set; }
+
+    /// <summary>
+    /// Whether current view is in English
+    /// </summary>
+    public bool IsEnglish { get; set; }
 }
 
 /// <summary>
@@ -56,6 +66,11 @@ public class BlogCategoryViewModel
     public int TotalPages => (int)Math.Ceiling((double)TotalPosts / PageSize);
     public bool HasPreviousPage => CurrentPage > 1;
     public bool HasNextPage => CurrentPage < TotalPages;
+
+    /// <summary>
+    /// Whether current view is in English
+    /// </summary>
+    public bool IsEnglish { get; set; }
 }
 
 /// <summary>
@@ -76,4 +91,9 @@ public class BlogTagViewModel
     public int TotalPages => (int)Math.Ceiling((double)TotalPosts / PageSize);
     public bool HasPreviousPage => CurrentPage > 1;
     public bool HasNextPage => CurrentPage < TotalPages;
+
+    /// <summary>
+    /// Whether current view is in English
+    /// </summary>
+    public bool IsEnglish { get; set; }
 }

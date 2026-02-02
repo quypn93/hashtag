@@ -79,12 +79,17 @@ public partial class TrendTagDbContext : DbContext
 
             entity.HasIndex(e => e.LastSeen, "IX_Hashtags_LastSeen");
 
-            entity.HasIndex(e => e.Tag, "IX_Hashtags_Tag").IsUnique();
+            // Unique constraint on Tag + CountryCode (same tag can exist in different regions)
+            entity.HasIndex(e => new { e.Tag, e.CountryCode }, "IX_Hashtags_Tag_CountryCode").IsUnique();
+
+            // Index on CountryCode for regional filtering
+            entity.HasIndex(e => e.CountryCode, "IX_Hashtags_CountryCode");
 
             entity.Property(e => e.DifficultyLevel).HasMaxLength(20);
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.Tag).HasMaxLength(100);
             entity.Property(e => e.TagDisplay).HasMaxLength(101);
+            entity.Property(e => e.CountryCode).HasMaxLength(5).HasDefaultValue("VN");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Hashtags)
                 .HasForeignKey(d => d.CategoryId)

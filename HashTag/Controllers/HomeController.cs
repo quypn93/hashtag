@@ -3,6 +3,7 @@ using HashTag.Models;
 using HashTag.Repositories;
 using HashTag.Services;
 using HashTag.ViewModels;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HashTag.Controllers
@@ -26,16 +27,20 @@ namespace HashTag.Controllers
             _blogRepository = blogRepository;
         }
 
-        [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new[] { "categoryId" })]
+        [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new[] { "categoryId", "region" })]
         public async Task<IActionResult> Index(int? categoryId)
         {
             try
             {
-                // Get top 10 trending hashtags
-                var filterDto = categoryId.HasValue ? new HashtagFilterDto
+                // Get current region from cookie
+                var currentRegion = GetCurrentRegion();
+
+                // Get top trending hashtags filtered by region
+                var filterDto = new HashtagFilterDto
                 {
-                    CategoryId = categoryId.Value
-                } : null;
+                    CategoryId = categoryId,
+                    CountryCode = currentRegion
+                };
 
                 var topHashtags = await _repository.GetTrendingHashtagsAsync(filterDto);
                 var top10 = topHashtags.Take(100).ToList();
@@ -90,10 +95,14 @@ namespace HashTag.Controllers
                     return NotFound();
                 }
 
-                // Get top 10 trending hashtags for this category
+                // Get current region from cookie
+                var currentRegion = GetCurrentRegion();
+
+                // Get top 10 trending hashtags for this category and region
                 var filterDto = new HashtagFilterDto
                 {
-                    CategoryId = category.Id
+                    CategoryId = category.Id,
+                    CountryCode = currentRegion
                 };
 
                 var topHashtags = await _repository.GetTrendingHashtagsAsync(filterDto);
@@ -131,17 +140,21 @@ namespace HashTag.Controllers
         }
 
         /// <summary>
-        /// API endpoint to get top 10 hashtags by category (AJAX)
+        /// API endpoint to get top hashtags by category and region (AJAX)
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetTopHashtags(int? categoryId)
+        public async Task<IActionResult> GetTopHashtags(int? categoryId, string? region)
         {
             try
             {
-                var filterDto = categoryId.HasValue ? new HashtagFilterDto
+                // Use provided region or fall back to cookie
+                var currentRegion = !string.IsNullOrEmpty(region) ? region : GetCurrentRegion();
+
+                var filterDto = new HashtagFilterDto
                 {
-                    CategoryId = categoryId.Value
-                } : null;
+                    CategoryId = categoryId,
+                    CountryCode = currentRegion
+                };
 
                 var topHashtags = await _repository.GetTrendingHashtagsAsync(filterDto);
                 var top10 = topHashtags.Take(100).ToList();
@@ -247,6 +260,83 @@ namespace HashTag.Controllers
                 TempData["ErrorMessage"] = "Failed to add hashtag to tracking";
                 return RedirectToAction(nameof(Index));
             }
+        }
+
+        /// <summary>
+        /// Set user's preferred language
+        /// </summary>
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddYears(1),
+                    IsEssential = true,
+                    SameSite = SameSiteMode.Lax
+                }
+            );
+
+            return LocalRedirect(returnUrl ?? "/");
+        }
+
+        /// <summary>
+        /// Cookie name for storing user's preferred region
+        /// </summary>
+        public const string RegionCookieName = "UserRegion";
+
+        /// <summary>
+        /// Get current region from cookie (default: VN)
+        /// </summary>
+        private string GetCurrentRegion()
+        {
+            return Request.Cookies[RegionCookieName] ?? "VN";
+        }
+
+        /// <summary>
+        /// Set user's preferred region for hashtag data
+        /// Also sets the UI language based on region (VN = Vietnamese, others = English)
+        /// </summary>
+        [HttpPost]
+        public IActionResult SetRegion(string region, string returnUrl)
+        {
+            // Validate region code
+            var validRegions = new[] { "VN", "US", "GB", "AU" };
+            if (!validRegions.Contains(region?.ToUpper()))
+            {
+                region = "VN";
+            }
+
+            region = region.ToUpper();
+
+            // Set region cookie
+            Response.Cookies.Append(
+                RegionCookieName,
+                region,
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddYears(1),
+                    IsEssential = true,
+                    SameSite = SameSiteMode.Lax
+                }
+            );
+
+            // Also set language based on region (VN = Vietnamese, others = English)
+            var culture = region == "VN" ? "vi" : "en";
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddYears(1),
+                    IsEssential = true,
+                    SameSite = SameSiteMode.Lax
+                }
+            );
+
+            return LocalRedirect(returnUrl ?? "/");
         }
 
         public IActionResult Privacy()

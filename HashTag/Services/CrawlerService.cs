@@ -35,6 +35,28 @@ public class CrawlerService : ICrawlerService
         { "29000000000", "Health" }
     };
 
+    // Supported regions for regional crawling
+    private readonly List<RegionInfo> _supportedRegions = new()
+    {
+        new RegionInfo { Code = "VN", Name = "Vietnam", NameVi = "Viet Nam" },
+        new RegionInfo { Code = "US", Name = "United States", NameVi = "Hoa Ky" },
+        new RegionInfo { Code = "GB", Name = "United Kingdom", NameVi = "Vuong quoc Anh" },
+        new RegionInfo { Code = "BR", Name = "Brazil", NameVi = "Brazil" },
+        new RegionInfo { Code = "IN", Name = "India", NameVi = "An Do" },
+        new RegionInfo { Code = "ID", Name = "Indonesia", NameVi = "Indonesia" },
+        new RegionInfo { Code = "PH", Name = "Philippines", NameVi = "Philippines" },
+        new RegionInfo { Code = "TH", Name = "Thailand", NameVi = "Thai Lan" },
+        new RegionInfo { Code = "MY", Name = "Malaysia", NameVi = "Malaysia" },
+        new RegionInfo { Code = "DE", Name = "Germany", NameVi = "Duc" },
+        new RegionInfo { Code = "FR", Name = "France", NameVi = "Phap" },
+        new RegionInfo { Code = "JP", Name = "Japan", NameVi = "Nhat Ban" },
+        new RegionInfo { Code = "KR", Name = "South Korea", NameVi = "Han Quoc" },
+        new RegionInfo { Code = "MX", Name = "Mexico", NameVi = "Mexico" },
+        new RegionInfo { Code = "AU", Name = "Australia", NameVi = "Uc" }
+    };
+
+    private const string DefaultCountryCode = "VN";
+
     public CrawlerService(
         IHashtagRepository repository,
         ILogger<CrawlerService> logger,
@@ -47,14 +69,109 @@ public class CrawlerService : ICrawlerService
         _sitemapService = sitemapService;
     }
 
-    public async Task<CrawlSummary> CrawlAllSourcesAsync()
+    public IReadOnlyList<RegionInfo> GetSupportedRegions() => _supportedRegions.AsReadOnly();
+
+    public Task<CrawlSummary> CrawlAllSourcesAsync() => CrawlAllSourcesAsync(DefaultCountryCode);
+
+    /// <summary>
+    /// Crawl all active sources for ALL configured regions (from appsettings.json)
+    /// </summary>
+    public async Task<MultiRegionCrawlSummary> CrawlAllRegionsAsync()
     {
+        var summary = new MultiRegionCrawlSummary
+        {
+            StartedAt = DateTime.UtcNow
+        };
+
+        // Get configured regions from appsettings.json
+        var configuredRegions = _configuration.GetSection("CrawlerSettings:Regions")
+            .Get<List<string>>() ?? new List<string> { DefaultCountryCode };
+
+        // Filter to only valid regions
+        var validRegions = configuredRegions
+            .Where(r => _supportedRegions.Any(s => s.Code.Equals(r, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+
+        if (!validRegions.Any())
+        {
+            _logger.LogWarning("No valid regions configured, using default: {Default}", DefaultCountryCode);
+            validRegions = new List<string> { DefaultCountryCode };
+        }
+
+        summary.TotalRegions = validRegions.Count;
+        _logger.LogInformation("Starting multi-region crawl for {Count} regions: {Regions}",
+            validRegions.Count, string.Join(", ", validRegions));
+
+        // Crawl each region sequentially
+        foreach (var regionCode in validRegions)
+        {
+            try
+            {
+                _logger.LogInformation("=== Crawling region: {Region} ===", regionCode);
+                var regionSummary = await CrawlAllSourcesAsync(regionCode);
+
+                summary.RegionResults[regionCode] = regionSummary;
+                summary.TotalHashtagsCollected += regionSummary.TotalHashtagsCollected;
+
+                if (regionSummary.SuccessfulSources > 0)
+                {
+                    summary.SuccessfulRegions++;
+                    _logger.LogInformation("Region {Region}: SUCCESS - {Hashtags} hashtags collected",
+                        regionCode, regionSummary.TotalHashtagsCollected);
+                }
+                else
+                {
+                    summary.FailedRegions++;
+                    _logger.LogWarning("Region {Region}: FAILED - No hashtags collected", regionCode);
+                }
+
+                // Brief pause between regions to avoid rate limiting
+                if (regionCode != validRegions.Last())
+                {
+                    _logger.LogInformation("Waiting 5 seconds before next region...");
+                    await Task.Delay(5000);
+                }
+            }
+            catch (Exception ex)
+            {
+                summary.FailedRegions++;
+                _logger.LogError(ex, "Error crawling region {Region}: {Message}", regionCode, ex.Message);
+                summary.RegionResults[regionCode] = new CrawlSummary
+                {
+                    StartedAt = DateTime.UtcNow,
+                    CompletedAt = DateTime.UtcNow,
+                    TotalSources = 0,
+                    SuccessfulSources = 0,
+                    FailedSources = 1
+                };
+            }
+        }
+
+        summary.CompletedAt = DateTime.UtcNow;
+        var duration = (summary.CompletedAt - summary.StartedAt).TotalMinutes;
+
+        _logger.LogInformation(
+            "Multi-region crawl completed in {Duration:F1} minutes. Regions: {Success}/{Total} successful, Total hashtags: {Hashtags}",
+            duration, summary.SuccessfulRegions, summary.TotalRegions, summary.TotalHashtagsCollected);
+
+        return summary;
+    }
+
+    public async Task<CrawlSummary> CrawlAllSourcesAsync(string countryCode)
+    {
+        // Validate country code
+        if (!_supportedRegions.Any(r => r.Code.Equals(countryCode, StringComparison.OrdinalIgnoreCase)))
+        {
+            _logger.LogWarning("Unsupported country code: {CountryCode}, falling back to {Default}", countryCode, DefaultCountryCode);
+            countryCode = DefaultCountryCode;
+        }
+
         var summary = new CrawlSummary
         {
             StartedAt = DateTime.UtcNow
         };
 
-        _logger.LogInformation("Starting crawl of all sources at {Time}", summary.StartedAt);
+        _logger.LogInformation("Starting crawl of all sources at {Time} for region {Region}", summary.StartedAt, countryCode);
 
         // Get active sources from database
         var sources = await _repository.GetActiveSourcesAsync();
@@ -71,10 +188,10 @@ public class CrawlerService : ICrawlerService
 
         _logger.LogInformation("Found {Count} enabled sources to crawl", sourcesToCrawl.Count);
 
-        // Crawl each source
+        // Crawl each source with the specified country code
         foreach (var source in sourcesToCrawl)
         {
-            var result = await CrawlSourceWithRetryAsync(source.Name);
+            var result = await CrawlSourceWithRetryAsync(source.Name, countryCode);
             summary.Results.Add(result);
 
             if (result.Success)
@@ -102,12 +219,21 @@ public class CrawlerService : ICrawlerService
         return summary;
     }
 
-    public async Task<CrawlResult> CrawlSourceAsync(string sourceName)
+    public Task<CrawlResult> CrawlSourceAsync(string sourceName) => CrawlSourceAsync(sourceName, DefaultCountryCode);
+
+    public async Task<CrawlResult> CrawlSourceAsync(string sourceName, string countryCode)
     {
-        return await CrawlSourceWithRetryAsync(sourceName);
+        // Validate country code
+        if (!_supportedRegions.Any(r => r.Code.Equals(countryCode, StringComparison.OrdinalIgnoreCase)))
+        {
+            _logger.LogWarning("Unsupported country code: {CountryCode}, falling back to {Default}", countryCode, DefaultCountryCode);
+            countryCode = DefaultCountryCode;
+        }
+
+        return await CrawlSourceWithRetryAsync(sourceName, countryCode);
     }
 
-    private async Task<CrawlResult> CrawlSourceWithRetryAsync(string sourceName)
+    private async Task<CrawlResult> CrawlSourceWithRetryAsync(string sourceName, string countryCode)
     {
         var maxRetries = _configuration.GetValue<int>("CrawlerSettings:MaxRetries", 3);
         var logMessages = new List<string>();
@@ -164,14 +290,14 @@ public class CrawlerService : ICrawlerService
         {
             try
             {
-                AddLog($"Attempt {attempt}/{maxRetries}: Crawling {sourceName}...");
+                AddLog($"Attempt {attempt}/{maxRetries}: Crawling {sourceName} for region {countryCode}...");
 
-                var hashtags = await CrawlSourceInternalAsync(sourceName);
+                var hashtags = await CrawlSourceInternalAsync(sourceName, countryCode);
 
                 if (hashtags.Count > 0)
                 {
                     AddLog($"Collected {hashtags.Count} hashtags, saving to database...");
-                    await SaveHashtagsAsync(source.Id, hashtags);
+                    await SaveHashtagsAsync(source.Id, hashtags, countryCode);
 
                     result.Success = true;
                     result.HashtagsCollected = hashtags.Count;
@@ -232,11 +358,11 @@ public class CrawlerService : ICrawlerService
         return result;
     }
 
-    private async Task<List<HashtagRaw>> CrawlSourceInternalAsync(string sourceName)
+    private async Task<List<HashtagRaw>> CrawlSourceInternalAsync(string sourceName, string countryCode)
     {
         var timeout = _configuration.GetValue<int>("CrawlerSettings:TimeoutSeconds", 120) * 1000;
 
-        _logger.LogInformation("CrawlSourceInternal: Starting for {Source}. Timeout: {Timeout}ms", sourceName, timeout);
+        _logger.LogInformation("CrawlSourceInternal: Starting for {Source} in region {Region}. Timeout: {Timeout}ms", sourceName, countryCode, timeout);
 
         IPlaywright? playwright = null;
         IBrowser? browser = null;
@@ -293,10 +419,10 @@ public class CrawlerService : ICrawlerService
             _logger.LogInformation("CrawlSourceInternal: Page created with timeout {Timeout}ms", timeout);
 
             // Step 4: Execute crawl
-            _logger.LogInformation("CrawlSourceInternal: Step 4 - Starting {Source} crawl...", sourceName);
+            _logger.LogInformation("CrawlSourceInternal: Step 4 - Starting {Source} crawl for region {Region}...", sourceName, countryCode);
             var result = sourceName switch
             {
-                "TikTok" => await CrawlTikTokHashtags(page),
+                "TikTok" => await CrawlTikTokHashtags(page, countryCode),
                 _ => new List<HashtagRaw>()
             };
 
@@ -342,13 +468,13 @@ public class CrawlerService : ICrawlerService
         }
     }
 
-    private async Task SaveHashtagsAsync(int sourceId, List<HashtagRaw> hashtags)
+    private async Task SaveHashtagsAsync(int sourceId, List<HashtagRaw> hashtags, string countryCode = "VN")
     {
         var startTime = DateTime.UtcNow;
         int newHashtagsCount = 0;
         int updatedHashtagsCount = 0;
 
-        _logger.LogInformation("SaveHashtags: Starting bulk save for {Count} hashtags", hashtags.Count);
+        _logger.LogInformation("SaveHashtags: Starting bulk save for {Count} hashtags (region: {Region})", hashtags.Count, countryCode);
 
         // STEP 1: Batch load all existing data (1-3 queries instead of N queries)
         var allTags = hashtags.Select(h => h.Tag.TrimStart('#').ToLower()).Distinct().ToList();
@@ -361,8 +487,8 @@ public class CrawlerService : ICrawlerService
         _logger.LogDebug("SaveHashtags: Loading existing data - {TagCount} unique tags, {CategoryCount} categories",
             allTags.Count, allCategories.Count);
 
-        // Load all existing hashtags at once
-        var existingHashtags = await _repository.GetHashtagsByTagsAsync(allTags);
+        // Load all existing hashtags at once (filtered by region)
+        var existingHashtags = await _repository.GetHashtagsByTagsAsync(allTags, countryCode);
         var existingHashtagDict = existingHashtags.ToDictionary(h => h.Tag.ToLower());
 
         // Load all existing categories at once
@@ -403,6 +529,7 @@ public class CrawlerService : ICrawlerService
                     {
                         Tag = normalizedTag,
                         TagDisplay = raw.Tag.TrimStart('#'),
+                        CountryCode = countryCode, // Set region for new hashtag
                         FirstSeen = DateTime.UtcNow,
                         LastSeen = DateTime.UtcNow,
                         TotalAppearances = 1,
@@ -538,7 +665,7 @@ public class CrawlerService : ICrawlerService
 
     #region Crawler Methods
 
-    private async Task<List<HashtagRaw>> CrawlTikTokHashtags(IPage page)
+    private async Task<List<HashtagRaw>> CrawlTikTokHashtags(IPage page, string countryCode)
     {
         var allHashtags = new List<HashtagRaw>();
         var errors = new List<string>();
@@ -547,11 +674,11 @@ public class CrawlerService : ICrawlerService
         await LoadTikTokCookies(page);
 
         // STEP 1: Crawl trending page (general, no industry filter) to get top hashtags with PostCount
-        _logger.LogInformation("TikTok: Step 1 - Crawling general trending page (https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag)");
+        _logger.LogInformation("TikTok: Step 1 - Crawling general trending page for region {Region}", countryCode);
 
         try
         {
-            var trendingHashtags = await CrawlTikTokTrendingPageAsync(page);
+            var trendingHashtags = await CrawlTikTokTrendingPageAsync(page, countryCode);
             _logger.LogInformation("TikTok: Collected {Count} trending hashtags with PostCount", trendingHashtags.Count);
             allHashtags.AddRange(trendingHashtags);
         }
@@ -575,7 +702,7 @@ public class CrawlerService : ICrawlerService
                 _logger.LogInformation("TikTok: Crawling industry '{IndustryName}' (ID: {IndustryId})",
                     industry.Value, industry.Key);
 
-                var industryHashtags = await CrawlTikTokIndustryHashtags(page, industry.Key, industry.Value);
+                var industryHashtags = await CrawlTikTokIndustryHashtags(page, industry.Key, industry.Value, countryCode);
 
                 _logger.LogInformation("TikTok: Collected {Count} hashtags from {Industry}",
                     industryHashtags.Count, industry.Value);
@@ -638,12 +765,13 @@ public class CrawlerService : ICrawlerService
         return allHashtags;
     }
 
-    private async Task<List<HashtagRaw>> CrawlTikTokTrendingPageAsync(IPage page)
+    private async Task<List<HashtagRaw>> CrawlTikTokTrendingPageAsync(IPage page, string countryCode)
     {
         var result = new List<HashtagRaw>();
 
-        // Navigate to general trending hashtag page (no industry filter)
-        var url = "https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en?countryCode=VN&period=7";
+        // Navigate to general trending hashtag page with regional filter
+        var url = $"https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en?countryCode={countryCode}&period=7";
+        _logger.LogInformation("TikTok: Crawling trending page: {Url}", url);
 
         await page.GotoAsync(url, new PageGotoOptions
         {
@@ -848,7 +976,7 @@ public class CrawlerService : ICrawlerService
         }
     }
 
-    private async Task<List<HashtagRaw>> CrawlTikTokIndustryHashtags(IPage page, string industryId, string industryName)
+    private async Task<List<HashtagRaw>> CrawlTikTokIndustryHashtags(IPage page, string industryId, string industryName, string countryCode)
     {
         var result = new List<HashtagRaw>();
 
@@ -899,9 +1027,9 @@ public class CrawlerService : ICrawlerService
 
             try
             {
-                // Navigate to base trending page (no industry filter yet)
-                var baseUrl = "https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en?country_code=VN&period=7";
-                _logger.LogInformation("TikTok {Industry}: Navigating to base page", industryName);
+                // Navigate to base trending page with region (no industry filter yet)
+                var baseUrl = $"https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en?country_code={countryCode}&period=7";
+                _logger.LogInformation("TikTok {Industry}: Navigating to base page for region {Region}: {Url}", industryName, countryCode, baseUrl);
                 await page.GotoAsync(baseUrl, new PageGotoOptions { WaitUntil = WaitUntilState.NetworkIdle, Timeout = 30000 });
                 await Task.Delay(3000);
 

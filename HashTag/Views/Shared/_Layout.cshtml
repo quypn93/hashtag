@@ -1,9 +1,34 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Localization
+@using HashTag
+@inject IStringLocalizer<SharedResource> Localizer
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.UICulture.Name ?? "vi";
+    var isEnglish = currentCulture.StartsWith("en");
+    var langCode = isEnglish ? "en" : "vi";
+
+    // Build canonical URL
+    var baseUrl = "https://www.viralhashtag.vn";
+    var currentPath = Context.Request.Path.ToString();
+    var canonicalUrl = $"{baseUrl}{currentPath}";
+}
+
+<!DOCTYPE html>
+<html lang="@langCode">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TrendTag</title>
+
+    <!-- Admin pages - noindex for search engines -->
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- Hreflang tags for International SEO -->
+    <link rel="alternate" hreflang="vi" href="@canonicalUrl" />
+    <link rel="alternate" hreflang="en" href="@canonicalUrl" />
+    <link rel="alternate" hreflang="x-default" href="@canonicalUrl" />
 
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
@@ -29,57 +54,83 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["Nav_Home"]</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Analytics" asp-action="Growth">
-                                <i class="bi bi-graph-up-arrow"></i> Theo Dõi Tăng Trưởng
+                                <i class="bi bi-graph-up-arrow"></i> @Localizer["Nav_GrowthTracking"]
                             </a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-shield-lock"></i> Admin
+                                <i class="bi bi-shield-lock"></i> @Localizer["Nav_Admin"]
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="adminDropdown">
                                 <li><a class="dropdown-item" asp-controller="Admin" asp-action="Index">
-                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                    <i class="bi bi-speedometer2"></i> @Localizer["Nav_Dashboard"]
                                 </a></li>
                                 <li><a class="dropdown-item" asp-controller="Admin" asp-action="Crawl">
-                                    <i class="bi bi-play-circle"></i> Manual Crawl
+                                    <i class="bi bi-play-circle"></i> @Localizer["Nav_ManualCrawl"]
                                 </a></li>
                                 <li>
                                     <form method="post" asp-controller="Admin" asp-action="CalculateMetrics" id="metricsForm" style="margin: 0;">
                                         <button type="submit" class="dropdown-item" onclick="return confirm('Calculate metrics for all hashtags? This may take a few minutes.');">
-                                            <i class="bi bi-calculator"></i> Calculate Metrics
+                                            <i class="bi bi-calculator"></i> @Localizer["Nav_CalculateMetrics"]
                                         </button>
                                     </form>
                                 </li>
                                 <li>
                                     <form method="post" asp-controller="Admin" asp-action="SyncLatestCounts" style="margin: 0;">
                                         <button type="submit" class="dropdown-item" onclick="return confirm('Sync PostCount/ViewCount from history to hashtags table?');">
-                                            <i class="bi bi-arrow-repeat"></i> Sync Latest Counts
+                                            <i class="bi bi-arrow-repeat"></i> @Localizer["Nav_SyncLatestCounts"]
                                         </button>
                                     </form>
                                 </li>
                                 <li><a class="dropdown-item" asp-controller="Admin" asp-action="Hashtags">
-                                    <i class="bi bi-hash"></i> Trending Hashtags
+                                    <i class="bi bi-hash"></i> @Localizer["Nav_TrendingHashtags"]
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" asp-controller="Admin" asp-action="CrawlLogs">
-                                    <i class="bi bi-journal-text"></i> Crawl Logs
+                                    <i class="bi bi-journal-text"></i> @Localizer["Nav_CrawlLogs"]
                                 </a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Nav_Privacy"]</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
+                        <!-- Language Switcher -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-globe2"></i> @(isEnglish ? "EN" : "VI")
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                                <li>
+                                    <form asp-controller="Home" asp-action="SetLanguage" method="post" style="margin: 0;">
+                                        <input type="hidden" name="culture" value="en" />
+                                        <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                        <button type="submit" class="dropdown-item @(isEnglish ? "active" : "")">
+                                            English
+                                        </button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form asp-controller="Home" asp-action="SetLanguage" method="post" style="margin: 0;">
+                                        <input type="hidden" name="culture" value="vi" />
+                                        <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                        <button type="submit" class="dropdown-item @(!isEnglish ? "active" : "")">
+                                            Tieng Viet
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
                         @if (Context.Session.GetString("IsAdmin") == "true")
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-success" asp-controller="Auth" asp-action="Logout">
-                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                    <i class="bi bi-box-arrow-right"></i> @Localizer["Nav_Logout"]
                                 </a>
                             </li>
                         }
@@ -87,7 +138,7 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">
-                                    <i class="bi bi-box-arrow-in-right"></i> Login
+                                    <i class="bi bi-box-arrow-in-right"></i> @Localizer["Nav_Login"]
                                 </a>
                             </li>
                         }
@@ -127,7 +178,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - HashTag - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            @Localizer["Footer_Copyright"] - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Footer_PrivacyPolicy"]</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

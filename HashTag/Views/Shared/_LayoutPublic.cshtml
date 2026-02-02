@@ -1,5 +1,14 @@
 @using HashTag.ViewModels
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Localization
+@using HashTag
+@using HashTag.Helpers
+@inject IStringLocalizer<SharedResource> Localizer
 @{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.UICulture.Name ?? "vi";
+    var isEnglish = currentCulture.StartsWith("en");
+    var langCode = isEnglish ? "en" : "vi";
     var seo = ViewData["SeoMetadata"] as SeoMetadata ?? new SeoMetadata();
 
     // Fallback to ViewData if SeoMetadata is not set
@@ -8,12 +17,28 @@
     var keywords = seo.Keywords ?? ViewData["Keywords"]?.ToString() ?? "hashtag tiktok, trending, viral";
 
     var fullTitle = pageTitle.Contains("TrendTag") ? pageTitle : $"{pageTitle} | TrendTag - Phân Tích Hashtag TikTok Việt Nam";
+
+    // Build canonical URL for hreflang
+    var baseUrl = "https://www.viralhashtag.vn";
+    var currentPath = Context.Request.Path.ToString();
+    var canonicalUrl = $"{baseUrl}{currentPath}";
 }
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="@langCode">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Hreflang tags for International SEO -->
+    <!-- Vietnamese (default for .vn domain) -->
+    <link rel="alternate" hreflang="vi" href="@canonicalUrl" />
+    <!-- English versions for international markets -->
+    <link rel="alternate" hreflang="en" href="@canonicalUrl" />
+    <link rel="alternate" hreflang="en-US" href="@canonicalUrl" />
+    <link rel="alternate" hreflang="en-GB" href="@canonicalUrl" />
+    <link rel="alternate" hreflang="en-AU" href="@canonicalUrl" />
+    <!-- Default fallback -->
+    <link rel="alternate" hreflang="x-default" href="@canonicalUrl" />
 
     <!-- SEO Meta Tags -->
     <title>@fullTitle</title>
@@ -31,8 +56,13 @@
     <meta property="og:type" content="@(seo.OgType ?? "website")" />
     <meta property="og:title" content="@(seo.OgTitle ?? pageTitle)" />
     <meta property="og:description" content="@(seo.OgDescription ?? description)" />
-    <meta property="og:site_name" content="TrendTag - Phân Tích Hashtag TikTok" />
-    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:site_name" content="TrendTag - TikTok Hashtag Analytics" />
+    <meta property="og:locale" content="@(isEnglish ? "en_US" : "vi_VN")" />
+    <!-- Alternate locales for international reach -->
+    <meta property="og:locale:alternate" content="vi_VN" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="en_GB" />
+    <meta property="og:locale:alternate" content="en_AU" />
 
     @if (!string.IsNullOrEmpty(seo.CanonicalUrl))
     {
@@ -82,16 +112,16 @@
         "@@context": "https://schema.org",
         "@@type": "Organization",
         "name": "TrendTag",
-        "url": "https://viralhashtag.vn",
-        "logo": "https://viralhashtag.vn/images/logo.svg",
-        "description": "Công cụ phân tích hashtag TikTok hàng đầu Việt Nam. Tìm hashtag trending, dự đoán lượt xem và tăng trưởng kênh TikTok hiệu quả.",
+        "url": "https://www.viralhashtag.vn",
+        "logo": "https://www.viralhashtag.vn/images/logo.svg",
+        "description": "@(isEnglish ? "Leading TikTok hashtag analytics tool. Find trending hashtags, predict views, and grow your TikTok channel effectively." : "Công cụ phân tích hashtag TikTok hàng đầu Việt Nam. Tìm hashtag trending, dự đoán lượt xem và tăng trưởng kênh TikTok hiệu quả.")",
         "sameAs": [],
         "contactPoint": {
             "@@type": "ContactPoint",
             "email": "viralhashtagvn@gmail.com",
             "contactType": "Customer Support",
-            "areaServed": "VN",
-            "availableLanguage": "Vietnamese"
+            "areaServed": ["VN", "US", "GB", "AU"],
+            "availableLanguage": ["Vietnamese", "English"]
         }
     }
     </script>
@@ -264,6 +294,16 @@
         .dropdown-item:hover {
             background-color: #f8f9fa;
             padding-left: 1.5rem;
+        }
+
+        .dropdown-item.active {
+            background-color: var(--primary-color);
+            color: #212529 !important;
+        }
+
+        .dropdown-item.active:hover {
+            background-color: #e61e45;
+            color: #212529 !important;
         }
 
         /* Mobile navbar toggler - make it visible on dark background */
@@ -472,26 +512,61 @@
                         <li class="nav-item">
                             <a class="nav-link-public" href="/">
                                 <i class="bi bi-house-fill me-1"></i>
-                                Trang Chủ
+                                @Localizer["Nav_Home"]
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link-public" href="/hashtag/tao-hashtag-ai">
+                            <a class="nav-link-public" href="@LocalizedUrlHelper.GetAIGeneratorUrl(Context)">
                                 <i class="bi bi-lightbulb-fill me-1"></i>
-                                Tạo Hashtag AI
+                                @Localizer["Nav_AIHashtag"]
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link-public" href="/phan-tich/theo-doi-tang-truong">
+                            <a class="nav-link-public" href="@LocalizedUrlHelper.GetGrowthTrackingUrl(Context)">
                                 <i class="bi bi-graph-up-arrow me-1"></i>
-                                Theo Dõi Tăng Trưởng
+                                @Localizer["Nav_GrowthTracking"]
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link-public" href="/blog">
                                 <i class="bi bi-journal-text me-1"></i>
-                                Blog
+                                @Localizer["Nav_Blog"]
                             </a>
+                        </li>
+                        <!-- Region Switcher (also sets language: VN=Vietnamese, others=English) -->
+                        @{
+                            var currentRegion = Context.Request.Cookies["UserRegion"] ?? "VN";
+                            var regionFlags = new Dictionary<string, string> {
+                                { "VN", "🇻🇳" }, { "US", "🇺🇸" }, { "GB", "🇬🇧" }, { "AU", "🇦🇺" }
+                            };
+                            var regionNames = new Dictionary<string, string> {
+                                { "VN", "Vietnam" }, { "US", "USA" }, { "GB", "UK" }, { "AU", "Australia" }
+                            };
+                            var regionLangs = new Dictionary<string, string> {
+                                { "VN", "VI" }, { "US", "EN" }, { "GB", "EN" }, { "AU", "EN" }
+                            };
+                            var currentFlag = regionFlags.GetValueOrDefault(currentRegion, "🇻🇳");
+                        }
+                        <li class="nav-item dropdown ms-lg-2">
+                            <a class="nav-link-public dropdown-toggle" href="#" id="regionDropdownPublic" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span>@currentFlag</span>
+                                <span class="ms-1">@currentRegion</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3" aria-labelledby="regionDropdownPublic">
+                                @foreach (var code in new[] { "VN", "US", "GB", "AU" })
+                                {
+                                    <li>
+                                        <form asp-controller="Home" asp-action="SetRegion" method="post" style="margin: 0;">
+                                            <input type="hidden" name="region" value="@code" />
+                                            <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                            <button type="submit" class="dropdown-item py-2 @(currentRegion == code ? "active fw-bold" : "")">
+                                                @regionFlags[code] @regionNames[code]
+                                                <small class="text-muted ms-2">(@regionLangs[code])</small>
+                                            </button>
+                                        </form>
+                                    </li>
+                                }
+                            </ul>
                         </li>
                         @* <li class="nav-item dropdown">
                             <a class="nav-link-public dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -560,29 +635,29 @@
                     <h5 class="text-white mb-3">
                         <i class="bi bi-hash-square"></i> TrendTag
                     </h5>
-                    <p>Công cụ phân tích hashtag TikTok hàng đầu Việt Nam. Giúp bạn tìm hashtag viral, dự đoán lượt xem và tăng trưởng kênh.</p>
+                    <p>@Localizer["Footer_Description"]</p>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <h6 class="text-white mb-3">Tính Năng</h6>
+                    <h6 class="text-white mb-3">@Localizer["Footer_Features"]</h6>
                     <ul class="list-unstyled">
-                        <li><i class="bi bi-check-circle"></i> Phân tích độ khó hashtag</li>
-                        <li><i class="bi bi-check-circle"></i> Dự đoán lượt xem</li>
-                        <li><i class="bi bi-check-circle"></i> Theo dõi trending real-time</li>
-                        <li><i class="bi bi-check-circle"></i> Gợi ý hashtag liên quan</li>
+                        <li><i class="bi bi-check-circle"></i> @Localizer["Footer_Feature1"]</li>
+                        <li><i class="bi bi-check-circle"></i> @Localizer["Footer_Feature2"]</li>
+                        <li><i class="bi bi-check-circle"></i> @Localizer["Footer_Feature3"]</li>
+                        <li><i class="bi bi-check-circle"></i> @Localizer["Footer_Feature4"]</li>
                     </ul>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <h6 class="text-white mb-3">Liên Hệ</h6>
+                    <h6 class="text-white mb-3">@Localizer["Footer_Contact"]</h6>
                     <ul class="list-unstyled">
-                        <li><a href="/chinh-sach-bao-mat">Chính sách bảo mật</a></li>
-                        <li><a href="/dieu-khoan-su-dung">Điều khoản sử dụng</a></li>
+                        <li><a href="@LocalizedUrlHelper.GetPrivacyUrl(Context)">@Localizer["Footer_PrivacyPolicy"]</a></li>
+                        <li><a href="@LocalizedUrlHelper.GetTermsUrl(Context)">@Localizer["Footer_TermsOfUse"]</a></li>
                         <li><a href="mailto:viralhashtagvn@gmail.com">viralhashtagvn@gmail.com</a></li>
                     </ul>
                 </div>
             </div>
             <hr style="border-color: rgba(255, 255, 255, 0.1);" />
             <div class="text-center">
-                <small>&copy; 2025 TrendTag. Phát triển cho cộng đồng TikTok Việt Nam.</small>
+                <small>@Localizer["Footer_Copyright"]</small>
             </div>
         </div>
     </footer>

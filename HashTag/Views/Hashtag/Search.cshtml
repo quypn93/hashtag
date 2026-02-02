@@ -1,6 +1,9 @@
 @model HashtagSearchViewModel
+@using Microsoft.Extensions.Localization
+@using HashTag
+@inject IStringLocalizer<SharedResource> Localizer
 @{
-    ViewData["Title"] = $"Tìm kiếm: {Model.Query}";
+    ViewData["Title"] = string.Format(Localizer["Search_PageTitle"], Model.Query);
     Layout = "_LayoutPublic";
 }
 
@@ -84,9 +87,9 @@
 <div class="text-center mb-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3rem 0; margin-top: -2rem;">
     <div class="container">
         <h1 class="text-white mb-3">
-            <i class="bi bi-search"></i> Kết quả tìm kiếm: "@Model.Query"
+            <i class="bi bi-search"></i> @string.Format(Localizer["Search_HeaderTitle"], Model.Query)
         </h1>
-        <p class="text-white-50 mb-0">Tìm thấy @Model.Results.TotalCount hashtag</p>
+        <p class="text-white-50 mb-0">@string.Format(Localizer["Search_FoundResults"], Model.Results.TotalCount)</p>
     </div>
 </div>
 
@@ -114,10 +117,10 @@
             <div class="col-md-12">
                 <div class="alert alert-info border-primary">
                     <h5 class="alert-heading">
-                        <i class="bi bi-cloud-download"></i> Live Result from TikTok
+                        <i class="bi bi-cloud-download"></i> @Localizer["Search_LiveResult"]
                     </h5>
                     <p class="mb-3">
-                        This hashtag was not found in our database, but we found it on TikTok Creative Center:
+                        @Localizer["Search_NotInDatabase"]
                     </p>
 
                     <div class="card">
@@ -129,7 +132,7 @@
                                     <dl class="row mb-0">
                                         @if (Model.LiveResult.PostCount.HasValue)
                                         {
-                                            <dt class="col-sm-4">Posts:</dt>
+                                            <dt class="col-sm-4">@Localizer["Search_Posts"]</dt>
                                             <dd class="col-sm-8">
                                                 @{
                                                     var postCountFormatted = Model.LiveResult.PostCount.Value >= 1_000_000
@@ -142,12 +145,12 @@
                                             </dd>
                                         }
 
-                                        <dt class="col-sm-4">Source:</dt>
+                                        <dt class="col-sm-4">@Localizer["Search_Source"]</dt>
                                         <dd class="col-sm-8">
                                             <span class="badge bg-secondary">@Model.LiveResult.Source</span>
                                         </dd>
 
-                                        <dt class="col-sm-4">Searched:</dt>
+                                        <dt class="col-sm-4">@Localizer["Search_SearchedAt"]</dt>
                                         <dd class="col-sm-8">@Model.LiveResult.SearchedAt.ToString("g")</dd>
                                     </dl>
                                 </div>
@@ -157,11 +160,11 @@
                                         <input type="hidden" name="tag" value="@Model.LiveResult.Tag" />
                                         <input type="hidden" name="postCount" value="@Model.LiveResult.PostCount" />
                                         <button type="submit" class="btn btn-success btn-lg">
-                                            <i class="bi bi-plus-circle"></i> Add to Tracking List
+                                            <i class="bi bi-plus-circle"></i> @Localizer["Search_AddToTracking"]
                                         </button>
                                     </form>
                                     <p class="text-muted mt-2 small">
-                                        <i class="bi bi-info-circle"></i> This hashtag will be included in future crawls
+                                        <i class="bi bi-info-circle"></i> @Localizer["Search_WillBeTracked"]
                                     </p>
                                 </div>
                             </div>
@@ -199,7 +202,7 @@
             <div class="col-12">
                 <div class="card shadow-sm" style="border-radius: 1.5rem; border: 2px solid #f093fb;">
                     <div class="card-body p-4">
-                        <h4 class="text-center mb-4 fw-bold">Lượt Xem Theo Hashtag</h4>
+                        <h4 class="text-center mb-4 fw-bold">@Localizer["Search_ViewsByHashtag"]</h4>
 
                         @{
                             var maxViews = Model.Results.Items.Max(h => h.LatestViewCount ?? 0);
@@ -281,8 +284,8 @@
             <div class="col-12">
                 <div class="alert alert-warning text-center">
                     <i class="bi bi-exclamation-triangle fs-1"></i>
-                    <h4 class="mt-3">Không tìm thấy kết quả cho "@Model.Query"</h4>
-                    <p class="mb-0">Thử tìm kiếm với từ khóa khác hoặc kiểm tra lại chính tả.</p>
+                    <h4 class="mt-3">@string.Format(Localizer["Search_NoResults"], Model.Query)</h4>
+                    <p class="mb-0">@Localizer["Search_NoResultsHint"]</p>
                 </div>
             </div>
         }
@@ -299,7 +302,7 @@
                         {
                             <li class="page-item">
                                 <a class="page-link" asp-action="Search" asp-route-query="@Model.Query" asp-route-page="@(Model.CurrentPage - 1)">
-                                    <i class="bi bi-chevron-left"></i> Previous
+                                    <i class="bi bi-chevron-left"></i> @Localizer["Hashtag_Previous"]
                                 </a>
                             </li>
                         }
@@ -315,7 +318,7 @@
                         {
                             <li class="page-item">
                                 <a class="page-link" asp-action="Search" asp-route-query="@Model.Query" asp-route-page="@(Model.CurrentPage + 1)">
-                                    Next <i class="bi bi-chevron-right"></i>
+                                    @Localizer["Hashtag_Next"] <i class="bi bi-chevron-right"></i>
                                 </a>
                             </li>
                         }
@@ -328,13 +331,20 @@
     <div class="row mt-4">
         <div class="col-md-12 text-center">
             <a asp-action="Index" asp-controller="Home" class="btn btn-secondary btn-lg px-5" style="border-radius: 50px;">
-                <i class="bi bi-arrow-left"></i> Quay lại
+                <i class="bi bi-arrow-left"></i> @Localizer["Search_GoBack"]
             </a>
         </div>
     </div>
 </div>
 
+<!-- Localization data for JavaScript -->
+<div id="jsLocalization" class="d-none"
+    data-copied="@Localizer["Search_Copied"]">
+</div>
+
 <script>
+    const localization = document.getElementById('jsLocalization').dataset;
+
     function copyAllHashtags() {
         const hashtags = @Html.Raw(Json.Serialize(Model.Results.Items.OrderByDescending(h => h.LatestViewCount ?? 0).Select(h => h.TagDisplay).ToList()));
         const text = hashtags.join(' ');
@@ -343,7 +353,7 @@
             // Show success feedback
             const btn = event.target.closest('button');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="bi bi-check-circle"></i> COPIED!';
+            btn.innerHTML = `<i class="bi bi-check-circle"></i> ${localization.copied}`;
             btn.classList.add('btn-success');
             btn.classList.remove('btn-warning');
 

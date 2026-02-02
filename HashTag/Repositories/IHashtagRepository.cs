@@ -69,7 +69,7 @@ public interface IHashtagRepository
     Task ClearAllDataAsync();
 
     // Bulk operations for performance optimization
-    Task<List<Hashtag>> GetHashtagsByTagsAsync(List<string> tags);
+    Task<List<Hashtag>> GetHashtagsByTagsAsync(List<string> tags, string countryCode = "VN");
     Task<List<HashtagCategory>> GetCategoriesByNamesAsync(List<string> names);
     Task<List<HashtagHistory>> GetHashtagHistoriesForDateAsync(int sourceId, DateTime date);
     Task BulkSaveChangesAsync(
@@ -114,6 +114,11 @@ public class HashtagFilterDto
     public string? SortBy { get; set; } // "BestRank", "TotalAppearances", "LastSeen"
     public int? CategoryId { get; set; }
     public string? DifficultyLevel { get; set; }
+    /// <summary>
+    /// Country/region code filter (e.g., "VN", "US", "GB", "AU")
+    /// Default is "VN" for backwards compatibility
+    /// </summary>
+    public string CountryCode { get; set; } = "VN";
 }
 
 public class PagedResult<T>

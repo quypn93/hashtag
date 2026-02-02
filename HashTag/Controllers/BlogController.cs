@@ -1,6 +1,7 @@
 using HashTag.Models;
 using HashTag.Repositories;
 using HashTag.ViewModels;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HashTag.Controllers;
@@ -22,6 +23,19 @@ public class BlogController : Controller
     }
 
     /// <summary>
+    /// Check if current request is in English
+    /// </summary>
+    private bool IsEnglish
+    {
+        get
+        {
+            var requestCulture = HttpContext.Features.Get<IRequestCultureFeature>();
+            var currentCulture = requestCulture?.RequestCulture.UICulture.Name ?? "vi";
+            return currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    /// <summary>
     /// Blog index page - List all published blog posts
     /// Route: /blog
     /// </summary>
@@ -33,11 +47,30 @@ public class BlogController : Controller
             const int pageSize = 9; // 3x3 grid
             page = Math.Max(1, page);
 
-            var posts = await _blogRepository.GetPublishedPostsAsync(page, pageSize);
-            var totalPosts = await _blogRepository.GetTotalPublishedPostsCountAsync();
+            var allPosts = await _blogRepository.GetPublishedPostsAsync(page, pageSize);
             var categories = await _blogRepository.GetActiveCategoriesAsync();
             var popularTags = await _blogRepository.GetPopularTagsAsync(15);
-            var recentPosts = await _blogRepository.GetRecentPostsAsync(5);
+            var allRecentPosts = await _blogRepository.GetRecentPostsAsync(5);
+
+            // Filter posts based on language: if English, only show posts with English translation
+            IEnumerable<BlogPost> posts;
+            IEnumerable<BlogPost> recentPosts;
+            int totalPosts;
+
+            if (IsEnglish)
+            {
+                posts = allPosts.Where(p => p.HasEnglishTranslation);
+                recentPosts = allRecentPosts.Where(p => p.HasEnglishTranslation);
+                // For accurate pagination, we need to count English posts only
+                totalPosts = (await _blogRepository.GetPublishedPostsAsync(1, 1000))
+                    .Count(p => p.HasEnglishTranslation);
+            }
+            else
+            {
+                posts = allPosts;
+                recentPosts = allRecentPosts;
+                totalPosts = await _blogRepository.GetTotalPublishedPostsCountAsync();
+            }
 
             var viewModel = new BlogIndexViewModel
             {
@@ -47,11 +80,12 @@ public class BlogController : Controller
                 RecentPosts = recentPosts,
                 CurrentPage = page,
                 PageSize = pageSize,
-                TotalPosts = totalPosts
+                TotalPosts = totalPosts,
+                IsEnglish = IsEnglish
             };
 
             // SEO metadata
-            var seoMetadata = CreateBlogIndexSeoMetadata(page, totalPosts);
+            var seoMetadata = CreateBlogIndexSeoMetadata(page, totalPosts, IsEnglish);
             ViewData["SeoMetadata"] = seoMetadata;
 
             return View(viewModel);
@@ -66,6 +100,7 @@ public class BlogController : Controller
     /// <summary>
     /// Single blog post details page
     /// Route: /blog/{slug}
+    /// Supports both Vietnamese and English slugs
     /// </summary>
     [HttpGet]
     public async Task<IActionResult> Details(string slug)
@@ -80,7 +115,14 @@ public class BlogController : Controller
 
             _logger.LogInformation("Blog Details: Looking up post with slug '{Slug}'", slug);
 
+            // Try to find by primary slug first
             var post = await _blogRepository.GetPostBySlugAsync(slug);
+
+            // If not found and English, try to find by English slug
+            if (post == null && IsEnglish)
+            {
+                post = await _blogRepository.GetPostByEnglishSlugAsync(slug);
+            }
 
             if (post == null)
             {
@@ -95,15 +137,30 @@ public class BlogController : Controller
                 return NotFound();
             }
 
+            // If English region but no English translation, return 404
+            if (IsEnglish && !post.HasEnglishTranslation)
+            {
+                _logger.LogWarning("Blog Details: Post '{Slug}' has no English translation, returning 404 for English users", slug);
+                return NotFound();
+            }
+
             _logger.LogInformation("Blog Details: Found post '{Title}' (ID: {Id}, Status: {Status})",
-                post.Title, post.Id, post.Status);
+                post.GetLocalizedTitle(IsEnglish), post.Id, post.Status);
 
             // Save post ID for background increment
             var postId = post.Id;
 
             // Load related data first (same DbContext)
-            var relatedPosts = await _blogRepository.GetRelatedPostsAsync(post.Id, 3);
-            var recentPosts = await _blogRepository.GetRecentPostsAsync(5);
+            var allRelatedPosts = await _blogRepository.GetRelatedPostsAsync(post.Id, 6);
+            var allRecentPosts = await _blogRepository.GetRecentPostsAsync(10);
+
+            // Filter by English availability if needed
+            var relatedPosts = IsEnglish
+                ? allRelatedPosts.Where(p => p.HasEnglishTranslation).Take(3)
+                : allRelatedPosts.Take(3);
+            var recentPosts = IsEnglish
+                ? allRecentPosts.Where(p => p.HasEnglishTranslation).Take(5)
+                : allRecentPosts.Take(5);
 
             // Increment view count in background after response is sent
             // Use IServiceScopeFactory to create new scope with fresh DbContext
@@ -126,11 +183,12 @@ public class BlogController : Controller
             {
                 Post = post,
                 RelatedPosts = relatedPosts,
-                RecentPosts = recentPosts
+                RecentPosts = recentPosts,
+                IsEnglish = IsEnglish
             };
 
-            // SEO metadata
-            var seoMetadata = CreateBlogPostSeoMetadata(post);
+            // SEO metadata (localized)
+            var seoMetadata = CreateBlogPostSeoMetadata(post, IsEnglish);
             ViewData["SeoMetadata"] = seoMetadata;
             viewModel.SeoMetadata = seoMetadata;
 
@@ -167,10 +225,28 @@ public class BlogController : Controller
             const int pageSize = 9;
             page = Math.Max(1, page);
 
-            var posts = await _blogRepository.GetPostsByCategoryAsync(slug, page, pageSize);
-            var totalPosts = await _blogRepository.GetPostCountByCategoryAsync(slug);
+            var allPosts = await _blogRepository.GetPostsByCategoryAsync(slug, page, pageSize);
             var allCategories = await _blogRepository.GetActiveCategoriesAsync();
-            var recentPosts = await _blogRepository.GetRecentPostsAsync(5);
+            var allRecentPosts = await _blogRepository.GetRecentPostsAsync(10);
+
+            // Filter posts based on language: if English, only show posts with English translation
+            IEnumerable<BlogPost> posts;
+            IEnumerable<BlogPost> recentPosts;
+            int totalPosts;
+
+            if (IsEnglish)
+            {
+                posts = allPosts.Where(p => p.HasEnglishTranslation);
+                recentPosts = allRecentPosts.Where(p => p.HasEnglishTranslation).Take(5);
+                totalPosts = (await _blogRepository.GetPostsByCategoryAsync(slug, 1, 1000))
+                    .Count(p => p.HasEnglishTranslation);
+            }
+            else
+            {
+                posts = allPosts;
+                recentPosts = allRecentPosts.Take(5);
+                totalPosts = await _blogRepository.GetPostCountByCategoryAsync(slug);
+            }
 
             var viewModel = new BlogCategoryViewModel
             {
@@ -180,11 +256,12 @@ public class BlogController : Controller
                 RecentPosts = recentPosts,
                 CurrentPage = page,
                 PageSize = pageSize,
-                TotalPosts = totalPosts
+                TotalPosts = totalPosts,
+                IsEnglish = IsEnglish
             };
 
             // SEO metadata
-            var seoMetadata = CreateCategorySeoMetadata(category, page, totalPosts);
+            var seoMetadata = CreateCategorySeoMetadata(category, page, totalPosts, IsEnglish);
             ViewData["SeoMetadata"] = seoMetadata;
 
             return View(viewModel);
@@ -220,10 +297,28 @@ public class BlogController : Controller
             const int pageSize = 9;
             page = Math.Max(1, page);
 
-            var posts = await _blogRepository.GetPostsByTagAsync(slug, page, pageSize);
-            var totalPosts = await _blogRepository.GetPostCountByTagAsync(slug);
+            var allPosts = await _blogRepository.GetPostsByTagAsync(slug, page, pageSize);
             var popularTags = await _blogRepository.GetPopularTagsAsync(15);
-            var recentPosts = await _blogRepository.GetRecentPostsAsync(5);
+            var allRecentPosts = await _blogRepository.GetRecentPostsAsync(10);
+
+            // Filter posts based on language: if English, only show posts with English translation
+            IEnumerable<BlogPost> posts;
+            IEnumerable<BlogPost> recentPosts;
+            int totalPosts;
+
+            if (IsEnglish)
+            {
+                posts = allPosts.Where(p => p.HasEnglishTranslation);
+                recentPosts = allRecentPosts.Where(p => p.HasEnglishTranslation).Take(5);
+                totalPosts = (await _blogRepository.GetPostsByTagAsync(slug, 1, 1000))
+                    .Count(p => p.HasEnglishTranslation);
+            }
+            else
+            {
+                posts = allPosts;
+                recentPosts = allRecentPosts.Take(5);
+                totalPosts = await _blogRepository.GetPostCountByTagAsync(slug);
+            }
 
             var viewModel = new BlogTagViewModel
             {
@@ -233,11 +328,12 @@ public class BlogController : Controller
                 RecentPosts = recentPosts,
                 CurrentPage = page,
                 PageSize = pageSize,
-                TotalPosts = totalPosts
+                TotalPosts = totalPosts,
+                IsEnglish = IsEnglish
             };
 
             // SEO metadata
-            var seoMetadata = CreateTagSeoMetadata(tag, page, totalPosts);
+            var seoMetadata = CreateTagSeoMetadata(tag, page, totalPosts, IsEnglish);
             ViewData["SeoMetadata"] = seoMetadata;
 
             return View(viewModel);
@@ -251,15 +347,28 @@ public class BlogController : Controller
 
     // ==================== SEO Metadata Generators ====================
 
-    private SeoMetadata CreateBlogIndexSeoMetadata(int page, int totalPosts)
+    private SeoMetadata CreateBlogIndexSeoMetadata(int page, int totalPosts, bool isEnglish = false)
     {
-        var title = page == 1
-            ? "Blog TikTok Marketing | Mẹo & Chiến Lược Tăng View TikTok - TrendTag"
-            : $"Blog TikTok Marketing - Trang {page} | TrendTag";
+        string title;
+        string description;
+        string keywords;
 
-        var description = "Khám phá các mẹo, chiến lược và hướng dẫn tăng view TikTok hiệu quả. Blog cập nhật xu hướng hashtag trending, phân tích viral video và tips cho TikTok creator.";
-
-        var keywords = "blog tiktok, mẹo tiktok, chiến lược hashtag, tăng view tiktok, hashtag trending, tiktok marketing, viral video tips";
+        if (isEnglish)
+        {
+            title = page == 1
+                ? "TikTok Marketing Blog | Tips & Strategies to Boost TikTok Views - TrendTag"
+                : $"TikTok Marketing Blog - Page {page} | TrendTag";
+            description = "Discover tips, strategies and guides to effectively increase TikTok views. Blog updates on trending hashtags, viral video analysis and tips for TikTok creators.";
+            keywords = "tiktok blog, tiktok tips, hashtag strategy, boost tiktok views, trending hashtag, tiktok marketing, viral video tips";
+        }
+        else
+        {
+            title = page == 1
+                ? "Blog TikTok Marketing | Mẹo & Chiến Lược Tăng View TikTok - TrendTag"
+                : $"Blog TikTok Marketing - Trang {page} | TrendTag";
+            description = "Khám phá các mẹo, chiến lược và hướng dẫn tăng view TikTok hiệu quả. Blog cập nhật xu hướng hashtag trending, phân tích viral video và tips cho TikTok creator.";
+            keywords = "blog tiktok, mẹo tiktok, chiến lược hashtag, tăng view tiktok, hashtag trending, tiktok marketing, viral video tips";
+        }
 
         return new SeoMetadata
         {
@@ -274,24 +383,33 @@ public class BlogController : Controller
         };
     }
 
-    private SeoMetadata CreateBlogPostSeoMetadata(BlogPost post)
+    private SeoMetadata CreateBlogPostSeoMetadata(BlogPost post, bool isEnglish = false)
     {
-        var title = !string.IsNullOrEmpty(post.MetaTitle)
-            ? post.MetaTitle
-            : $"{post.Title} | Blog TrendTag";
+        var localizedTitle = post.GetLocalizedTitle(isEnglish);
+        var localizedMetaTitle = post.GetLocalizedMetaTitle(isEnglish);
+        var localizedMetaDescription = post.GetLocalizedMetaDescription(isEnglish);
+        var localizedMetaKeywords = post.GetLocalizedMetaKeywords(isEnglish);
+        var localizedExcerpt = post.GetLocalizedExcerpt(isEnglish);
+        var localizedSlug = post.GetLocalizedSlug(isEnglish);
 
-        var description = !string.IsNullOrEmpty(post.MetaDescription)
-            ? post.MetaDescription
-            : post.Excerpt ?? post.Title;
+        var title = !string.IsNullOrEmpty(localizedMetaTitle)
+            ? localizedMetaTitle
+            : $"{localizedTitle} | Blog TrendTag";
 
-        var keywords = !string.IsNullOrEmpty(post.MetaKeywords)
-            ? post.MetaKeywords
-            : $"{post.Title}, tiktok, hashtag trending, viral tips";
+        var description = !string.IsNullOrEmpty(localizedMetaDescription)
+            ? localizedMetaDescription
+            : localizedExcerpt ?? localizedTitle;
 
-        var canonicalUrl = $"https://viralhashtag.vn/blog/{post.Slug}";
+        var keywords = !string.IsNullOrEmpty(localizedMetaKeywords)
+            ? localizedMetaKeywords
+            : isEnglish
+                ? $"{localizedTitle}, tiktok, hashtag trending, viral tips"
+                : $"{localizedTitle}, tiktok, hashtag trending, viral tips";
+
+        var canonicalUrl = $"https://viralhashtag.vn/blog/{localizedSlug}";
 
         // Create Article structured data
-        var structuredData = CreateArticleStructuredData(post, canonicalUrl);
+        var structuredData = CreateArticleStructuredData(post, canonicalUrl, isEnglish);
 
         return new SeoMetadata
         {
@@ -308,21 +426,39 @@ public class BlogController : Controller
         };
     }
 
-    private SeoMetadata CreateCategorySeoMetadata(BlogCategory category, int page, int totalPosts)
+    private SeoMetadata CreateCategorySeoMetadata(BlogCategory category, int page, int totalPosts, bool isEnglish = false)
     {
-        var categoryName = !string.IsNullOrEmpty(category.DisplayNameVi)
-            ? category.DisplayNameVi
-            : category.Name;
+        var categoryName = category.GetLocalizedName(isEnglish);
+        var categoryDescription = category.GetLocalizedDescription(isEnglish);
 
-        var title = page == 1
-            ? $"Blog {categoryName} | TrendTag"
-            : $"Blog {categoryName} - Trang {page} | TrendTag";
+        string title;
+        string description;
+        string keywords;
 
-        var description = !string.IsNullOrEmpty(category.Description)
-            ? category.Description
-            : $"Tất cả bài viết về {categoryName}. Mẹo, chiến lược và hướng dẫn chi tiết cho TikTok creator.";
+        if (isEnglish)
+        {
+            title = page == 1
+                ? $"{categoryName} Blog | TrendTag"
+                : $"{categoryName} Blog - Page {page} | TrendTag";
 
-        var keywords = $"{categoryName}, blog {categoryName}, tiktok {categoryName}";
+            description = !string.IsNullOrEmpty(categoryDescription)
+                ? categoryDescription
+                : $"All articles about {categoryName}. Tips, strategies and detailed guides for TikTok creators.";
+
+            keywords = $"{categoryName}, {categoryName} blog, tiktok {categoryName}";
+        }
+        else
+        {
+            title = page == 1
+                ? $"Blog {categoryName} | TrendTag"
+                : $"Blog {categoryName} - Trang {page} | TrendTag";
+
+            description = !string.IsNullOrEmpty(categoryDescription)
+                ? categoryDescription
+                : $"Tất cả bài viết về {categoryName}. Mẹo, chiến lược và hướng dẫn chi tiết cho TikTok creator.";
+
+            keywords = $"{categoryName}, blog {categoryName}, tiktok {categoryName}";
+        }
 
         var canonicalUrl = page == 1
             ? $"https://viralhashtag.vn/blog/category/{category.Slug}"
@@ -341,15 +477,32 @@ public class BlogController : Controller
         };
     }
 
-    private SeoMetadata CreateTagSeoMetadata(BlogTag tag, int page, int totalPosts)
+    private SeoMetadata CreateTagSeoMetadata(BlogTag tag, int page, int totalPosts, bool isEnglish = false)
     {
-        var title = page == 1
-            ? $"Bài Viết Về {tag.Name} | Blog TrendTag"
-            : $"Bài Viết Về {tag.Name} - Trang {page} | Blog TrendTag";
+        string title;
+        string description;
+        string keywords;
 
-        var description = $"Tất cả bài viết được gắn tag {tag.Name}. Khám phá mẹo, chiến lược và hướng dẫn chi tiết.";
+        if (isEnglish)
+        {
+            title = page == 1
+                ? $"Posts About {tag.Name} | TrendTag Blog"
+                : $"Posts About {tag.Name} - Page {page} | TrendTag Blog";
 
-        var keywords = $"{tag.Name}, blog {tag.Name}, tiktok {tag.Name}";
+            description = $"All posts tagged with {tag.Name}. Discover tips, strategies and detailed guides.";
+
+            keywords = $"{tag.Name}, {tag.Name} blog, tiktok {tag.Name}";
+        }
+        else
+        {
+            title = page == 1
+                ? $"Bài Viết Về {tag.Name} | Blog TrendTag"
+                : $"Bài Viết Về {tag.Name} - Trang {page} | Blog TrendTag";
+
+            description = $"Tất cả bài viết được gắn tag {tag.Name}. Khám phá mẹo, chiến lược và hướng dẫn chi tiết.";
+
+            keywords = $"{tag.Name}, blog {tag.Name}, tiktok {tag.Name}";
+        }
 
         var canonicalUrl = page == 1
             ? $"https://viralhashtag.vn/blog/tag/{tag.Slug}"
@@ -368,8 +521,12 @@ public class BlogController : Controller
         };
     }
 
-    private string CreateArticleStructuredData(BlogPost post, string canonicalUrl)
+    private string CreateArticleStructuredData(BlogPost post, string canonicalUrl, bool isEnglish = false)
     {
+        var localizedTitle = post.GetLocalizedTitle(isEnglish);
+        var localizedExcerpt = post.GetLocalizedExcerpt(isEnglish);
+        var localizedContent = post.GetLocalizedContent(isEnglish);
+
         var categoryName = post.Category != null
             ? (!string.IsNullOrEmpty(post.Category.DisplayNameVi) ? post.Category.DisplayNameVi : post.Category.Name)
             : "TikTok Tips";
@@ -389,6 +546,8 @@ public class BlogController : Controller
             ? (!string.IsNullOrEmpty(post.Category.DisplayNameVi) ? post.Category.DisplayNameVi : post.Category.Name)
             : "Blog";
 
+        var homeName = isEnglish ? "Home" : "Trang chủ";
+
         // Combine Article schema with BreadcrumbList for better SEO
         var schemas = new List<string>();
 
@@ -396,7 +555,7 @@ public class BlogController : Controller
         schemas.Add($@"{{
             ""@context"": ""https://schema.org"",
             ""@type"": ""Article"",
-            ""headline"": ""{EscapeJson(post.Title)}"",
+            ""headline"": ""{EscapeJson(localizedTitle)}"",
             ""image"": ""{imageUrl}"",
             ""datePublished"": ""{publishedDate}"",
             ""dateModified"": ""{modifiedDate}"",
@@ -412,9 +571,9 @@ public class BlogController : Controller
                     ""url"": ""https://viralhashtag.vn/images/logo.png""
                 }}
             }},
-            ""description"": ""{EscapeJson(post.Excerpt ?? post.Title)}"",
+            ""description"": ""{EscapeJson(localizedExcerpt ?? localizedTitle)}"",
             ""articleSection"": ""{EscapeJson(categoryName)}"",
-            ""wordCount"": {post.Content?.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries).Length ?? 0},
+            ""wordCount"": {localizedContent?.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries).Length ?? 0},
             ""url"": ""{canonicalUrl}""
         }}");
 
@@ -426,7 +585,7 @@ public class BlogController : Controller
                 {{
                     ""@type"": ""ListItem"",
                     ""position"": 1,
-                    ""name"": ""Trang chủ"",
+                    ""name"": ""{homeName}"",
                     ""item"": ""https://viralhashtag.vn""
                 }},
                 {{
@@ -444,15 +603,15 @@ public class BlogController : Controller
                 {{
                     ""@type"": ""ListItem"",
                     ""position"": 4,
-                    ""name"": ""{EscapeJson(post.Title)}""
+                    ""name"": ""{EscapeJson(localizedTitle)}""
                 }}
             ]
         }}");
 
         // HowTo Schema - detect if post is a guide/tutorial
-        if (IsHowToPost(post.Title))
+        if (IsHowToPost(localizedTitle))
         {
-            var howToSchema = CreateHowToSchema(post, imageUrl);
+            var howToSchema = CreateHowToSchema(post, imageUrl, isEnglish);
             if (!string.IsNullOrEmpty(howToSchema))
             {
                 schemas.Add(howToSchema);
@@ -484,10 +643,14 @@ public class BlogController : Controller
     /// <summary>
     /// Create HowTo schema for tutorial/guide posts
     /// </summary>
-    private string CreateHowToSchema(BlogPost post, string imageUrl)
+    private string CreateHowToSchema(BlogPost post, string imageUrl, bool isEnglish = false)
     {
+        var localizedTitle = post.GetLocalizedTitle(isEnglish);
+        var localizedExcerpt = post.GetLocalizedExcerpt(isEnglish);
+        var localizedContent = post.GetLocalizedContent(isEnglish);
+
         // Extract steps from content (look for numbered lists or h2/h3 headers)
-        var steps = ExtractStepsFromContent(post.Content ?? "");
+        var steps = ExtractStepsFromContent(localizedContent ?? "");
 
         if (steps.Count < 2)
             return string.Empty; // Need at least 2 steps for HowTo schema
@@ -503,8 +666,8 @@ public class BlogController : Controller
         return $@"{{
             ""@context"": ""https://schema.org"",
             ""@type"": ""HowTo"",
-            ""name"": ""{EscapeJson(post.Title)}"",
-            ""description"": ""{EscapeJson(post.Excerpt ?? post.Title)}"",
+            ""name"": ""{EscapeJson(localizedTitle)}"",
+            ""description"": ""{EscapeJson(localizedExcerpt ?? localizedTitle)}"",
             ""image"": ""{imageUrl}"",
             ""step"": [{stepsJson}]
         }}";

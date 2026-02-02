@@ -4,6 +4,7 @@ using HashTag.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HashTag.Migrations
 {
     [DbContext(typeof(TrendTagDbContext))]
-    partial class TrendTagDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260201114622_MultiLanguageAndRegionSupport")]
+    partial class MultiLanguageAndRegionSupport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,10 +40,6 @@ namespace HashTag.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("DescriptionEn")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<string>("DisplayNameVi")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -50,10 +49,6 @@ namespace HashTag.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("NameEn")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 

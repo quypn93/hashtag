@@ -721,7 +721,7 @@ public class HashtagRepository : IHashtagRepository
 
     #region Bulk Operations
 
-    public async Task<List<Hashtag>> GetHashtagsByTagsAsync(List<string> tags)
+    public async Task<List<Hashtag>> GetHashtagsByTagsAsync(List<string> tags, string countryCode = "VN")
     {
         if (!tags.Any()) return new List<Hashtag>();
 
@@ -730,7 +730,7 @@ public class HashtagRepository : IHashtagRepository
 
         return await _context.Hashtags
             .Include(h => h.Category)
-            .Where(h => normalizedTags.Contains(h.Tag.ToLower()))
+            .Where(h => normalizedTags.Contains(h.Tag.ToLower()) && h.CountryCode == countryCode)
             .ToListAsync();
     }
 

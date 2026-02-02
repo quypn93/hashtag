@@ -6,9 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HashTag.Controllers;
 
-[Route("phan-tich")]
+// Vietnamese routes: /phan-tich/theo-doi-tang-truong
+// English routes: /analytics/growth-tracking
 public class AnalyticsController : Controller
 {
+    public const string RegionCookieName = "UserRegion";
+
     private readonly IGrowthAnalysisService _growthService;
     private readonly TrendTagDbContext _context;
     private readonly ILogger<AnalyticsController> _logger;
@@ -23,12 +26,24 @@ public class AnalyticsController : Controller
         _logger = logger;
     }
 
-    [HttpGet("theo-doi-tang-truong")]
-    [HttpGet("theo-doi-tang-truong/{catSlug}")]
+    private string GetCurrentRegion()
+    {
+        return Request.Cookies[RegionCookieName] ?? "VN";
+    }
+
+    // Vietnamese routes
+    [HttpGet("phan-tich/theo-doi-tang-truong")]
+    [HttpGet("phan-tich/theo-doi-tang-truong/{catSlug}")]
+    // English routes
+    [HttpGet("analytics/growth-tracking")]
+    [HttpGet("analytics/growth-tracking/{catSlug}")]
     public async Task<IActionResult> Growth(string? catSlug = null)
     {
         try
         {
+            // Get current region from cookie
+            var currentRegion = GetCurrentRegion();
+
             // Get categories for filter dropdown
             var categories = await _context.HashtagCategories
                 .OrderBy(c => c.Name)
@@ -42,10 +57,10 @@ public class AnalyticsController : Controller
                 categoryId = category?.Id;
             }
 
-            _logger.LogInformation("Loading Growth Tracker page, category: {CategorySlug} ({CategoryId})", catSlug, categoryId);
+            _logger.LogInformation("Loading Growth Tracker page, category: {CategorySlug} ({CategoryId}), region: {Region}", catSlug, categoryId, currentRegion);
 
-            // Analyze growth (7 days by default)
-            var analysisResult = await _growthService.AnalyzeGrowthAsync(7, categoryId);
+            // Analyze growth (7 days by default), filtered by region
+            var analysisResult = await _growthService.AnalyzeGrowthAsync(7, categoryId, currentRegion);
 
             // Prepare view model
             var viewModel = new GrowthTrackerViewModel

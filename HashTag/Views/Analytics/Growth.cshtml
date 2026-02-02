@@ -1,18 +1,25 @@
 @model HashTag.ViewModels.GrowthTrackerViewModel
+@using Microsoft.Extensions.Localization
+@using HashTag
+@using HashTag.Helpers
+@inject IStringLocalizer<SharedResource> Localizer
 @{
-    ViewData["Title"] = "Phân Tích Tăng Trưởng Hashtag TikTok 7 Ngày | Growth Tracker";
-    ViewData["Description"] = "Theo dõi tốc độ tăng trưởng hashtag TikTok trong 7 ngày gần nhất. Phát hiện hashtag bùng nổ, trending mạnh và xu hướng tăng/giảm để tối ưu chiến lược content.";
-    ViewData["Keywords"] = "phân tích tăng trưởng hashtag, hashtag trending nhanh, hashtag bùng nổ, growth tracker tiktok, xu hướng hashtag, hashtag đang lên, tìm hashtag viral";
+    ViewData["Title"] = Localizer["Growth_PageTitle"];
+    ViewData["Description"] = Localizer["Growth_PageDescription"];
+    ViewData["Keywords"] = Localizer["Growth_PageKeywords"];
     Layout = "_LayoutPublic";
+
+    var currentRegion = Context.Request.Cookies["UserRegion"] ?? "VN";
+    var isVietnamese = currentRegion == "VN";
 }
 
 <div class="container py-4">
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="display-4 fw-bold text-gradient">
-                <i class="bi bi-graph-up-arrow me-2"></i> Theo Dõi Tăng Trưởng
+                <i class="bi bi-graph-up-arrow me-2"></i> @Localizer["Growth_Title"]
             </h1>
-            <p class="lead text-muted">Phân tích tăng trưởng hashtag trong 7 ngày gần nhất</p>
+            <p class="lead text-muted">@Localizer["Growth_Subtitle"]</p>
         </div>
     </div>
 
@@ -22,13 +29,15 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <label class="form-label fw-semibold">
-                        <i class="bi bi-funnel me-2"></i>Lọc theo chủ đề
+                        <i class="bi bi-funnel me-2"></i>@Localizer["Growth_FilterCategory"]
                     </label>
                     <select id="categoryFilter" class="form-select" onchange="filterByCategory(this.value)">
-                        <option value="">Tất cả chủ đề</option>
+                        <option value="">@Localizer["Growth_AllCategories"]</option>
                         @foreach (var category in Model.Categories)
                         {
-                            var displayName = !string.IsNullOrEmpty(category.DisplayNameVi) ? category.DisplayNameVi : category.Name;
+                            var displayName = isVietnamese && !string.IsNullOrEmpty(category.DisplayNameVi)
+                                ? category.DisplayNameVi
+                                : category.Name;
                             @if (category.Id == Model.SelectedCategoryId)
                             {
                                 <option value="@category.Slug" selected>@displayName</option>
@@ -55,10 +64,9 @@
                                 <div class="feature-icon">
                                     <i class="bi bi-rocket-takeoff-fill"></i>
                                 </div>
-                                <h6 class="fw-bold mb-2">Phát Hiện Hashtag Bùng Nổ</h6>
+                                <h6 class="fw-bold mb-2">@Localizer["Growth_Feature1_Title"]</h6>
                                 <p class="text-muted small mb-0">
-                                    Theo dõi hashtag có tốc độ tăng trưởng nhanh nhất trong 7 ngày.
-                                    Bắt kịp trend ngay từ giai đoạn đầu để tối đa hóa reach.
+                                    @Localizer["Growth_Feature1_Desc"]
                                 </p>
                             </div>
                         </div>
@@ -67,10 +75,9 @@
                                 <div class="feature-icon">
                                     <i class="bi bi-graph-up-arrow"></i>
                                 </div>
-                                <h6 class="fw-bold mb-2">Phân Tích Xu Hướng</h6>
+                                <h6 class="fw-bold mb-2">@Localizer["Growth_Feature2_Title"]</h6>
                                 <p class="text-muted small mb-0">
-                                    Xem hashtag nào đang trending mạnh với lượng view tăng cao nhất.
-                                    Dữ liệu cập nhật real-time từ TikTok Creative Center.
+                                    @Localizer["Growth_Feature2_Desc"]
                                 </p>
                             </div>
                         </div>
@@ -79,10 +86,9 @@
                                 <div class="feature-icon">
                                     <i class="bi bi-lightbulb-fill"></i>
                                 </div>
-                                <h6 class="fw-bold mb-2">Tối Ưu Chiến Lược</h6>
+                                <h6 class="fw-bold mb-2">@Localizer["Growth_Feature3_Title"]</h6>
                                 <p class="text-muted small mb-0">
-                                    Nhận gợi ý sử dụng hashtag dựa trên tình trạng tăng trưởng.
-                                    Tránh hashtag đang giảm, tập trung vào hashtag đang lên.
+                                    @Localizer["Growth_Feature3_Desc"]
                                 </p>
                             </div>
                         </div>
@@ -98,9 +104,9 @@
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-gradient-primary text-white">
                     <h4 class="mb-0">
-                        <i class="bi bi-rocket-takeoff me-2"></i>Tăng trưởng nhanh nhất (Top 10)
+                        <i class="bi bi-rocket-takeoff me-2"></i>@Localizer["Growth_FastestGrowing"]
                     </h4>
-                    <small>Hashtag có tỷ lệ tăng trưởng cao nhất</small>
+                    <small>@Localizer["Growth_FastestGrowingDesc"]</small>
                 </div>
                 <div class="card-body">
                     @if (Model.FastestGrowing.Any())
@@ -145,7 +151,7 @@
                     else
                     {
                         <div class="alert alert-info">
-                            <i class="bi bi-info-circle me-2"></i>Không có hashtag tăng trưởng trong khoảng thời gian này.
+                            <i class="bi bi-info-circle me-2"></i>@Localizer["Growth_NoGrowthData"]
                         </div>
                     }
                 </div>
@@ -159,9 +165,9 @@
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-gradient-success text-white">
                     <h4 class="mb-0">
-                        <i class="bi bi-fire me-2"></i>Trending mạnh nhất (Top 10)
+                        <i class="bi bi-fire me-2"></i>@Localizer["Growth_TrendingGrowth"]
                     </h4>
-                    <small>Hashtag có lượng tăng lượt xem cao nhất</small>
+                    <small>@Localizer["Growth_TrendingGrowthDesc"]</small>
                 </div>
                 <div class="card-body">
                     @if (Model.TrendingGrowth.Any())
@@ -208,7 +214,7 @@
                     else
                     {
                         <div class="alert alert-info">
-                            <i class="bi bi-info-circle me-2"></i>Không có dữ liệu trending trong khoảng thời gian này.
+                            <i class="bi bi-info-circle me-2"></i>@Localizer["Growth_NoTrendingData"]
                         </div>
                     }
                 </div>
@@ -224,9 +230,9 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-gradient-warning text-white">
                         <h4 class="mb-0">
-                            <i class="bi bi-graph-down-arrow me-2"></i>Đang giảm (Top 10)
+                            <i class="bi bi-graph-down-arrow me-2"></i>@Localizer["Growth_Declining"]
                         </h4>
-                        <small>Hashtag có xu hướng giảm đáng kể</small>
+                        <small>@Localizer["Growth_DecliningDesc"]</small>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
@@ -505,11 +511,17 @@
     }
 </style>
 
+<!-- Localization data for JavaScript -->
+<div id="jsLocalization" class="d-none"
+    data-growth-url="@LocalizedUrlHelper.GetGrowthTrackingUrl(Context)">
+</div>
+
 <script>
+    const localization = document.getElementById('jsLocalization').dataset;
+
     function filterByCategory(catSlug) {
-        const url = catSlug
-            ? `/phan-tich/theo-doi-tang-truong/${catSlug}`
-            : '/phan-tich/theo-doi-tang-truong';
+        const baseUrl = localization.growthUrl;
+        const url = catSlug ? `${baseUrl}/${catSlug}` : baseUrl;
         window.location.href = url;
     }
 </script>

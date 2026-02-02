@@ -4,8 +4,10 @@ using HashTag.Options;
 using HashTag.Repositories;
 using HashTag.Services;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,8 +39,13 @@ builder.Services.Configure<GzipCompressionProviderOptions>(options =>
     options.Level = CompressionLevel.Optimal;
 });
 
+// Add Localization services for multi-language support
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
 
 // Add Response Caching for better performance
 builder.Services.AddResponseCaching();
@@ -187,6 +194,26 @@ app.Use(async (context, next) =>
 
 app.UseRouting();
 
+// Configure Request Localization for multi-language support
+var supportedCultures = new[]
+{
+    new CultureInfo("en"),
+    new CultureInfo("vi")
+};
+
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("vi"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures,
+    RequestCultureProviders = new List<IRequestCultureProvider>
+    {
+        new QueryStringRequestCultureProvider(),
+        new CookieRequestCultureProvider(),
+        new AcceptLanguageHeaderRequestCultureProvider()
+    }
+});
+
 // Enable Response Caching
 app.UseResponseCaching();
 
@@ -216,22 +243,34 @@ app.MapControllerRoute(
     pattern: "blog",
     defaults: new { controller = "Blog", action = "Index" });
 
-// SEO-friendly category route
+// SEO-friendly category routes (Vietnamese and English)
 app.MapControllerRoute(
-    name: "category",
+    name: "category-vi",
     pattern: "chu-de/{slug}",
     defaults: new { controller = "Home", action = "Category" });
-
-// SEO-friendly privacy policy route
 app.MapControllerRoute(
-    name: "privacy",
+    name: "category-en",
+    pattern: "category/{slug}",
+    defaults: new { controller = "Home", action = "Category" });
+
+// SEO-friendly privacy policy routes (Vietnamese and English)
+app.MapControllerRoute(
+    name: "privacy-vi",
     pattern: "chinh-sach-bao-mat",
     defaults: new { controller = "Home", action = "Privacy" });
-
-// SEO-friendly terms of service route
 app.MapControllerRoute(
-    name: "terms",
+    name: "privacy-en",
+    pattern: "privacy-policy",
+    defaults: new { controller = "Home", action = "Privacy" });
+
+// SEO-friendly terms of service routes (Vietnamese and English)
+app.MapControllerRoute(
+    name: "terms-vi",
     pattern: "dieu-khoan-su-dung",
+    defaults: new { controller = "Home", action = "Terms" });
+app.MapControllerRoute(
+    name: "terms-en",
+    pattern: "terms-of-service",
     defaults: new { controller = "Home", action = "Terms" });
 
 app.MapControllerRoute(

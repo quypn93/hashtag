@@ -50,6 +50,7 @@ public class StoredProcedureService : IStoredProcedureService
             command.Parameters.AddWithValue("@EndDate", (object?)filters?.EndDate ?? DBNull.Value);
             command.Parameters.AddWithValue("@SortBy", (object?)filters?.SortBy ?? "BestRank");
             command.Parameters.AddWithValue("@Limit", 100);
+            command.Parameters.AddWithValue("@CountryCode", filters?.CountryCode ?? "VN");
 
             await connection.OpenAsync();
 

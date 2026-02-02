@@ -210,40 +210,60 @@ public class HashtagCrawlerHostedService : BackgroundService
             _logger.LogInformation("Resolving ICrawlerService...");
             var crawlerService = scope.ServiceProvider.GetRequiredService<ICrawlerService>();
 
-            // Step 1: Crawl hashtags
-            _logger.LogInformation("Calling CrawlAllSourcesAsync...");
-            var summary = await crawlerService.CrawlAllSourcesAsync();
+            // Get regions to crawl from configuration (default: VN only, can add US, UK, etc.)
+            var regionsToCrawl = _configuration.GetSection("CrawlerSettings:Regions").Get<string[]>() ?? new[] { "VN" };
+            _logger.LogInformation("Regions to crawl: {Regions}", string.Join(", ", regionsToCrawl));
 
-            _logger.LogInformation(
-                "Crawl completed. Success: {Success}, Failed: {Failed}, Total hashtags: {Total}",
-                summary.SuccessfulSources,
-                summary.FailedSources,
-                summary.TotalHashtagsCollected);
+            var totalHashtagsCollected = 0;
+            var totalSuccessful = 0;
+            var totalFailed = 0;
+            var allResultDetails = new List<object>();
 
-            // Log each result
-            var resultDetails = new List<object>();
-            foreach (var result in summary.Results)
+            // Step 1: Crawl hashtags for each region
+            foreach (var region in regionsToCrawl)
             {
-                if (result.Success)
+                _logger.LogInformation("=== Crawling region: {Region} ===", region);
+                var summary = await crawlerService.CrawlAllSourcesAsync(region);
+
+                _logger.LogInformation(
+                    "Region {Region} crawl completed. Success: {Success}, Failed: {Failed}, Total hashtags: {Total}",
+                    region, summary.SuccessfulSources, summary.FailedSources, summary.TotalHashtagsCollected);
+
+                totalHashtagsCollected += summary.TotalHashtagsCollected;
+                totalSuccessful += summary.SuccessfulSources;
+                totalFailed += summary.FailedSources;
+
+                // Log each result for this region
+                foreach (var result in summary.Results)
                 {
-                    _logger.LogInformation("  ✓ {Source}: {Count} hashtags", result.SourceName, result.HashtagsCollected);
-                    resultDetails.Add(new { Source = result.SourceName, Success = true, Count = result.HashtagsCollected });
+                    if (result.Success)
+                    {
+                        _logger.LogInformation("  ✓ [{Region}] {Source}: {Count} hashtags", region, result.SourceName, result.HashtagsCollected);
+                        allResultDetails.Add(new { Region = region, Source = result.SourceName, Success = true, Count = result.HashtagsCollected });
+                    }
+                    else
+                    {
+                        _logger.LogWarning("  ✗ [{Region}] {Source}: {Error}", region, result.SourceName, result.ErrorMessage ?? "Unknown error");
+                        allResultDetails.Add(new { Region = region, Source = result.SourceName, Success = false, Error = result.ErrorMessage ?? "Unknown error" });
+                    }
                 }
-                else
+
+                // Small delay between regions to avoid rate limiting
+                if (region != regionsToCrawl.Last())
                 {
-                    _logger.LogWarning("  ✗ {Source}: {Error}", result.SourceName, result.ErrorMessage ?? "Unknown error");
-                    resultDetails.Add(new { Source = result.SourceName, Success = false, Error = result.ErrorMessage ?? "Unknown error" });
+                    _logger.LogInformation("Waiting 30 seconds before crawling next region...");
+                    await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken);
                 }
             }
 
             // Log crawl result to database
             await LogToDatabase(
-                summary.SuccessfulSources > 0 ? "CrawlSuccess" : "CrawlFailed",
-                $"Crawl completed. Success: {summary.SuccessfulSources}, Failed: {summary.FailedSources}, Hashtags: {summary.TotalHashtagsCollected}",
-                new { Summary = summary, Results = resultDetails });
+                totalSuccessful > 0 ? "CrawlSuccess" : "CrawlFailed",
+                $"Multi-region crawl completed. Regions: {string.Join(", ", regionsToCrawl)}, Success: {totalSuccessful}, Failed: {totalFailed}, Hashtags: {totalHashtagsCollected}",
+                new { Regions = regionsToCrawl, TotalSuccess = totalSuccessful, TotalFailed = totalFailed, TotalHashtags = totalHashtagsCollected, Results = allResultDetails });
 
             // Step 2: Calculate metrics after successful crawl
-            if (summary.SuccessfulSources > 0)
+            if (totalSuccessful > 0)
             {
                 _logger.LogInformation("Starting metrics calculation...");
                 var metricsService = scope.ServiceProvider.GetRequiredService<IHashtagMetricsService>();

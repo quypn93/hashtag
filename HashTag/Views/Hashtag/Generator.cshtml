@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Tạo Hashtag Thông Minh";
+    ViewData["Title"] = Localizer["Generator_Title"];
     Layout = "_LayoutPublic";
 }
 
@@ -201,9 +201,9 @@
 <div class="text-center mb-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3rem 0; margin-top: -2rem;">
     <div class="container">
         <h1 class="text-white mb-3">
-            <i class="bi bi-lightbulb"></i> Tạo Hashtag Thông Minh với AI
+            <i class="bi bi-lightbulb"></i> @Localizer["Generator_Header"]
         </h1>
-        <p class="text-white-50 mb-0 fs-5">Công nghệ AI giúp bạn tìm hashtag viral cho video TikTok</p>
+        <p class="text-white-50 mb-0 fs-5">@Localizer["Generator_Subtitle"]</p>
     </div>
 </div>
 
@@ -213,11 +213,11 @@
         <div class="d-flex align-items-center justify-content-between">
             <div>
                 <i class="bi bi-info-circle text-warning fs-4"></i>
-                <strong class="ms-2">Miễn phí:</strong>
-                <span id="remainingCount">5</span> lượt tạo hashtag mỗi ngày
+                <strong class="ms-2">@Localizer["Generator_Free"]</strong>
+                <span id="remainingCount">5</span> @Localizer["Generator_DailyLimit"]
             </div>
             <a href="#" class="btn btn-sm btn-warning">
-                <i class="bi bi-star"></i> Nâng cấp Pro
+                <i class="bi bi-star"></i> @Localizer["Generator_UpgradePro"]
             </a>
         </div>
     </div>
@@ -226,21 +226,21 @@
     <div class="card shadow-sm mb-5" style="border-radius: 1.5rem; border: 2px solid #667eea;">
         <div class="card-body p-4">
             <h4 class="mb-3 fw-bold">
-                <i class="bi bi-pencil-square text-primary"></i> Mô tả video của bạn
+                <i class="bi bi-pencil-square text-primary"></i> @Localizer["Generator_DescribeVideo"]
             </h4>
             <p class="text-muted mb-3">
-                Hãy mô tả nội dung video của bạn càng chi tiết càng tốt để AI đề xuất hashtag chính xác nhất.
+                @Localizer["Generator_DescribeHint"]
             </p>
 
             <div class="mb-3">
                 <textarea
                     id="videoDescription"
                     class="form-control description-input"
-                    placeholder="VD: Video hướng dẫn làm bánh mì Việt Nam tại nhà, thơm ngon giòn rụm, phù hợp cho người mới bắt đầu..."
+                    placeholder="@Localizer["Generator_Placeholder"]"
                     maxlength="1000"></textarea>
                 <div class="d-flex justify-content-between mt-2">
                     <small class="text-muted">
-                        <i class="bi bi-info-circle"></i> Tối thiểu 10 ký tự
+                        <i class="bi bi-info-circle"></i> @Localizer["Generator_MinChars"]
                     </small>
                     <small class="char-counter" id="charCounter">0 / 1000</small>
                 </div>
@@ -248,7 +248,7 @@
 
             <div class="text-center">
                 <button id="generateBtn" class="btn btn-primary btn-generate" onclick="generateHashtags()">
-                    <i class="bi bi-stars"></i> Tạo Hashtag Ngay
+                    <i class="bi bi-stars"></i> @Localizer["Generator_CreateNow"]
                 </button>
             </div>
         </div>
@@ -257,7 +257,7 @@
     <!-- Loading Spinner -->
     <div id="loadingSpinner" class="loading-spinner">
         <div class="spinner-border text-primary" role="status"></div>
-        <p class="mt-3 text-muted">AI đang phân tích và tạo hashtag cho bạn...</p>
+        <p class="mt-3 text-muted">@Localizer["Generator_Analyzing"]</p>
     </div>
 
     <!-- Error Message -->
@@ -271,7 +271,7 @@
         <!-- Reasoning Section -->
         <div class="reasoning-box">
             <h5 class="fw-bold mb-2">
-                <i class="bi bi-lightbulb-fill text-warning"></i> Chiến Lược Hashtag
+                <i class="bi bi-lightbulb-fill text-warning"></i> @Localizer["Generator_Strategy"]
             </h5>
             <p id="reasoningText" class="mb-0"></p>
         </div>
@@ -282,30 +282,30 @@
                 <!-- Trending Hashtags -->
                 <div id="trendingSection" class="hashtag-category category-trending">
                     <div class="category-title">
-                        <i class="bi bi-fire text-danger"></i> Trending Hashtags
+                        <i class="bi bi-fire text-danger"></i> @Localizer["Generator_Trending"] Hashtags
                         <small class="text-muted">(1-2 hashtag)</small>
                     </div>
-                    <p class="text-muted small mb-3">Hashtag đang viral, tiếp cận rộng nhưng cạnh tranh cao</p>
+                    <p class="text-muted small mb-3">@Localizer["Generator_TrendingDesc"]</p>
                     <div id="trendingList"></div>
                 </div>
 
                 <!-- Niche Hashtags -->
                 <div id="nicheSection" class="hashtag-category category-niche">
                     <div class="category-title">
-                        <i class="bi bi-bullseye text-primary"></i> Niche Hashtags
+                        <i class="bi bi-bullseye text-primary"></i> @Localizer["Generator_Niche"] Hashtags
                         <small class="text-muted">(2-3 hashtag)</small>
                     </div>
-                    <p class="text-muted small mb-3">Hashtag chuyên ngành, cân bằng giữa tiếp cận và cạnh tranh</p>
+                    <p class="text-muted small mb-3">@Localizer["Generator_NicheDesc"]</p>
                     <div id="nicheList"></div>
                 </div>
 
                 <!-- Ultra-Niche Hashtags -->
                 <div id="ultraSection" class="hashtag-category category-ultra">
                     <div class="category-title">
-                        <i class="bi bi-gem text-purple"></i> Ultra-Niche Hashtags
+                        <i class="bi bi-gem text-purple"></i> @Localizer["Generator_UltraNiche"] Hashtags
                         <small class="text-muted">(1-2 hashtag)</small>
                     </div>
-                    <p class="text-muted small mb-3">Hashtag siêu chuyên biệt, dễ nổi bật trong cộng đồng nhỏ</p>
+                    <p class="text-muted small mb-3">@Localizer["Generator_UltraNicheDesc"]</p>
                     <div id="ultraList"></div>
                 </div>
             </div>
@@ -315,25 +315,25 @@
                 <div class="position-sticky" style="top: 20px;">
                     <div class="card shadow" style="border-radius: 1rem;">
                         <div class="card-body text-center p-4">
-                            <h5 class="fw-bold mb-3">Sao chép hashtag</h5>
+                            <h5 class="fw-bold mb-3">@Localizer["Generator_CopyHashtags"]</h5>
                             <p class="text-muted small mb-3">
-                                <span id="selectedCount">0</span> hashtag đã chọn
+                                <span id="selectedCount">0</span> @Localizer["Generator_SelectedCount"]
                             </p>
                             <button class="btn btn-primary copy-all-btn w-100 mb-3" onclick="copySelectedHashtags(event)">
-                                <i class="bi bi-clipboard"></i> Copy Tất Cả
+                                <i class="bi bi-clipboard"></i> @Localizer["Generator_CopyAll"]
                             </button>
                             <button class="btn btn-outline-secondary w-100" onclick="resetGenerator()">
-                                <i class="bi bi-arrow-clockwise"></i> Tạo Lại
+                                <i class="bi bi-arrow-clockwise"></i> @Localizer["Generator_Regenerate"]
                             </button>
 
                             <hr class="my-3">
 
                             <div class="text-start">
                                 <small class="text-muted d-block mb-2">
-                                    <i class="bi bi-check-circle text-success"></i> Click hashtag để chọn/bỏ chọn
+                                    <i class="bi bi-check-circle text-success"></i> @Localizer["Generator_ClickToSelect"]
                                 </small>
                                 <small class="text-muted d-block">
-                                    <i class="bi bi-info-circle text-info"></i> Đề xuất: 5-7 hashtag/video
+                                    <i class="bi bi-info-circle text-info"></i> @Localizer["Generator_Recommend"]
                                 </small>
                             </div>
                         </div>
@@ -349,22 +349,22 @@
             <div class="card" style="background: #f8f9fa; border: none; border-radius: 1rem;">
                 <div class="card-body p-4">
                     <h5 class="fw-bold mb-3">
-                        <i class="bi bi-question-circle text-info"></i> Cách sử dụng hiệu quả
+                        <i class="bi bi-question-circle text-info"></i> @Localizer["Generator_HowToUse"]
                     </h5>
                     <div class="row">
                         <div class="col-md-6">
                             <ul class="list-unstyled">
                                 <li class="mb-2">
                                     <i class="bi bi-check-circle-fill text-success"></i>
-                                    Mô tả chi tiết nội dung video (50-200 từ)
+                                    @Localizer["Generator_Tip1"]
                                 </li>
                                 <li class="mb-2">
                                     <i class="bi bi-check-circle-fill text-success"></i>
-                                    Đề cập đến chủ đề, đối tượng, địa điểm
+                                    @Localizer["Generator_Tip2"]
                                 </li>
                                 <li class="mb-2">
                                     <i class="bi bi-check-circle-fill text-success"></i>
-                                    Sử dụng 5-7 hashtag/video để tối ưu
+                                    @Localizer["Generator_Tip3"]
                                 </li>
                             </ul>
                         </div>
@@ -372,15 +372,15 @@
                             <ul class="list-unstyled">
                                 <li class="mb-2">
                                     <i class="bi bi-check-circle-fill text-success"></i>
-                                    Mix hashtag trending và niche
+                                    @Localizer["Generator_Tip4"]
                                 </li>
                                 <li class="mb-2">
                                     <i class="bi bi-check-circle-fill text-success"></i>
-                                    Hashtag ultra-niche giúp tiếp cận đúng người
+                                    @Localizer["Generator_Tip5"]
                                 </li>
                                 <li class="mb-2">
                                     <i class="bi bi-check-circle-fill text-success"></i>
-                                    Thử nghiệm và theo dõi hiệu quả
+                                    @Localizer["Generator_Tip6"]
                                 </li>
                             </ul>
                         </div>
@@ -391,9 +391,25 @@
     </div>
 </div>
 
+<!-- Localization data for JavaScript -->
+<div id="jsLocalization" class="d-none"
+    data-error-min-chars="@Localizer["Generator_Error_MinChars"]"
+    data-error-generic="@Localizer["Generator_Error_Generic"]"
+    data-error-connection="@Localizer["Generator_Error_Connection"]"
+    data-default-reasoning="@Localizer["Generator_DefaultReasoning"]"
+    data-no-data="@Localizer["Generator_NoData"]"
+    data-no-data-warning="@Localizer["Generator_NoDataWarning"]"
+    data-error-select-one="@Localizer["Generator_Error_SelectOne"]"
+    data-copied="@Localizer["Generator_Copied"]"
+    data-error-copy="@Localizer["Generator_Error_Copy"]">
+</div>
+
 <script>
     let allHashtags = [];
     let selectedHashtags = new Set();
+
+    // Get localized strings
+    const localization = document.getElementById('jsLocalization').dataset;
 
     // Character counter
     document.getElementById('videoDescription').addEventListener('input', function() {
@@ -431,7 +447,7 @@
 
         // Validate
         if (description.length < 10) {
-            showError('Vui lòng nhập mô tả ít nhất 10 ký tự.');
+            showError(localization.errorMinChars);
             return;
         }
 
@@ -470,11 +486,11 @@
                     document.getElementById('remainingCount').textContent = limitData.remaining;
                 }
             } else {
-                showError(data.errorMessage || 'Đã xảy ra lỗi. Vui lòng thử lại.');
+                showError(data.errorMessage || localization.errorGeneric);
             }
         } catch (error) {
             console.error('Error:', error);
-            showError('Không thể kết nối với máy chủ. Vui lòng thử lại.');
+            showError(localization.errorConnection);
         } finally {
             generateBtn.disabled = false;
             loadingSpinner.style.display = 'none';
@@ -490,7 +506,7 @@
         console.log('Recommendation received:', recommendation);
 
         // Display reasoning
-        document.getElementById('reasoningText').textContent = recommendation.reasoning || 'AI đã phân tích và đề xuất các hashtag phù hợp nhất cho nội dung của bạn.';
+        document.getElementById('reasoningText').textContent = recommendation.reasoning || localization.defaultReasoning;
 
         // Display hashtags by category
         displayCategory('trending', recommendation.trendingHashtags, 'trendingList', 'trendingSection');
@@ -580,14 +596,14 @@
             <div class="hashtag-item selected ${disabledClass}" data-tag="${hashtag.tag}" data-exists="${existsInDb}" style="${cursorStyle}">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="flex-grow-1">
-                        <div class="hashtag-tag">#${hashtag.tag} ${!existsInDb ? '<span class="badge bg-secondary ms-2" style="font-size: 0.7rem;">Chưa có data</span>' : ''}</div>
+                        <div class="hashtag-tag">#${hashtag.tag} ${!existsInDb ? `<span class="badge bg-secondary ms-2" style="font-size: 0.7rem;">${localization.noData}</span>` : ''}</div>
                         <div class="hashtag-meta ${!existsInDb ? 'd-none' : ''}">
                             <span><i class="bi bi-eye"></i> ${formatNumber(hashtag.viewCount)} views</span>
                             <span><i class="bi bi-file-text"></i> ${formatNumber(hashtag.postCount || 0)} posts</span>
                             <span><i class="bi bi-bar-chart"></i> ${hashtag.competitionLevel}</span>
                         </div>
                         ${hashtag.recommendationNote ? `<small class="text-muted mt-2 d-block"><i class="bi bi-lightbulb"></i> ${hashtag.recommendationNote}</small>` : ''}
-                        ${!existsInDb ? '<small class="text-warning mt-1 d-block"><i class="bi bi-exclamation-triangle"></i> Hashtag này chưa có dữ liệu, không thể xem chi tiết.</small>' : ''}
+                        ${!existsInDb ? `<small class="text-warning mt-1 d-block"><i class="bi bi-exclamation-triangle"></i> ${localization.noDataWarning}</small>` : ''}
                     </div>
                     <span class="viral-badge bg-${viralColor} text-white">
                         ${hashtag.viralProbability}% viral
@@ -617,7 +633,7 @@
 
     function copySelectedHashtags(event) {
         if (selectedHashtags.size === 0) {
-            showError('Vui lòng chọn ít nhất một hashtag.');
+            showError(localization.errorSelectOne);
             return;
         }
 
@@ -627,7 +643,7 @@
             // Show success feedback
             const btn = event.target.closest('button');
             const originalHtml = btn.innerHTML;
-            btn.innerHTML = '<i class="bi bi-check-circle"></i> Đã Copy!';
+            btn.innerHTML = `<i class="bi bi-check-circle"></i> ${localization.copied}`;
             btn.classList.add('btn-success');
             btn.classList.remove('btn-primary');
 
@@ -638,7 +654,7 @@
             }, 2000);
         }).catch(err => {
             console.error('Copy failed:', err);
-            showError('Không thể sao chép. Vui lòng thử lại.');
+            showError(localization.errorCopy);
         });
     }
 

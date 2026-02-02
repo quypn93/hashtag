@@ -101,6 +101,10 @@ public class BlogAutoGeneratorService : IBlogAutoGeneratorService
         var title = $"Top 20 Hashtag TikTok Hot Nhất Tháng {month}/{year}";
         var content = GenerateMonthlyContent(topHashtags, month, year, monthName);
 
+        // Generate English content
+        var titleEn = $"Top 20 Hottest TikTok Hashtags in {GetEnglishMonthName(month)} {year}";
+        var contentEn = GenerateMonthlyContentEnglish(topHashtags, month, year);
+
         var post = new BlogPost
         {
             Title = title,
@@ -111,6 +115,14 @@ public class BlogAutoGeneratorService : IBlogAutoGeneratorService
             MetaTitle = $"Top 20 Hashtag TikTok Hot Nhất Tháng {month}/{year} | ViralHashtag",
             MetaDescription = $"Danh sách 20 hashtag TikTok trending tháng {month}/{year}. Xem ngay để biết hashtag nào đang hot và cách sử dụng hiệu quả nhất.",
             MetaKeywords = $"hashtag tiktok tháng {month}, trending hashtag {year}, top hashtag vietnam, viral hashtag",
+            // English content
+            TitleEn = titleEn,
+            SlugEn = $"top-20-tiktok-hashtags-{GetEnglishMonthName(month).ToLower()}-{year}",
+            ExcerptEn = $"Discover the top 20 most-used TikTok hashtags in {GetEnglishMonthName(month)} {year}. Stay updated with the latest trends to boost your video views and reach.",
+            ContentEn = contentEn,
+            MetaTitleEn = $"Top 20 Hottest TikTok Hashtags {GetEnglishMonthName(month)} {year} | ViralHashtag",
+            MetaDescriptionEn = $"Complete list of top 20 trending TikTok hashtags for {GetEnglishMonthName(month)} {year}. Learn which hashtags are hot and how to use them effectively.",
+            MetaKeywordsEn = $"tiktok hashtags {GetEnglishMonthName(month).ToLower()} {year}, trending hashtags, top hashtags vietnam, viral hashtag",
             Author = "TrendTag Team",
             Status = "Published",
             PublishedAt = DateTime.UtcNow,
@@ -169,8 +181,11 @@ public class BlogAutoGeneratorService : IBlogAutoGeneratorService
         }
 
         var title = $"Top 15 Hashtag {displayName} Đang Viral Trên TikTok {year}";
-
         var content = GenerateCategoryContent(topHashtags, displayName, category.Name, year);
+
+        // Generate English content
+        var titleEn = $"Top 15 {category.Name} Hashtags Going Viral on TikTok {year}";
+        var contentEn = GenerateCategoryContentEnglish(topHashtags, category.Name, year);
 
         var post = new BlogPost
         {
@@ -182,6 +197,14 @@ public class BlogAutoGeneratorService : IBlogAutoGeneratorService
             MetaTitle = $"Top 15 Hashtag {displayName} TikTok {year} | ViralHashtag",
             MetaDescription = $"Danh sách hashtag {displayName} trending trên TikTok. Xem ngay cách sử dụng và kết hợp hashtag hiệu quả nhất.",
             MetaKeywords = $"hashtag {displayName.ToLower()}, hashtag tiktok {category.Name.ToLower()}, trending hashtag {year}",
+            // English content
+            TitleEn = titleEn,
+            SlugEn = $"top-{category.Name.ToLower().Replace(" ", "-")}-hashtags-tiktok-{year}",
+            ExcerptEn = $"Discover the top 15 hottest {category.Name} hashtags on TikTok {year}. Use the right hashtags to boost views and reach your target audience.",
+            ContentEn = contentEn,
+            MetaTitleEn = $"Top 15 {category.Name} TikTok Hashtags {year} | ViralHashtag",
+            MetaDescriptionEn = $"Complete list of trending {category.Name} hashtags on TikTok. Learn how to use and combine hashtags effectively.",
+            MetaKeywordsEn = $"{category.Name.ToLower()} hashtags, tiktok {category.Name.ToLower()}, trending hashtags {year}",
             Author = "TrendTag Team",
             Status = "Published",
             PublishedAt = DateTime.UtcNow,
@@ -235,6 +258,10 @@ public class BlogAutoGeneratorService : IBlogAutoGeneratorService
         var title = $"Hashtag Nổi Bật Tuần {startDate:dd/MM} - {endDate:dd/MM/yyyy}";
         var content = GenerateWeeklyContent(trendingHashtags, startDate, endDate);
 
+        // Generate English content
+        var titleEn = $"Top Trending Hashtags This Week ({startDate:MMM dd} - {endDate:MMM dd, yyyy})";
+        var contentEn = GenerateWeeklyContentEnglish(trendingHashtags, startDate, endDate);
+
         var post = new BlogPost
         {
             Title = title,
@@ -245,6 +272,14 @@ public class BlogAutoGeneratorService : IBlogAutoGeneratorService
             MetaTitle = $"Hashtag TikTok Trending Tuần {startDate:dd/MM} - {endDate:dd/MM} | ViralHashtag",
             MetaDescription = $"Báo cáo xu hướng hashtag TikTok tuần này. Xem ngay top hashtag hot và dự đoán trend tuần tới.",
             MetaKeywords = $"hashtag trending tuần này, xu hướng tiktok, viral hashtag vietnam, trend tiktok {DateTime.Now.Year}",
+            // English content
+            TitleEn = titleEn,
+            SlugEn = $"trending-hashtags-week-{startDate:MMM-dd}-{endDate:MMM-dd-yyyy}".ToLower(),
+            ExcerptEn = $"Weekly TikTok trending hashtags report ({startDate:MMM dd} - {endDate:MMM dd}). Stay updated with the latest trends and don't miss the hottest hashtags.",
+            ContentEn = contentEn,
+            MetaTitleEn = $"TikTok Trending Hashtags {startDate:MMM dd} - {endDate:MMM dd} | ViralHashtag",
+            MetaDescriptionEn = $"Weekly TikTok hashtag trends report. Discover top trending hashtags and predictions for next week.",
+            MetaKeywordsEn = $"trending hashtags this week, tiktok trends, viral hashtags, tiktok trends {DateTime.Now.Year}",
             Author = "TrendTag Team",
             Status = "Published",
             PublishedAt = DateTime.UtcNow,
@@ -417,9 +452,183 @@ public class BlogAutoGeneratorService : IBlogAutoGeneratorService
         return sb.ToString();
     }
 
+    // ============ English Content Generators ============
+
+    private string GenerateMonthlyContentEnglish(List<Hashtag> hashtags, int month, int year)
+    {
+        var sb = new StringBuilder();
+        var monthName = GetEnglishMonthName(month);
+
+        sb.AppendLine($"<p>{monthName} {year} has seen many exciting hashtag trends on TikTok Vietnam. Below is a compilation of the <strong>top 20 most-used hashtags</strong> to help you stay on trend and optimize your content.</p>");
+
+        sb.AppendLine("<h2>Top 20 Hashtag Rankings</h2>");
+        sb.AppendLine("<div class=\"table-responsive\">");
+        sb.AppendLine("<table class=\"table table-striped\">");
+        sb.AppendLine("<thead><tr><th>#</th><th>Hashtag</th><th>Views</th><th>Posts</th><th>Category</th></tr></thead>");
+        sb.AppendLine("<tbody>");
+
+        int rank = 1;
+        foreach (var h in hashtags)
+        {
+            var viewsFormatted = VietnameseHelper.FormatNumber(h.LatestViewCount ?? 0);
+            var postsFormatted = VietnameseHelper.FormatNumber(h.LatestPostCount ?? 0);
+            var categoryName = h.Category?.Name ?? "Other";
+
+            sb.AppendLine($"<tr>");
+            sb.AppendLine($"<td><strong>{rank}</strong></td>");
+            sb.AppendLine($"<td><a href=\"/hashtag/{VietnameseHelper.ToUrlSlug(h.Tag)}\">{h.TagDisplay}</a></td>");
+            sb.AppendLine($"<td>{viewsFormatted}</td>");
+            sb.AppendLine($"<td>{postsFormatted}</td>");
+            sb.AppendLine($"<td>{categoryName}</td>");
+            sb.AppendLine($"</tr>");
+            rank++;
+        }
+
+        sb.AppendLine("</tbody></table></div>");
+
+        sb.AppendLine("<h2>Trend Analysis</h2>");
+        sb.AppendLine($"<p>In {monthName}, hashtags about <strong>entertainment and lifestyle</strong> continue to dominate. Notably, hashtags related to viral trends have attracted millions of views.</p>");
+
+        sb.AppendLine("<h2>Tips for Using Hashtags Effectively</h2>");
+        sb.AppendLine("<ul>");
+        sb.AppendLine("<li><strong>Combine hot and niche hashtags:</strong> Use 2-3 trending hashtags along with 2-3 industry-specific hashtags.</li>");
+        sb.AppendLine("<li><strong>Post during peak hours:</strong> 12pm-2pm and 7pm-10pm are when most users are online.</li>");
+        sb.AppendLine("<li><strong>Track new trends:</strong> Use our <a href=\"/\">hashtag lookup tool</a> to stay updated with real-time trends.</li>");
+        sb.AppendLine("</ul>");
+
+        sb.AppendLine($"<p><em>Data updated for {monthName} {year} from TikTok Vietnam.</em></p>");
+
+        return sb.ToString();
+    }
+
+    private string GenerateCategoryContentEnglish(List<Hashtag> hashtags, string categoryName, int year)
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine($"<p>If you're creating content about <strong>{categoryName}</strong>, using the right hashtags is key to getting more views. Here are the <strong>top 15 hottest {categoryName} hashtags</strong> on TikTok {year}.</p>");
+
+        sb.AppendLine($"<h2>Top 15 {categoryName} Hashtags</h2>");
+        sb.AppendLine("<div class=\"table-responsive\">");
+        sb.AppendLine("<table class=\"table table-striped\">");
+        sb.AppendLine("<thead><tr><th>#</th><th>Hashtag</th><th>Views</th><th>Posts</th></tr></thead>");
+        sb.AppendLine("<tbody>");
+
+        int rank = 1;
+        foreach (var h in hashtags)
+        {
+            var viewsFormatted = VietnameseHelper.FormatNumber(h.LatestViewCount ?? 0);
+            var postsFormatted = VietnameseHelper.FormatNumber(h.LatestPostCount ?? 0);
+
+            sb.AppendLine($"<tr>");
+            sb.AppendLine($"<td><strong>{rank}</strong></td>");
+            sb.AppendLine($"<td><a href=\"/hashtag/{VietnameseHelper.ToUrlSlug(h.Tag)}\">{h.TagDisplay}</a></td>");
+            sb.AppendLine($"<td>{viewsFormatted}</td>");
+            sb.AppendLine($"<td>{postsFormatted}</td>");
+            sb.AppendLine($"</tr>");
+            rank++;
+        }
+
+        sb.AppendLine("</tbody></table></div>");
+
+        sb.AppendLine("<h2>How to Combine Hashtags Effectively</h2>");
+        sb.AppendLine($"<p>When creating {categoryName} videos, you should combine:</p>");
+        sb.AppendLine("<ul>");
+        sb.AppendLine($"<li><strong>2-3 industry hashtags:</strong> Choose from the list above like {hashtags.FirstOrDefault()?.TagDisplay ?? "#hashtag"}</li>");
+        sb.AppendLine("<li><strong>1-2 general trending hashtags:</strong> #fyp, #trending, #viral</li>");
+        sb.AppendLine("<li><strong>1 branded hashtag:</strong> Create your own brand hashtag</li>");
+        sb.AppendLine("</ul>");
+
+        sb.AppendLine($"<h2>{categoryName} Content Ideas</h2>");
+        sb.AppendLine("<p>Some content ideas that work well with these hashtags:</p>");
+        sb.AppendLine("<ul>");
+        sb.AppendLine("<li>Product/Service reviews</li>");
+        sb.AppendLine("<li>Tutorials/How-to guides</li>");
+        sb.AppendLine("<li>Before & After transformations</li>");
+        sb.AppendLine("<li>Day in my life vlogs</li>");
+        sb.AppendLine("<li>Tips & Tricks</li>");
+        sb.AppendLine("</ul>");
+
+        sb.AppendLine($"<p><em>Find more {categoryName} hashtags <a href=\"/\">here</a>.</em></p>");
+
+        return sb.ToString();
+    }
+
+    private string GenerateWeeklyContentEnglish(List<Hashtag> hashtags, DateTime startDate, DateTime endDate)
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine($"<p>TikTok hashtag trends report from <strong>{startDate:MMM dd}</strong> to <strong>{endDate:MMM dd, yyyy}</strong>. Let's see which hashtags are dominating TikTok this week!</p>");
+
+        sb.AppendLine("<h2>Top Trending Hashtags This Week</h2>");
+        sb.AppendLine("<div class=\"table-responsive\">");
+        sb.AppendLine("<table class=\"table table-striped\">");
+        sb.AppendLine("<thead><tr><th>#</th><th>Hashtag</th><th>Views</th><th>Category</th></tr></thead>");
+        sb.AppendLine("<tbody>");
+
+        int rank = 1;
+        foreach (var h in hashtags.Take(10))
+        {
+            var viewsFormatted = VietnameseHelper.FormatNumber(h.LatestViewCount ?? 0);
+            var categoryName = h.Category?.Name ?? "Other";
+
+            sb.AppendLine($"<tr>");
+            sb.AppendLine($"<td><strong>{rank}</strong></td>");
+            sb.AppendLine($"<td><a href=\"/hashtag/{VietnameseHelper.ToUrlSlug(h.Tag)}\">{h.TagDisplay}</a></td>");
+            sb.AppendLine($"<td>{viewsFormatted}</td>");
+            sb.AppendLine($"<td>{categoryName}</td>");
+            sb.AppendLine($"</tr>");
+            rank++;
+        }
+
+        sb.AppendLine("</tbody></table></div>");
+
+        sb.AppendLine("<h2>Analysis</h2>");
+        sb.AppendLine("<p>This week's notable trends include:</p>");
+        sb.AppendLine("<ul>");
+        sb.AppendLine("<li>Entertainment hashtags continue to lead</li>");
+        sb.AppendLine("<li>Lifestyle and daily vlog content remains popular</li>");
+        sb.AppendLine("<li>New trends started emerging towards the weekend</li>");
+        sb.AppendLine("</ul>");
+
+        sb.AppendLine("<h2>Predictions for Next Week</h2>");
+        sb.AppendLine("<p>Based on data analysis, these hashtags may trend next week:</p>");
+        sb.AppendLine("<ul>");
+
+        foreach (var h in hashtags.Skip(10).Take(5))
+        {
+            sb.AppendLine($"<li><a href=\"/hashtag/{VietnameseHelper.ToUrlSlug(h.Tag)}\">{h.TagDisplay}</a></li>");
+        }
+
+        sb.AppendLine("</ul>");
+
+        sb.AppendLine("<p><strong>Track real-time trends:</strong> Use our <a href=\"/\">hashtag lookup tool</a> to stay updated with the latest trends!</p>");
+
+        return sb.ToString();
+    }
+
     #endregion
 
     #region Helper Methods
+
+    private static string GetEnglishMonthName(int month)
+    {
+        return month switch
+        {
+            1 => "January",
+            2 => "February",
+            3 => "March",
+            4 => "April",
+            5 => "May",
+            6 => "June",
+            7 => "July",
+            8 => "August",
+            9 => "September",
+            10 => "October",
+            11 => "November",
+            12 => "December",
+            _ => month.ToString()
+        };
+    }
 
     private async Task<string> GetUniqueSlugAsync(string baseSlug)
     {

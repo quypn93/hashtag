@@ -1,6 +1,10 @@
+@using Microsoft.Extensions.Localization
+@using HashTag
+@using HashTag.Helpers
+@inject IStringLocalizer<SharedResource> Localizer
 @{
-    ViewData["Title"] = "404 - Không Tìm Thấy Trang | TrendTag";
-    ViewData["Description"] = "Trang bạn đang tìm kiếm không tồn tại. Hãy quay lại trang chủ để tìm hashtag TikTok trending.";
+    ViewData["Title"] = Localizer["NotFound_PageTitle"];
+    ViewData["Description"] = Localizer["NotFound_PageDescription"];
     Layout = "_LayoutPublic";
 }
 
@@ -13,30 +17,30 @@
                     <span style="font-size: 120px; font-weight: bold; color: #6c757d; line-height: 1;">404</span>
                 </div>
 
-                <h1 class="h3 mb-3">Oops! Trang Không Tồn Tại</h1>
+                <h1 class="h3 mb-3">@Localizer["NotFound_Title"]</h1>
 
                 <p class="text-muted mb-4">
-                    Trang bạn đang tìm kiếm có thể đã bị xóa, đổi tên hoặc tạm thời không khả dụng.
+                    @Localizer["NotFound_Description"]
                 </p>
 
                 <!-- Suggestions -->
                 <div class="card card-hashtag mb-4">
                     <div class="card-body">
                         <h5 class="card-title mb-3">
-                            <i class="bi bi-lightbulb text-warning"></i> Bạn có thể thử:
+                            <i class="bi bi-lightbulb text-warning"></i> @Localizer["NotFound_Suggestions"]
                         </h5>
                         <ul class="list-unstyled text-start mb-0">
                             <li class="mb-2">
                                 <i class="bi bi-check-circle text-success"></i>
-                                Kiểm tra lại địa chỉ URL
+                                @Localizer["NotFound_CheckUrl"]
                             </li>
                             <li class="mb-2">
                                 <i class="bi bi-check-circle text-success"></i>
-                                Sử dụng thanh tìm kiếm để tìm hashtag
+                                @Localizer["NotFound_UseSearch"]
                             </li>
                             <li class="mb-2">
                                 <i class="bi bi-check-circle text-success"></i>
-                                Quay lại trang chủ và bắt đầu lại
+                                @Localizer["NotFound_GoHome"]
                             </li>
                         </ul>
                     </div>
@@ -45,22 +49,22 @@
                 <!-- Action Buttons -->
                 <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
                     <a href="/" class="btn btn-primary btn-lg">
-                        <i class="bi bi-house-door"></i> Về Trang Chủ
+                        <i class="bi bi-house-door"></i> @Localizer["NotFound_BackToHome"]
                     </a>
-                    <a href="/tim-kiem" class="btn btn-outline-secondary btn-lg">
-                        <i class="bi bi-search"></i> Tìm Hashtag
+                    <a href="@LocalizedUrlHelper.GetLocalizedUrl(Context, "search")" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-search"></i> @Localizer["NotFound_SearchHashtag"]
                     </a>
                 </div>
 
                 <!-- Popular Links -->
                 <div class="mt-5">
-                    <h6 class="text-muted mb-3">Trang phổ biến:</h6>
+                    <h6 class="text-muted mb-3">@Localizer["NotFound_PopularPages"]</h6>
                     <div class="d-flex flex-wrap justify-content-center gap-2">
-                        <a href="/" class="btn btn-sm btn-outline-primary">Top Hashtag</a>
+                        <a href="/" class="btn btn-sm btn-outline-primary">@Localizer["NotFound_TopHashtag"]</a>
                         <a href="/blog" class="btn btn-sm btn-outline-primary">Blog</a>
-                        <a href="/phan-tich/theo-doi-tang-truong" class="btn btn-sm btn-outline-primary">Phân Tích</a>
-                        <a href="/chu-de/entertainment" class="btn btn-sm btn-outline-primary">Giải Trí</a>
-                        <a href="/chu-de/education" class="btn btn-sm btn-outline-primary">Giáo Dục</a>
+                        <a href="@LocalizedUrlHelper.GetGrowthTrackingUrl(Context)" class="btn btn-sm btn-outline-primary">@Localizer["NotFound_Analysis"]</a>
+                        <a href="@LocalizedUrlHelper.GetCategoryUrl(Context, "entertainment")" class="btn btn-sm btn-outline-primary">@Localizer["NotFound_Entertainment"]</a>
+                        <a href="@LocalizedUrlHelper.GetCategoryUrl(Context, "education")" class="btn btn-sm btn-outline-primary">@Localizer["NotFound_Education"]</a>
                     </div>
                 </div>
             </div>

@@ -6,7 +6,7 @@ namespace HashTag.Services;
 
 public interface IGrowthAnalysisService
 {
-    Task<GrowthAnalysisResult> AnalyzeGrowthAsync(int days = 7, int? categoryId = null);
+    Task<GrowthAnalysisResult> AnalyzeGrowthAsync(int days = 7, int? categoryId = null, string countryCode = "VN");
 }
 
 public class GrowthAnalysisService : IGrowthAnalysisService
@@ -22,11 +22,11 @@ public class GrowthAnalysisService : IGrowthAnalysisService
         _logger = logger;
     }
 
-    public async Task<GrowthAnalysisResult> AnalyzeGrowthAsync(int days = 7, int? categoryId = null)
+    public async Task<GrowthAnalysisResult> AnalyzeGrowthAsync(int days = 7, int? categoryId = null, string countryCode = "VN")
     {
         try
         {
-            _logger.LogInformation("Starting growth analysis for {Days} days, category: {CategoryId}", days, categoryId);
+            _logger.LogInformation("Starting growth analysis for {Days} days, category: {CategoryId}, region: {CountryCode}", days, categoryId, countryCode);
 
             var result = new GrowthAnalysisResult
             {
@@ -38,10 +38,11 @@ public class GrowthAnalysisService : IGrowthAnalysisService
             var currentDate = DateTime.UtcNow.Date;
             var comparisonDate = currentDate.AddDays(-days);
 
-            // Get hashtags with recent data
+            // Get hashtags with recent data, filtered by region
             var query = _context.Hashtags
                 .Include(h => h.Category)
-                .Where(h => h.LatestViewCount > 0);
+                .Where(h => h.LatestViewCount > 0)
+                .Where(h => h.CountryCode == countryCode);
 
             if (categoryId.HasValue)
             {
